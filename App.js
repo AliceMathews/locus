@@ -6,11 +6,21 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import { MaterialIcons } from "@expo/vector-icons";
 
-import HomeScreen from "./src/components/home/HomeScreen";
+import CategoriesScreen from "./src/components/home/CategoriesScreen";
+import PhotosScreen from "./src/components/home/PhotosScreen";
+import DetailPhotoScreen from "./src/components/home/DetailPhotoScreen";
+import FullPhotoScreen from "./src/components/home/FullPhotoScreen";
+
 import UploadScreen from "./src/components/upload/UploadScreen";
-import UserScreen from "./src/components/user/UserScreen";
+
+import ProfileScreen from "./src/components/user/ProfileScreen";
+import LoginScreen from "./src/components/user/LoginScreen";
+import RegisterScreen from "./src/components/user/RegisterScreen";
 
 const Tab = createBottomTabNavigator();
+const UserStack = createStackNavigator();
+const HomeStack = createStackNavigator();
+const UploadStack = createStackNavigator();
 
 export default function App() {
   return (
@@ -35,9 +45,38 @@ export default function App() {
           inactiveTintColor: "gray"
         }}
       >
-        <Tab.Screen name="User" component={UserScreen}></Tab.Screen>
-        <Tab.Screen name="Home" component={HomeScreen}></Tab.Screen>
-        <Tab.Screen name="Upload" component={UploadScreen}></Tab.Screen>
+        <Tab.Screen name="User">
+          {() => (
+            <UserStack.Navigator>
+              <UserStack.Screen name="Profile" component={ProfileScreen} />
+              <UserStack.Screen name="Login" component={LoginScreen} />
+              <UserStack.Screen name="Register" component={RegisterScreen} />
+            </UserStack.Navigator>
+          )}
+        </Tab.Screen>
+        <Tab.Screen name="Home">
+          {() => (
+            <HomeStack.Navigator>
+              <HomeStack.Screen
+                name="Categories"
+                component={CategoriesScreen}
+              />
+              <HomeStack.Screen name="Photos" component={PhotosScreen} />
+              <HomeStack.Screen name="Photo" component={DetailPhotoScreen} />
+              <HomeStack.Screen name="Photo-full" component={FullPhotoScreen} />
+            </HomeStack.Navigator>
+          )}
+        </Tab.Screen>
+        <Tab.Screen name="Upload">
+          {() => (
+            <UploadStack.Navigator>
+              <UploadStack.Screen
+                name="Upload Photo"
+                component={UploadScreen}
+              />
+            </UploadStack.Navigator>
+          )}
+        </Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
   );
