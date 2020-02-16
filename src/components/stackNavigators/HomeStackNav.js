@@ -10,7 +10,7 @@ const HomeStack = createStackNavigator();
 
 export default function HomeStackNav() {
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator initialRouteName="Categories">
       <HomeStack.Screen name="Categories" component={CategoriesScreen} />
       <HomeStack.Screen name="Photos" component={PhotosScreen} />
       <HomeStack.Screen name="Photo" component={DetailPhotoScreen} />
