@@ -10,8 +10,12 @@ export default function UploadScreen() {
 
   useEffect(() => {
     if (selectedImage !== null) {
-      axios
-        .get("http://b3900705.ngrok.io")
+      let imageData = createFormData(selectedImage);
+      axios({
+        method: "post",
+        url: "https://f6d7fd58.ngrok.io/api/images/upload",
+        data: { imageData }
+      })
         .then(res => {
           console.log(res.data);
         })
@@ -31,14 +35,30 @@ export default function UploadScreen() {
 
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      exif: true,
-      base64: true
+      exif: true
     });
 
     if (pickerResult.cancelled === true) return;
 
     ///THIS IS WHERE WE WILL MAKE REQUEST TO API TO GET TAGS
-    setSelectedImage({ localUri: pickerResult.uri, exif: pickerResult.exif });
+    setSelectedImage({
+      localUri: pickerResult.uri,
+      exif: pickerResult.exif,
+      type: pickerResult.type
+      // name: pickerResult.fileName
+    });
+  };
+
+  const createFormData = (image, exifData) => {
+    const data = new FormData();
+
+    data.append("image", {
+      name: "newImage",
+      type: selectedImage.type,
+      uri: selectedImage.localUri
+    });
+
+    return data;
   };
 
   if (selectedImage !== null) {
