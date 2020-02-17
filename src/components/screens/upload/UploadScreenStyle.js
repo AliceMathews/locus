@@ -6,6 +6,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center"
+  },
+  thumbnail: {
+    width: 300,
+    height: 300,
+    resizeMode: "contain"
   }
 });
 
