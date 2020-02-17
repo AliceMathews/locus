@@ -1,11 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, Button, Image } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import axios from "axios";
 
 import styles from "./UploadScreenStyle";
 
 export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("https://locus-api.herokuapp.com/")
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(e => {
+        console.error(e);
+      });
+  }, [selectedImage]);
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
