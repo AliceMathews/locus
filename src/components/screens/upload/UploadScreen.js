@@ -15,22 +15,26 @@ export default function UploadScreen() {
       return;
     }
 
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      exif: true
+    });
 
     if (pickerResult.cancelled === true) return;
 
     ///THIS IS WHERE WE WILL MAKE REQUEST TO API TO GET TAGS
-    console.log(pickerResult);
-    setSelectedImage({ localUri: pickerResult.uri });
+    setSelectedImage({ localUri: pickerResult.uri, exif: pickerResult.exif });
   };
 
   if (selectedImage !== null) {
+    console.log(selectedImage);
     return (
       <View style={styles.container}>
         <Image
           source={{ uri: selectedImage.localUri }}
           style={styles.thumbnail}
         />
+        <Button title="cancel" onPress={() => setSelectedImage(null)} />
       </View>
     );
   }
