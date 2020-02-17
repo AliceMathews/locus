@@ -9,14 +9,16 @@ export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("https://locus-api.herokuapp.com/")
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch(e => {
-        console.error(e);
-      });
+    if (selectedImage !== null) {
+      axios
+        .get("http://b3900705.ngrok.io")
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(e => {
+          console.error(e);
+        });
+    }
   }, [selectedImage]);
 
   const pickImage = async () => {
@@ -29,7 +31,8 @@ export default function UploadScreen() {
 
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      exif: true
+      exif: true,
+      base64: true
     });
 
     if (pickerResult.cancelled === true) return;
