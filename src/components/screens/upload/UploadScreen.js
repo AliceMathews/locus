@@ -20,6 +20,7 @@ import { ScrollView } from "react-native-gesture-handler";
 export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [tags, setTags] = useState([]);
+  const [imageUrl, setImageUrl] = useState("");
 
   useEffect(() => {
     if (selectedImage !== null) {
@@ -46,13 +47,13 @@ export default function UploadScreen() {
 
           const url = res.body.postResponse.location;
           console.log("image saved to s3");
+          setImageUrl(url);
           return url;
         })
         .then(url => {
           axios
             .get(`https://3cdc8260.ngrok.io/api/images/tags?url=${url}`)
             .then(res => {
-              console.log("tags");
               setTags(res.data);
             })
             .catch(e => {
@@ -82,6 +83,24 @@ export default function UploadScreen() {
       exif: pickerResult.exif,
       type: pickerResult.type
     });
+  };
+
+  const saveImage = () => {
+    console.log("saving");
+    const imageData = {
+      owner_id: 1,
+      exif: selectedImage.exif,
+      description: "PHOTO",
+      url: imageUrl,
+      views: 0,
+      tags: tags
+    };
+    axios
+      .post("https://3cdc8260.ngrok.io/api/images", { imageData })
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(e => console.log(e));
   };
 
   const generateFileName = () => {
@@ -116,15 +135,16 @@ export default function UploadScreen() {
   });
 
   if (tags !== null && selectedImage !== null) {
-    console.log(tags);
+    console.log(selectedImage);
     return (
       <View style={styles.container}>
         <Image
           source={{ uri: selectedImage.localUri }}
           style={styles.thumbnail}
         />
-        <Button title="cancel" onPress={() => setSelectedImage(null)} />
         <ScrollView>{tagsToShow}</ScrollView>
+        <Button title="cancel" onPress={() => setSelectedImage(null)} />
+        <Button title="save" onPress={saveImage} />
       </View>
     );
   }
