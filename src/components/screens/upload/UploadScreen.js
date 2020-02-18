@@ -50,7 +50,7 @@ export default function UploadScreen() {
         })
         .then(url => {
           axios
-            .get(`https://f391f7a9.ngrok.io/api/images/tags?url=${url}`)
+            .get(`https://3cdc8260.ngrok.io/api/images/tags?url=${url}`)
             .then(res => {
               console.log("tags");
               setTags(res.data);
@@ -107,8 +107,12 @@ export default function UploadScreen() {
     return `${randomString}.jpg`;
   };
 
+  const removeTag = tagName => {
+    setTags(tags.filter(tag => tag.name !== tagName));
+  };
+
   const tagsToShow = tags.map(tag => {
-    return <Tag tagName={tag.name} />;
+    return <Tag key={tag.id} tagName={tag.name} delete={removeTag} />;
   });
 
   if (tags !== null && selectedImage !== null) {
