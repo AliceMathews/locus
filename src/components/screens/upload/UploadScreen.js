@@ -3,6 +3,8 @@ import { Text, View, Button, Image } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 
+const RNFS = require("react-native-fs");
+
 import styles from "./UploadScreenStyle";
 
 export default function UploadScreen() {
@@ -11,10 +13,15 @@ export default function UploadScreen() {
   useEffect(() => {
     if (selectedImage !== null) {
       let imageData = createFormData(selectedImage);
+      console.log(imageData);
       axios({
         method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
         url: "https://f6d7fd58.ngrok.io/api/images/upload",
-        data: { imageData }
+        data: imageData
       })
         .then(res => {
           console.log(res.data);
@@ -50,19 +57,17 @@ export default function UploadScreen() {
   };
 
   const createFormData = (image, exifData) => {
-    const data = new FormData();
-
-    data.append("image", {
+    const data = {
       name: "newImage",
       type: selectedImage.type,
-      uri: selectedImage.localUri
-    });
+      uri: selectedImage.localUri.replace("file:", "file://")
+    };
 
     return data;
   };
 
   if (selectedImage !== null) {
-    console.log(selectedImage);
+    // console.log(selectedImage);
     return (
       <View style={styles.container}>
         <Image
