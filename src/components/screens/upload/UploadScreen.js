@@ -4,6 +4,8 @@ import * as ImagePicker from "expo-image-picker";
 import { RNS3 } from "react-native-aws3";
 import axios from "axios";
 
+import Tag from "./Tag";
+
 import styles from "./UploadScreenStyle";
 import {
   keyPrefix,
@@ -13,9 +15,11 @@ import {
   secretKey,
   successActionStatus
 } from "../../../../configKeys";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [tags, setTags] = useState([]);
 
   useEffect(() => {
     if (selectedImage !== null) {
@@ -47,7 +51,7 @@ export default function UploadScreen() {
           axios
             .get(`https://f6d7fd58.ngrok.io/api/images/tags?url=${url}`)
             .then(res => {
-              console.log(res.data);
+              setTags(res.data);
             })
             .catch(e => {
               console.log(e);
@@ -101,8 +105,12 @@ export default function UploadScreen() {
     return `${randomString}.jpg`;
   };
 
-  if (selectedImage !== null) {
-    // console.log(selectedImage);
+  const tagsToShow = tags.map(tag => {
+    return <Tag tagName={tag.name} />;
+  });
+
+  if (tags !== null && selectedImage !== null) {
+    console.log(tags);
     return (
       <View style={styles.container}>
         <Image
@@ -110,6 +118,7 @@ export default function UploadScreen() {
           style={styles.thumbnail}
         />
         <Button title="cancel" onPress={() => setSelectedImage(null)} />
+        <ScrollView>{tagsToShow}</ScrollView>
       </View>
     );
   }
