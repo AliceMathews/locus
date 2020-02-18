@@ -7,14 +7,18 @@ import RegisterScreen from "../screens/user/RegisterScreen";
 
 const UserStack = createStackNavigator();
 
-export default function UserStackNav(props) {
+export default function UserStackNav({ storeToken, getToken }) {
   return (
     <UserStack.Navigator initialRouteName="Profile">
       <UserStack.Screen name="Profile">
-        {() => <ProfileScreen currentUser={props.currentUser} />}
+        {() => <ProfileScreen getToken={getToken} />}
       </UserStack.Screen>
-      <UserStack.Screen name="Login" component={LoginScreen} />
-      <UserStack.Screen name="Register" component={RegisterScreen} />
+      <UserStack.Screen name="Login">
+        {() => <LoginScreen storeToken={storeToken} />}
+      </UserStack.Screen>
+      <UserStack.Screen name="Register">
+        {() => <RegisterScreen storeToken={storeToken} />}
+      </UserStack.Screen>
     </UserStack.Navigator>
   );
 }

@@ -5,27 +5,35 @@ import {
   View,
   TouchableOpacity,
   Keyboard,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  TouchableHighlight,
+  Modal,
+  Alert
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 import styles from "./LoginScreenStyle";
 
-export default function LoginScreen() {
+export default function LoginScreen({ storeToken }) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-
+  // const [error, setError] = useState(null);
+  const navigation = useNavigation();
   const login = async (username, password) => {
     try {
       const res = await axios.post(
-        "https://a9edfc48.ngrok.io/api/users/login",
+        "https://f17096c5.ngrok.io/api/users/login",
         {
           username,
           password
         }
       );
-    } catch {
-      console.log;
+      await storeToken(res.data.auth_token);
+      navigation.navigate("Home");
+    } catch (err) {
+      // setError(err);
+      Alert.alert("Wrong Credentials");
     }
   };
 
@@ -55,10 +63,18 @@ export default function LoginScreen() {
         />
 
         <TouchableOpacity
+          disabled={!password || !userName}
           style={styles.submitButton}
           onPress={() => (Keyboard.dismiss(), login(userName, password))}
         >
           <Text style={styles.submitButtonText}>Submit</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={() => navigation.navigate("Register")}
+        >
+          <Text style={styles.submitButtonText}>Sign up</Text>
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
