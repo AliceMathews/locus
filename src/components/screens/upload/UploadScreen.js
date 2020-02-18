@@ -34,21 +34,25 @@ export default function UploadScreen() {
         successActionStatus
       };
 
-      RNS3.put(file, options).then(res => {
-        if (res.status !== 201) {
-          throw new Error("Failed to upload image to S3");
-        }
-        console.log(res.body.postResponse.location);
-        const url = res.body.postResponse.location;
-        axios
-          .get(`https://f6d7fd58.ngrok.io/api/images/tags?url=${url}`)
-          .then(res => {
-            console.log(res.data);
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      });
+      RNS3.put(file, options)
+        .then(res => {
+          if (res.status !== 201) {
+            throw new Error("Failed to upload image to S3");
+          }
+
+          const url = res.body.postResponse.location;
+          return url;
+        })
+        .then(url => {
+          axios
+            .get(`https://f6d7fd58.ngrok.io/api/images/tags?url=${url}`)
+            .then(res => {
+              console.log(res.data);
+            })
+            .catch(e => {
+              console.log(e);
+            });
+        });
     }
   }, [selectedImage]);
 
@@ -67,12 +71,10 @@ export default function UploadScreen() {
 
     if (pickerResult.cancelled === true) return;
 
-    ///THIS IS WHERE WE WILL MAKE REQUEST TO API TO GET TAGS
     setSelectedImage({
       localUri: pickerResult.uri,
       exif: pickerResult.exif,
       type: pickerResult.type
-      // name: pickerResult.fileName
     });
   };
 
