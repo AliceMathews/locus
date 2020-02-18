@@ -1,34 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, Button, Image } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { RNS3 } from "react-native-aws3";
 import axios from "axios";
 
-const RNFS = require("react-native-fs");
-
 import styles from "./UploadScreenStyle";
+import {
+  keyPrefix,
+  bucket,
+  region,
+  accessKey,
+  secretKey,
+  successActionStatus
+} from "../../../../configKeys";
 
 export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     if (selectedImage !== null) {
-      let imageData = createFormData(selectedImage);
-      console.log(imageData);
-      axios({
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        url: "https://f6d7fd58.ngrok.io/api/images/upload",
-        data: imageData
-      })
-        .then(res => {
-          console.log(res.data);
-        })
-        .catch(e => {
-          console.error(e);
-        });
+      const file = {
+        uri: selectedImage.localUri,
+        name: generateFileName(),
+        type: "image/jpg"
+      };
+
+      const options = {
+        keyPrefix,
+        bucket,
+        region,
+        accessKey,
+        secretKey,
+        successActionStatus
+      };
+
+      RNS3.put(file, options).then(res => {
+        if (res.status !== 201) {
+          throw new Error("Failed to upload image to S3");
+        }
+        console.log(res.body.postResponse.location);
+      });
     }
   }, [selectedImage]);
 
@@ -56,14 +67,27 @@ export default function UploadScreen() {
     });
   };
 
-  const createFormData = (image, exifData) => {
-    const data = {
-      name: "newImage",
-      type: selectedImage.type,
-      uri: selectedImage.localUri.replace("file:", "file://")
-    };
+  const generateFileName = () => {
+    let count = 0;
+    let randomString = "";
 
-    return data;
+    while (count < 6) {
+      let randomNumber = Math.floor(Math.random() * (122 - 48 + 1) + 48);
+      let randomChar = "";
+
+      if (randomNumber >= 58 && randomNumber <= 64) {
+        continue;
+      } else if (randomNumber >= 91 && randomNumber <= 96) {
+        continue;
+      } else {
+        //convert to character
+        randomChar = String.fromCharCode(randomNumber);
+        randomString += randomChar;
+        count++;
+      }
+    }
+
+    return `${randomString}.jpg`;
   };
 
   if (selectedImage !== null) {
