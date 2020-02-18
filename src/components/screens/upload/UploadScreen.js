@@ -45,12 +45,14 @@ export default function UploadScreen() {
           }
 
           const url = res.body.postResponse.location;
+          console.log("image saved to s3");
           return url;
         })
         .then(url => {
           axios
-            .get(`https://f6d7fd58.ngrok.io/api/images/tags?url=${url}`)
+            .get(`https://f391f7a9.ngrok.io/api/images/tags?url=${url}`)
             .then(res => {
+              console.log("tags");
               setTags(res.data);
             })
             .catch(e => {
