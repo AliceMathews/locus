@@ -49,7 +49,7 @@ export default function UploadScreen() {
         })
         .then(url => {
           axios
-            .get(`https://f6d7fd58.ngrok.io/api/images/tags?url=${url}`)
+            .get(`https://3cdc8260.ngrok.io/api/images/tags?url=${url}`)
             .then(res => {
               setTags(res.data);
             })
@@ -106,9 +106,7 @@ export default function UploadScreen() {
   };
 
   const removeTag = tagName => {
-    setTags(prev => {
-      prev.filter(tag => tag.name !== tagName);
-    });
+    setTags(tags.filter(tag => tag.name !== tagName));
   };
 
   const tagsToShow = tags.map(tag => {
