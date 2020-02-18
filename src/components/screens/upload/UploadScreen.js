@@ -39,6 +39,15 @@ export default function UploadScreen() {
           throw new Error("Failed to upload image to S3");
         }
         console.log(res.body.postResponse.location);
+        const url = res.body.postResponse.location;
+        axios
+          .get(`https://f6d7fd58.ngrok.io/api/images/tags?url=${url}`)
+          .then(res => {
+            console.log(res.data);
+          })
+          .catch(e => {
+            console.log(e);
+          });
       });
     }
   }, [selectedImage]);
