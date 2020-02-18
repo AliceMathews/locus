@@ -105,8 +105,14 @@ export default function UploadScreen() {
     return `${randomString}.jpg`;
   };
 
+  const removeTag = tagName => {
+    setTags(prev => {
+      prev.filter(tag => tag.name !== tagName);
+    });
+  };
+
   const tagsToShow = tags.map(tag => {
-    return <Tag tagName={tag.name} />;
+    return <Tag key={tag.id} tagName={tag.name} delete={removeTag} />;
   });
 
   if (tags !== null && selectedImage !== null) {
