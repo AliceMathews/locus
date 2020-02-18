@@ -21,6 +21,13 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     color: "white"
+  },
+  model: {
+    width: 300,
+    height: 300,
+    flex: 2,
+    justifyContent: "center",
+    backgroundColor: "#F5FCFF"
   }
 });
 

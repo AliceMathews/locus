@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Image } from "react-native";
+import { View, Image, AsyncStorage } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AppLoading } from "expo";
@@ -13,33 +13,24 @@ import UserStackNav from "./src/components/stackNavigators/UserStackNav";
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentSession, setCurrentSession] = useState(null);
 
-  useEffect(() => {
-    //fetch session from AsyncStorage
-    //fetch fonts and download any other assets
-    //fetch user data
-    (async () => {
-      try {
-        const res = await axios.get(
-          "https://locus-api.herokuapp.com/api/users/3"
-        );
-        setCurrentUser(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-    // return () => {
-    //   cleanup
-    // };
-  }, []);
-
-  // const _cacheResourcesAsync = async () => {
-  //   const timer = await setTimeout(() => {
-  //     console.log("hello from the otherside");
-  //   }, 10000);
-  //   return timer;
-  // };
+  const storeToken = async token => {
+    try {
+      await AsyncStorage.setItem("userData", JSON.stringify(token));
+    } catch (error) {
+      console.log("Something went wrong", error);
+    }
+  };
+  const getToken = async () => {
+    try {
+      let userData = await AsyncStorage.getItem("userData");
+      let data = JSON.parse(userData);
+      console.log("this is the auth token", data);
+    } catch (error) {
+      console.log("Something went wrong", error);
+    }
+  };
 
   return (
     <NavigationContainer>
@@ -63,7 +54,7 @@ export default function App() {
         }}
       >
         <Tab.Screen name="User">
-          {() => <UserStackNav currentUser={currentUser} />}
+          {() => <UserStackNav storeToken={storeToken} getToken={getToken} />}
         </Tab.Screen>
         <Tab.Screen name="Home">{() => <HomeStackNav />}</Tab.Screen>
         <Tab.Screen name="Upload">{() => <UploadStackNav />}</Tab.Screen>

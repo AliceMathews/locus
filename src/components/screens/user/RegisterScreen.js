@@ -5,26 +5,32 @@ import {
   View,
   TouchableOpacity,
   Keyboard,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Alert
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import styles from "./RegisterScreenStyle";
 
-export default function RegisterScreen() {
+export default function RegisterScreen({ storeToken }) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const navigation = useNavigation();
 
   const register = async (username, password) => {
     try {
       const res = await axios.post(
-        "https://a9edfc48.ngrok.io/api/users/register",
+        "https://f17096c5.ngrok.io/api/users/register",
         {
           username,
           password
         }
       );
-    } catch {
-      console.log;
+      await storeToken(res.data.auth_token);
+      navigation.navigate("Home");
+    } catch (err) {
+      console.log(err);
+      Alert.alert("Username already taken");
     }
   };
   return (
@@ -53,6 +59,7 @@ export default function RegisterScreen() {
         />
 
         <TouchableOpacity
+          disabled={!password || !userName}
           style={styles.submitButton}
           onPress={() => (Keyboard.dismiss(), register(userName, password))}
         >

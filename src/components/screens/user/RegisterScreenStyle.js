@@ -3,8 +3,8 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 2,
-    backgroundColor: "#fff",
-    justifyContent: "center"
+    justifyContent: "center",
+    backgroundColor: "#F5FCFF"
   },
   input: {
     margin: 15,
