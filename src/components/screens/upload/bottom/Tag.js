@@ -5,9 +5,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import styles from "./TagStyle";
 
 export default function Tag(props) {
+  const name = props.tagName;
   return (
     <TouchableOpacity style={styles.tag} onPress={() => props.delete(name)}>
-      <Text style={styles.label}>{props.tagName}</Text>
+      <Text style={styles.label}>{name}</Text>
       <MaterialIcons name={"cancel"} size={15} color={"grey"} />
     </TouchableOpacity>
   );

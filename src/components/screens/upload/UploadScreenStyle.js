@@ -17,25 +17,38 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
-    flex: 0.35,
+    flex: 0.4,
     padding: 20
   },
   bottom: {
     flexDirection: "column",
-    flex: 0.65,
+    flex: 0.6,
     padding: 20,
     backgroundColor: "aliceblue"
   },
+  imageInfo: {
+    flex: 1,
+    // backgroundColor: "red",
+    justifyContent: "space-evenly"
+  },
+  description: {
+    padding: 10,
+    borderTopWidth: 1,
+    borderBottomWidth: 1
+  },
   tagsContainer: {
-    flex: 0.6,
+    flex: 0.7,
     flexDirection: "row",
     flexWrap: "wrap",
-    backgroundColor: "blue"
+    // backgroundColor: "blue",
+    paddingTop: 20
   },
   buttons: {
-    flex: 0.4,
+    flex: 0.3,
     flexDirection: "row",
-    backgroundColor: "orange"
+    // backgroundColor: "orange",
+    alignItems: "center",
+    justifyContent: "space-evenly"
   }
 });
 

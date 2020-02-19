@@ -8,12 +8,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     width: 100,
     margin: 3,
+    marginBottom: 5,
     flexDirection: "row",
     justifyContent: "space-between",
     borderRadius: 5
   },
   label: {
-    fontSize: 18
+    fontSize: 15
   }
 });
 

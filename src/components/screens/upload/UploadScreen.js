@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
-  Text,
   View,
-  Button,
   Image,
   ActivityIndicator,
   SafeAreaView,
-  TouchableOpacity
+  TextInput
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { RNS3 } from "react-native-aws3";
@@ -146,7 +144,7 @@ export default function UploadScreen() {
     setTags(tags.filter(tag => tag.name !== tagName));
   };
 
-  const tagsToShow = tags.slice(0, 9).map(tag => {
+  const tagsToShow = tags.slice(0, 12).map(tag => {
     return <Tag key={tag.id} tagName={tag.name} delete={removeTag} />;
   });
 
@@ -163,97 +161,40 @@ export default function UploadScreen() {
       </View>
 
       <View style={styles.bottom}>
-        {mode === "LOADING-TAGS" && (
-          <ActivityIndicator size="large" color="#0000ff" />
-        )}
-        {mode === "LOADED" && (
-          <View style={styles.tagsContainer}>{tagsToShow}</View>
-        )}
-        <View style={styles.buttons}>
-          <CustomButton
-            onPress={() => {
-              setSelectedImage(null);
-              setTags([]);
-              setImageUrl("");
-              setMode("EMPTY");
-            }}
-          >
-            Cancel
-          </CustomButton>
-          <CustomButton
-            onPress={() => {
-              saveImage;
-            }}
-          >
-            Save
-          </CustomButton>
-          {/* <TouchableOpacity
-            onPress={() => {
-              setSelectedImage(null);
-              setTags([]);
-              setImageUrl("");
-              setMode("EMPTY");
-            }}
-          >
-            <Text>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={saveImage}>
-            <Text>Save</Text>
-          </TouchableOpacity> */}
+        <View style={styles.imageInfo}>
+          {mode === "LOADING-TAGS" && (
+            <ActivityIndicator size="large" color="#0000ff" />
+          )}
+          {mode === "LOADED" && (
+            <>
+              <TextInput
+                style={styles.description}
+                placeholder="Add a description to your photo..."
+              ></TextInput>
+              <View style={styles.tagsContainer}>{tagsToShow}</View>
+              <View style={styles.buttons}>
+                <CustomButton
+                  onPress={() => {
+                    setSelectedImage(null);
+                    setTags([]);
+                    setImageUrl("");
+                    setMode("EMPTY");
+                  }}
+                >
+                  Cancel
+                </CustomButton>
+                <CustomButton
+                  onPress={() => {
+                    saveImage;
+                  }}
+                >
+                  Save
+                </CustomButton>
+              </View>
+            </>
+          )}
         </View>
       </View>
     </SafeAreaView>
-  );
-
-  if (tags !== null && selectedImage !== null) {
-    console.log(selectedImage);
-    return (
-      <View style={styles.container}>
-        <Image
-          source={{ uri: selectedImage.localUri }}
-          style={styles.thumbnail}
-        />
-        <ScrollView>{tagsToShow}</ScrollView>
-        <Button
-          title="cancel"
-          onPress={() => {
-            setSelectedImage(null);
-            setTags([]);
-            setImageUrl("");
-          }}
-        />
-        <Button title="save" onPress={saveImage} />
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
-
-  if (tags === null && selectedImage !== null) {
-    console.log(selectedImage);
-    return (
-      <View style={styles.container}>
-        <Image
-          source={{ uri: selectedImage.localUri }}
-          style={styles.thumbnail}
-        />
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Button
-          title="cancel"
-          onPress={() => {
-            setSelectedImage(null);
-            setTags([]);
-            setImageUrl("");
-          }}
-        />
-        <Button title="save" onPress={saveImage} />
-      </View>
-    );
-  }
-
-  return (
-    <View style={styles.container}>
-      <Text>Upload!</Text>
-      <Button title="add image" onPress={pickImage} />
-    </View>
   );
 }
