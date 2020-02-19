@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Button, Image } from "react-native";
+import {
+  View,
+  Image,
+  ActivityIndicator,
+  SafeAreaView,
+  TextInput
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { RNS3 } from "react-native-aws3";
 import axios from "axios";
 
-import Tag from "./Tag";
+import Tag from "./bottom/Tag";
 
 import styles from "./UploadScreenStyle";
 import {
@@ -15,12 +21,16 @@ import {
   secretKey,
   successActionStatus
 } from "../../../../configKeys";
-import { ScrollView } from "react-native-gesture-handler";
+
+import Empty from "./top/Empty";
+import CustomButton from "../../global/Button";
 
 export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [tags, setTags] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
+  const [mode, setMode] = useState("EMPTY");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     if (selectedImage !== null) {
@@ -39,6 +49,8 @@ export default function UploadScreen() {
         successActionStatus
       };
 
+      setMode("LOADING-TAGS");
+
       RNS3.put(file, options)
         .then(res => {
           if (res.status !== 201) {
@@ -52,9 +64,10 @@ export default function UploadScreen() {
         })
         .then(url => {
           axios
-            .get(`https://3cdc8260.ngrok.io/api/images/tags?url=${url}`)
+            .get(`https://4fd074c1.ngrok.io/api/images/tags?url=${url}`)
             .then(res => {
               setTags(res.data);
+              setMode("LOADED");
             })
             .catch(e => {
               console.log(e);
@@ -83,20 +96,24 @@ export default function UploadScreen() {
       exif: pickerResult.exif,
       type: pickerResult.type
     });
+    setMode("IMAGE");
   };
 
   const saveImage = () => {
     console.log("saving");
+
     const imageData = {
       owner_id: 1,
       exif: selectedImage.exif,
-      description: "PHOTO",
+      description: description,
       url: imageUrl,
       views: 0,
       tags: tags
     };
+
+    console.log(imageData);
     axios
-      .post("https://3cdc8260.ngrok.io/api/images", { imageData })
+      .post("https://4fd074c1.ngrok.io/api/images", { imageData })
       .then(res => {
         console.log(res.data);
       })
@@ -130,29 +147,60 @@ export default function UploadScreen() {
     setTags(tags.filter(tag => tag.name !== tagName));
   };
 
-  const tagsToShow = tags.map(tag => {
+  const tagsToShow = tags.slice(0, 12).map(tag => {
     return <Tag key={tag.id} tagName={tag.name} delete={removeTag} />;
   });
 
-  if (tags !== null && selectedImage !== null) {
-    console.log(selectedImage);
-    return (
-      <View style={styles.container}>
-        <Image
-          source={{ uri: selectedImage.localUri }}
-          style={styles.thumbnail}
-        />
-        <ScrollView>{tagsToShow}</ScrollView>
-        <Button title="cancel" onPress={() => setSelectedImage(null)} />
-        <Button title="save" onPress={saveImage} />
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.container}>
-      <Text>Upload!</Text>
-      <Button title="add image" onPress={pickImage} />
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.top}>
+        {mode === "EMPTY" && <Empty press={pickImage} />}
+        {mode !== "EMPTY" && (
+          <Image
+            source={{ uri: selectedImage.localUri }}
+            style={styles.thumbnail}
+          />
+        )}
+      </View>
+
+      <View style={styles.bottom}>
+        <View style={styles.imageInfo}>
+          {mode === "LOADING-TAGS" && (
+            <ActivityIndicator size="large" color="#0000ff" />
+          )}
+          {mode === "LOADED" && (
+            <>
+              <TextInput
+                style={styles.description}
+                placeholder="Add a description to your photo..."
+                onChangeText={text => setDescription(text)}
+                value={description}
+              ></TextInput>
+              <View style={styles.tagsContainer}>{tagsToShow}</View>
+              <View style={styles.buttons}>
+                <CustomButton
+                  onPress={() => {
+                    setSelectedImage(null);
+                    setTags([]);
+                    setImageUrl("");
+                    setMode("EMPTY");
+                    setDescription("");
+                  }}
+                >
+                  Cancel
+                </CustomButton>
+                <CustomButton
+                  onPress={() => {
+                    saveImage();
+                  }}
+                >
+                  Save
+                </CustomButton>
+              </View>
+            </>
+          )}
+        </View>
+      </View>
+    </SafeAreaView>
   );
 }
