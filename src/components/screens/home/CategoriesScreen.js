@@ -29,14 +29,21 @@ export default function CategoriesScreen({ navigation }) {
   const [value, setValue] = useState("");
 
   useEffect(() => {
+    // navigation.addListener("focus", () => {
+    //   console.log("focused");
+    //   fetchCategories();
+    // })
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = () => {
     axios.get(`${API_URL}categories`).then(res => {
-      // console.log(res.data.categories);
       setCategories(res.data.categories);
       console.log(`response from backend ${categories}`);
       setFullCategories(res.data.categories);
       setLoading(false);
     });
-  }, []);
+  }
 
   const deviceWidth = Dimensions.get("window").width;
 
