@@ -26,7 +26,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 
 import Empty from "./top/Empty";
-import TagsContainer from "./bottom/TagContainer";
+import CustomButton from "../../global/Button";
 
 export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -66,7 +66,7 @@ export default function UploadScreen() {
         })
         .then(url => {
           axios
-            .get(`https://3cdc8260.ngrok.io/api/images/tags?url=${url}`)
+            .get(`https://4fd074c1.ngrok.io/api/images/tags?url=${url}`)
             .then(res => {
               setTags(res.data);
               setMode("LOADED");
@@ -112,7 +112,7 @@ export default function UploadScreen() {
       tags: tags
     };
     axios
-      .post("https://3cdc8260.ngrok.io/api/images", { imageData })
+      .post("https://4fd074c1.ngrok.io/api/images", { imageData })
       .then(res => {
         console.log(res.data);
       })
@@ -170,7 +170,24 @@ export default function UploadScreen() {
           <View style={styles.tagsContainer}>{tagsToShow}</View>
         )}
         <View style={styles.buttons}>
-          <TouchableOpacity
+          <CustomButton
+            onPress={() => {
+              setSelectedImage(null);
+              setTags([]);
+              setImageUrl("");
+              setMode("EMPTY");
+            }}
+          >
+            Cancel
+          </CustomButton>
+          <CustomButton
+            onPress={() => {
+              saveImage;
+            }}
+          >
+            Save
+          </CustomButton>
+          {/* <TouchableOpacity
             onPress={() => {
               setSelectedImage(null);
               setTags([]);
@@ -182,7 +199,7 @@ export default function UploadScreen() {
           </TouchableOpacity>
           <TouchableOpacity onPress={saveImage}>
             <Text>Save</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </SafeAreaView>
