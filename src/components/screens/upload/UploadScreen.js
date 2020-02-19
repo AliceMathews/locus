@@ -21,7 +21,6 @@ import {
   secretKey,
   successActionStatus
 } from "../../../../configKeys";
-import { ScrollView } from "react-native-gesture-handler";
 
 import Empty from "./top/Empty";
 import CustomButton from "../../global/Button";
@@ -31,6 +30,7 @@ export default function UploadScreen() {
   const [tags, setTags] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [mode, setMode] = useState("EMPTY");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     if (selectedImage !== null) {
@@ -101,14 +101,17 @@ export default function UploadScreen() {
 
   const saveImage = () => {
     console.log("saving");
+
     const imageData = {
       owner_id: 1,
       exif: selectedImage.exif,
-      description: "PHOTO",
+      description: description,
       url: imageUrl,
       views: 0,
       tags: tags
     };
+
+    console.log(imageData);
     axios
       .post("https://4fd074c1.ngrok.io/api/images", { imageData })
       .then(res => {
@@ -170,6 +173,8 @@ export default function UploadScreen() {
               <TextInput
                 style={styles.description}
                 placeholder="Add a description to your photo..."
+                onChangeText={text => setDescription(text)}
+                value={description}
               ></TextInput>
               <View style={styles.tagsContainer}>{tagsToShow}</View>
               <View style={styles.buttons}>
@@ -179,13 +184,14 @@ export default function UploadScreen() {
                     setTags([]);
                     setImageUrl("");
                     setMode("EMPTY");
+                    setDescription("");
                   }}
                 >
                   Cancel
                 </CustomButton>
                 <CustomButton
                   onPress={() => {
-                    saveImage;
+                    saveImage();
                   }}
                 >
                   Save
