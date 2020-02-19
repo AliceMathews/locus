@@ -13,7 +13,8 @@ import {
   region,
   accessKey,
   secretKey,
-  successActionStatus
+  successActionStatus,
+  API_URL
 } from "../../../../configKeys";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -44,7 +45,6 @@ export default function UploadScreen() {
           if (res.status !== 201) {
             throw new Error("Failed to upload image to S3");
           }
-
           const url = res.body.postResponse.location;
           console.log("image saved to s3");
           setImageUrl(url);
@@ -52,8 +52,9 @@ export default function UploadScreen() {
         })
         .then(url => {
           axios
-            .get(`https://3cdc8260.ngrok.io/api/images/tags?url=${url}`)
+            .get(`${API_URL}images/tags?url=${url}`)
             .then(res => {
+              console.log(res.data);
               setTags(res.data);
             })
             .catch(e => {

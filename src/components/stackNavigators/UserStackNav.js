@@ -9,7 +9,7 @@ const UserStack = createStackNavigator();
 
 export default function UserStackNav({ storeToken, getToken }) {
   return (
-    <UserStack.Navigator initialRouteName="Profile">
+    <UserStack.Navigator initialRouteName="Login">
       <UserStack.Screen name="Profile">
         {() => <ProfileScreen getToken={getToken} />}
       </UserStack.Screen>
