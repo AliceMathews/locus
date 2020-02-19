@@ -19,6 +19,23 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     flex: 0.35,
     padding: 20
+  },
+  bottom: {
+    flexDirection: "column",
+    flex: 0.65,
+    padding: 20,
+    backgroundColor: "aliceblue"
+  },
+  tagsContainer: {
+    flex: 0.6,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    backgroundColor: "blue"
+  },
+  buttons: {
+    flex: 0.4,
+    flexDirection: "row",
+    backgroundColor: "orange"
   }
 });
 

@@ -5,13 +5,14 @@ import {
   Button,
   Image,
   ActivityIndicator,
-  SafeAreaView
+  SafeAreaView,
+  TouchableOpacity
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { RNS3 } from "react-native-aws3";
 import axios from "axios";
 
-import Tag from "./Tag";
+import Tag from "./bottom/Tag";
 
 import styles from "./UploadScreenStyle";
 import {
@@ -25,6 +26,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 
 import Empty from "./top/Empty";
+import TagsContainer from "./bottom/TagContainer";
 
 export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -144,17 +146,14 @@ export default function UploadScreen() {
     setTags(tags.filter(tag => tag.name !== tagName));
   };
 
-  const tagsToShow = tags.map(tag => {
+  const tagsToShow = tags.slice(0, 9).map(tag => {
     return <Tag key={tag.id} tagName={tag.name} delete={removeTag} />;
   });
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.top}>
-        {mode === "EMPTY" && (
-          // <Button title="add image" onPress={pickImage} />
-          <Empty press={pickImage} />
-        )}
+        {mode === "EMPTY" && <Empty press={pickImage} />}
         {mode !== "EMPTY" && (
           <Image
             source={{ uri: selectedImage.localUri }}
@@ -163,28 +162,28 @@ export default function UploadScreen() {
         )}
       </View>
 
-      <View
-        style={{
-          flexDirection: "column",
-          flex: 0.65,
-          padding: 20,
-          backgroundColor: "aliceblue"
-        }}
-      >
+      <View style={styles.bottom}>
         {mode === "LOADING-TAGS" && (
           <ActivityIndicator size="large" color="#0000ff" />
         )}
-        {mode === "LOADED" && <ScrollView>{tagsToShow}</ScrollView>}
-        <Button
-          title="cancel"
-          onPress={() => {
-            setSelectedImage(null);
-            setTags([]);
-            setImageUrl("");
-            setMode("EMPTY");
-          }}
-        />
-        <Button title="save" onPress={saveImage} />
+        {mode === "LOADED" && (
+          <View style={styles.tagsContainer}>{tagsToShow}</View>
+        )}
+        <View style={styles.buttons}>
+          <TouchableOpacity
+            onPress={() => {
+              setSelectedImage(null);
+              setTags([]);
+              setImageUrl("");
+              setMode("EMPTY");
+            }}
+          >
+            <Text>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={saveImage}>
+            <Text>Save</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
