@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
     
   },
   categoriesContainer: {
-    flex: 5
+    flex: 5,
+    justifyContent: "space-evenly"
   },
   categoryTile: {
     margin: 5

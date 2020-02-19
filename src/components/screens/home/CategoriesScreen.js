@@ -6,9 +6,12 @@ import {
   Image,
   ScrollView,
   FlatList,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from "react-native";
 import { Tile, SearchBar } from "react-native-elements";
+import LiveSearch from './LiveSearch';
+
 import axios from "axios";
 
 import { API_URL } from "../../../../configKeys";
@@ -26,14 +29,21 @@ export default function CategoriesScreen({ navigation }) {
   const [value, setValue] = useState("");
 
   useEffect(() => {
+    // navigation.addListener("focus", () => {
+    //   console.log("focused");
+    //   fetchCategories();
+    // })
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = () => {
     axios.get(`${API_URL}categories`).then(res => {
-      // console.log(res.data.categories);
       setCategories(res.data.categories);
       console.log(`response from backend ${categories}`);
       setFullCategories(res.data.categories);
       setLoading(false);
     });
-  }, []);
+  }
 
   const deviceWidth = Dimensions.get("window").width;
 
@@ -52,44 +62,39 @@ export default function CategoriesScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.bannerContainer}>
-        <Image
-          source={{
-            uri: "https://locus-dev.s3-us-west-1.amazonaws.com/nsx.jpg"
-          }}
-          style={styles.banner}
-        />
-        <SearchBar
-          placeholder="Search here..."
-          lightTheme
-          round
-          onChangeText={text => searchFilterCategories(text)}
+        <LiveSearch
           value={searchValue}
-          showCancel={true}
+          onChangeText={text => searchFilterCategories(text)}
+          width={deviceWidth * 0.85}
         />
-        <Text>The placeholder for Locus Logo</Text>
       </View>
       <View style={styles.categoriesContainer}>
-        <FlatList
-          numColumns={2}
-          data={categories}
-          renderItem={({ item }) => (
-            <Tile
-              style={styles.categoryTile}
-              key={item.id}
-              imageSrc={{ uri: item.cover_photo_url }}
-              title={item.name}
-              featured
-              onPress={() =>
-                navigation.navigate("Photos", {
-                  categoryId: item.id
-                })
-              }
-              width={deviceWidth / 2}
-              height={deviceWidth / 2}
-              titleStyle={styles.categoryTitleStyle}
-            />
-          )}
-        />
+        {loading && (
+          <ActivityIndicator size="large" color="#0000ff" />
+        )}
+        {!loading && (
+          <FlatList
+            numColumns={2}
+            data={categories}
+            renderItem={({ item }) => (
+              <Tile
+                style={styles.categoryTile}
+                key={item.id}
+                imageSrc={{ uri: item.cover_photo_url }}
+                title={item.name}
+                featured
+                onPress={() =>
+                  navigation.navigate("Photos", {
+                    categoryId: item.id
+                  })
+                }
+                width={deviceWidth / 2}
+                height={deviceWidth / 2}
+                titleStyle={styles.categoryTitleStyle}
+              />
+            )}
+          />
+        )}
       </View>
     </View>
   );

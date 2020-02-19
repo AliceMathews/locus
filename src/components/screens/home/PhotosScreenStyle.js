@@ -11,7 +11,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   photosContainer: {
-    flex: 6
+    flex: 6,
+    justifyContent: "space-evenly"
   },
   banner: {
     width: 300,
