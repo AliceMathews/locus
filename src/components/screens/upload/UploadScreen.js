@@ -26,6 +26,7 @@ import {
 
 import Empty from "./top/Empty";
 import CustomButton from "../../global/Button";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -210,7 +211,10 @@ export default function UploadScreen() {
           )}
           {mode === "SAVED" && (
             <>
-              <Text>Sucessfully saved</Text>
+              <View>
+                <MaterialIcons name={"check-box"} size={24} color={"grey"} />
+                <Text style={{ fontSize: 18 }}>Sucessfully saved</Text>
+              </View>
               <CustomButton
                 style={{ width: 300 }}
                 onPress={() => {
