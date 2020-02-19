@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Button, Image } from "react-native";
+import {
+  Text,
+  View,
+  Button,
+  Image,
+  ActivityIndicator,
+  SafeAreaView
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { RNS3 } from "react-native-aws3";
 import axios from "axios";
@@ -17,10 +24,13 @@ import {
 } from "../../../../configKeys";
 import { ScrollView } from "react-native-gesture-handler";
 
+import Empty from "./top/Empty";
+
 export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [tags, setTags] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
+  const [mode, setMode] = useState("EMPTY");
 
   useEffect(() => {
     if (selectedImage !== null) {
@@ -39,6 +49,8 @@ export default function UploadScreen() {
         successActionStatus
       };
 
+      setMode("LOADING-TAGS");
+
       RNS3.put(file, options)
         .then(res => {
           if (res.status !== 201) {
@@ -55,6 +67,7 @@ export default function UploadScreen() {
             .get(`https://3cdc8260.ngrok.io/api/images/tags?url=${url}`)
             .then(res => {
               setTags(res.data);
+              setMode("LOADED");
             })
             .catch(e => {
               console.log(e);
@@ -83,6 +96,7 @@ export default function UploadScreen() {
       exif: pickerResult.exif,
       type: pickerResult.type
     });
+    setMode("IMAGE");
   };
 
   const saveImage = () => {
@@ -134,6 +148,52 @@ export default function UploadScreen() {
     return <Tag key={tag.id} tagName={tag.name} delete={removeTag} />;
   });
 
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <View
+        style={{
+          flexDirection: "column",
+          flex: 0.35,
+          padding: 20
+        }}
+      >
+        {mode === "EMPTY" && (
+          // <Button title="add image" onPress={pickImage} />
+          <Empty press={pickImage} />
+        )}
+        {mode !== "EMPTY" && (
+          <Image
+            source={{ uri: selectedImage.localUri }}
+            style={styles.thumbnail}
+          />
+        )}
+      </View>
+      <View
+        style={{
+          flexDirection: "column",
+          flex: 0.65,
+          padding: 20,
+          backgroundColor: "aliceblue"
+        }}
+      >
+        {mode === "LOADING-TAGS" && (
+          <ActivityIndicator size="large" color="#0000ff" />
+        )}
+        {mode === "LOADED" && <ScrollView>{tagsToShow}</ScrollView>}
+        <Button
+          title="cancel"
+          onPress={() => {
+            setSelectedImage(null);
+            setTags([]);
+            setImageUrl("");
+            setMode("EMPTY");
+          }}
+        />
+        <Button title="save" onPress={saveImage} />
+      </View>
+    </SafeAreaView>
+  );
+
   if (tags !== null && selectedImage !== null) {
     console.log(selectedImage);
     return (
@@ -143,7 +203,37 @@ export default function UploadScreen() {
           style={styles.thumbnail}
         />
         <ScrollView>{tagsToShow}</ScrollView>
-        <Button title="cancel" onPress={() => setSelectedImage(null)} />
+        <Button
+          title="cancel"
+          onPress={() => {
+            setSelectedImage(null);
+            setTags([]);
+            setImageUrl("");
+          }}
+        />
+        <Button title="save" onPress={saveImage} />
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if (tags === null && selectedImage !== null) {
+    console.log(selectedImage);
+    return (
+      <View style={styles.container}>
+        <Image
+          source={{ uri: selectedImage.localUri }}
+          style={styles.thumbnail}
+        />
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Button
+          title="cancel"
+          onPress={() => {
+            setSelectedImage(null);
+            setTags([]);
+            setImageUrl("");
+          }}
+        />
         <Button title="save" onPress={saveImage} />
       </View>
     );
