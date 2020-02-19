@@ -4,7 +4,8 @@ import {
   Image,
   ActivityIndicator,
   SafeAreaView,
-  TextInput
+  TextInput,
+  Text
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { RNS3 } from "react-native-aws3";
@@ -66,7 +67,6 @@ export default function UploadScreen() {
           axios
             .get(`${API_URL}images/tags?url=${url}`)
             .then(res => {
-              console.log(res.data);
               setTags(res.data);
               setMode("LOADED");
             })
@@ -102,6 +102,7 @@ export default function UploadScreen() {
 
   const saveImage = () => {
     console.log("saving");
+    setMode("SAVING");
 
     const imageData = {
       owner_id: 1,
@@ -116,9 +117,13 @@ export default function UploadScreen() {
     axios
       .post(`${API_URL}images`, { imageData })
       .then(res => {
+        setMode("SAVED");
         console.log(res.data);
       })
-      .catch(e => console.log(e));
+      .catch(e => {
+        setMode("ERROR");
+        console.log(e);
+      });
   };
 
   const generateFileName = () => {
@@ -200,6 +205,27 @@ export default function UploadScreen() {
               </View>
             </>
           )}
+          {mode === "SAVING" && (
+            <ActivityIndicator size="large" color="#0000ff" />
+          )}
+          {mode === "SAVED" && (
+            <>
+              <Text>Sucessfully saved</Text>
+              <CustomButton
+                style={{ width: 300 }}
+                onPress={() => {
+                  setSelectedImage(null);
+                  setTags([]);
+                  setImageUrl("");
+                  setMode("EMPTY");
+                  setDescription("");
+                }}
+              >
+                Add image
+              </CustomButton>
+            </>
+          )}
+          {mode === "ERROR" && <Text>Error saving</Text>}
         </View>
       </View>
     </SafeAreaView>
