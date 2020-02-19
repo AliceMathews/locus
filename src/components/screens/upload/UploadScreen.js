@@ -150,13 +150,7 @@ export default function UploadScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View
-        style={{
-          flexDirection: "column",
-          flex: 0.35,
-          padding: 20
-        }}
-      >
+      <View style={styles.top}>
         {mode === "EMPTY" && (
           // <Button title="add image" onPress={pickImage} />
           <Empty press={pickImage} />
@@ -168,6 +162,7 @@ export default function UploadScreen() {
           />
         )}
       </View>
+
       <View
         style={{
           flexDirection: "column",
