@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   imageInfo: {
     flex: 1,
     // backgroundColor: "red",
+    alignItems: "center",
     justifyContent: "space-evenly"
   },
   description: {
