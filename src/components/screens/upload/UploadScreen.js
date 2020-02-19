@@ -114,7 +114,7 @@ export default function UploadScreen() {
 
     console.log(imageData);
     axios
-      .post("https://4fd074c1.ngrok.io/api/images", { imageData })
+      .post(`${API_URL}images`, { imageData })
       .then(res => {
         console.log(res.data);
       })
