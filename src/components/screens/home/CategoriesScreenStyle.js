@@ -19,12 +19,15 @@ const styles = StyleSheet.create({
     flex: 5
   },
   categoryTile: {
-    margin: 5,
-    width: '50%'
+    margin: 5
   },
   tilesContainer: {
     width: '50%',
     position: 'relative'
+  },
+  categoryTitleStyle: {
+    fontStyle: 'italic',
+    fontSize: 100
   }
 });
 

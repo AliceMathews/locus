@@ -6,7 +6,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center"
-  }
+  }, 
+  bannerContainer: {
+    flex: 1,
+  },
+  photosContainer: {
+    flex: 6
+  },
+  banner: {
+    width: 300,
+    height: 75
+  },
 });
 
 export default styles;

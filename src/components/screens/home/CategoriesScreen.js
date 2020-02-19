@@ -9,14 +9,14 @@ export default function CategoriesScreen({ navigation }) {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios.get('https://9cd0f54c.ngrok.io/api/categories')
+    axios.get('https://a206c4aa.ngrok.io/api/categories')
       .then(res => {
         // console.log(res.data.categories);
         setCategories(res.data.categories);
         console.log(`response from backend ${categories}`);
       });
   }, []);
-  
+
   const deviceWidth = Dimensions.get('window').width;
   return (
     <View style={styles.container}>
@@ -50,7 +50,7 @@ export default function CategoriesScreen({ navigation }) {
               })}
               width={deviceWidth / 2}
               height={deviceWidth / 2}
-              titleStyle={{fontStyle: 'italic'}}
+              titleStyle={styles.categoryTitleStyle}
             />
           }
         />
