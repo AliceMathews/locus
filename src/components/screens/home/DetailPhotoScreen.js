@@ -8,7 +8,8 @@ import * as Permissions from "expo-permissions";
 import icon from "../../../../assets/locus.png";
 import { Linking } from "expo";
 
-export default function DetailPhotoScreen({ navigation }) {
+export default function DetailPhotoScreen({ route, navigation }) {
+  console.log(route.params.image.latitude, route.params.image.longitude);
   // const getDirections = async (lat, lng) => {
   //   try {
   //     const res = await axios.get(
@@ -57,13 +58,18 @@ export default function DetailPhotoScreen({ navigation }) {
         style={styles.map}
         showsUserLocation={true}
         initialRegion={{
-          latitude: 49.289819,
-          longitude: -123.132738,
+          latitude: route.params.image.latitude,
+          longitude: route.params.image.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421
         }}
       >
-        <Marker coordinate={{ latitude: 49.289819, longitude: -123.132738 }}>
+        <Marker
+          coordinate={{
+            latitude: route.params.image.latitude,
+            longitude: route.params.image.longitude
+          }}
+        >
           <Image
             source={icon}
             style={{
