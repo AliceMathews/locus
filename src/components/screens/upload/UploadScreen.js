@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Button, Image } from "react-native";
+import {
+  View,
+  Image,
+  ActivityIndicator,
+  SafeAreaView,
+  TextInput
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { RNS3 } from "react-native-aws3";
 import axios from "axios";
+
+import Tag from "./bottom/Tag";
 
 import styles from "./UploadScreenStyle";
 import {
@@ -11,11 +19,19 @@ import {
   region,
   accessKey,
   secretKey,
-  successActionStatus
+  successActionStatus,
+  API_URL
 } from "../../../../configKeys";
+
+import Empty from "./top/Empty";
+import CustomButton from "../../global/Button";
 
 export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [tags, setTags] = useState([]);
+  const [imageUrl, setImageUrl] = useState("");
+  const [mode, setMode] = useState("EMPTY");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     if (selectedImage !== null) {
@@ -34,21 +50,30 @@ export default function UploadScreen() {
         successActionStatus
       };
 
-      RNS3.put(file, options).then(res => {
-        if (res.status !== 201) {
-          throw new Error("Failed to upload image to S3");
-        }
-        console.log(res.body.postResponse.location);
-        const url = res.body.postResponse.location;
-        axios
-          .get(`https://f6d7fd58.ngrok.io/api/images/tags?url=${url}`)
-          .then(res => {
-            console.log(res.data);
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      });
+      setMode("LOADING-TAGS");
+
+      RNS3.put(file, options)
+        .then(res => {
+          if (res.status !== 201) {
+            throw new Error("Failed to upload image to S3");
+          }
+          const url = res.body.postResponse.location;
+          console.log("image saved to s3");
+          setImageUrl(url);
+          return url;
+        })
+        .then(url => {
+          axios
+            .get(`${API_URL}images/tags?url=${url}`)
+            .then(res => {
+              console.log(res.data);
+              setTags(res.data);
+              setMode("LOADED");
+            })
+            .catch(e => {
+              console.log(e);
+            });
+        });
     }
   }, [selectedImage]);
 
@@ -67,13 +92,33 @@ export default function UploadScreen() {
 
     if (pickerResult.cancelled === true) return;
 
-    ///THIS IS WHERE WE WILL MAKE REQUEST TO API TO GET TAGS
     setSelectedImage({
       localUri: pickerResult.uri,
       exif: pickerResult.exif,
       type: pickerResult.type
-      // name: pickerResult.fileName
     });
+    setMode("IMAGE");
+  };
+
+  const saveImage = () => {
+    console.log("saving");
+
+    const imageData = {
+      owner_id: 1,
+      exif: selectedImage.exif,
+      description: description,
+      url: imageUrl,
+      views: 0,
+      tags: tags
+    };
+
+    console.log(imageData);
+    axios
+      .post("https://4fd074c1.ngrok.io/api/images", { imageData })
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(e => console.log(e));
   };
 
   const generateFileName = () => {
@@ -99,23 +144,64 @@ export default function UploadScreen() {
     return `${randomString}.jpg`;
   };
 
-  if (selectedImage !== null) {
-    // console.log(selectedImage);
-    return (
-      <View style={styles.container}>
-        <Image
-          source={{ uri: selectedImage.localUri }}
-          style={styles.thumbnail}
-        />
-        <Button title="cancel" onPress={() => setSelectedImage(null)} />
-      </View>
-    );
-  }
+  const removeTag = tagName => {
+    setTags(tags.filter(tag => tag.name !== tagName));
+  };
+
+  const tagsToShow = tags.slice(0, 12).map(tag => {
+    return <Tag key={tag.id} tagName={tag.name} delete={removeTag} />;
+  });
 
   return (
-    <View style={styles.container}>
-      <Text>Upload!</Text>
-      <Button title="add image" onPress={pickImage} />
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.top}>
+        {mode === "EMPTY" && <Empty press={pickImage} />}
+        {mode !== "EMPTY" && (
+          <Image
+            source={{ uri: selectedImage.localUri }}
+            style={styles.thumbnail}
+          />
+        )}
+      </View>
+
+      <View style={styles.bottom}>
+        <View style={styles.imageInfo}>
+          {mode === "LOADING-TAGS" && (
+            <ActivityIndicator size="large" color="#0000ff" />
+          )}
+          {mode === "LOADED" && (
+            <>
+              <TextInput
+                style={styles.description}
+                placeholder="Add a description to your photo..."
+                onChangeText={text => setDescription(text)}
+                value={description}
+              ></TextInput>
+              <View style={styles.tagsContainer}>{tagsToShow}</View>
+              <View style={styles.buttons}>
+                <CustomButton
+                  onPress={() => {
+                    setSelectedImage(null);
+                    setTags([]);
+                    setImageUrl("");
+                    setMode("EMPTY");
+                    setDescription("");
+                  }}
+                >
+                  Cancel
+                </CustomButton>
+                <CustomButton
+                  onPress={() => {
+                    saveImage();
+                  }}
+                >
+                  Save
+                </CustomButton>
+              </View>
+            </>
+          )}
+        </View>
+      </View>
+    </SafeAreaView>
   );
 }
