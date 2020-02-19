@@ -64,11 +64,7 @@ export default function UploadScreen() {
         })
         .then(url => {
           axios
-<<<<<<< HEAD
             .get(`${API_URL}images/tags?url=${url}`)
-=======
-            .get(`https://4fd074c1.ngrok.io/api/images/tags?url=${url}`)
->>>>>>> 426ffb799a36c0bd881496ddb74810f087031f3e
             .then(res => {
               console.log(res.data);
               setTags(res.data);

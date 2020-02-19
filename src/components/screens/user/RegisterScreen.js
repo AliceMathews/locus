@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import { API_URL } from "../../../../configKeys";
 import styles from "./RegisterScreenStyle";
 
 export default function RegisterScreen({ storeToken }) {
@@ -19,13 +20,10 @@ export default function RegisterScreen({ storeToken }) {
 
   const register = async (username, password) => {
     try {
-      const res = await axios.post(
-        "https://f17096c5.ngrok.io/api/users/register",
-        {
-          username,
-          password
-        }
-      );
+      const res = await axios.post(`${API_URL}users/register`, {
+        username,
+        password
+      });
       await storeToken(res.data.auth_token);
       navigation.navigate("Home");
     } catch (err) {

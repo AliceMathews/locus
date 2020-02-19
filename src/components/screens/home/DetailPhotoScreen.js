@@ -20,17 +20,15 @@ export default function DetailPhotoScreen({ navigation }) {
   //   }
   // };
 
-  // const _getLocationAsync = async () => {
-  //   let { status } = await Permissions.askAsync(Permissions.LOCATION);
-  //   if (status !== "granted") {
-  //     this.setState({
-  //       errorMessage: "Permission to access location was denied"
-  //     });
-  //   }
+  const _getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== "granted") {
+      console.log("Permission to access location was denied");
+    }
 
-  //   let location = await Location.getCurrentPositionAsync({});
-  //   getDirections(location.coords.latitude, location.coords.longitude);
-  // };
+    let location = await Location.getCurrentPositionAsync({});
+    console.log(location);
+  };
 
   // const lat = 49.289819;
   // const lng = -123.132738;
@@ -65,11 +63,7 @@ export default function DetailPhotoScreen({ navigation }) {
           longitudeDelta: 0.0421
         }}
       >
-        <Marker
-          title={"BRAH"}
-          description={"BRAHBRAH"}
-          coordinate={{ latitude: 49.289819, longitude: -123.132738 }}
-        >
+        <Marker coordinate={{ latitude: 49.289819, longitude: -123.132738 }}>
           <Image
             source={icon}
             style={{
@@ -78,7 +72,7 @@ export default function DetailPhotoScreen({ navigation }) {
               borderRadius: 50
             }}
           />
-          <Callout tooltip={true}>
+          <Callout>
             <Image source={{ uri: url }} style={{ height: 100, width: 100 }} />
           </Callout>
         </Marker>
@@ -88,7 +82,9 @@ export default function DetailPhotoScreen({ navigation }) {
         title="View fullscreen photo"
         onPress={() => navigation.navigate("Photo-full")}
       />
-      <Button title="click" onPress={() => getDirections()} />
+
+      <Button title="google maps" onPress={() => getDirections()} />
+      <Button title="locate me" onPress={() => _getLocationAsync()} />
     </View>
   );
 }

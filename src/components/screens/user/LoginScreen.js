@@ -11,6 +11,7 @@ import {
   Alert
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { API_URL } from "../../../../configKeys";
 import axios from "axios";
 
 import styles from "./LoginScreenStyle";
@@ -22,13 +23,10 @@ export default function LoginScreen({ storeToken }) {
   const navigation = useNavigation();
   const login = async (username, password) => {
     try {
-      const res = await axios.post(
-        "https://f17096c5.ngrok.io/api/users/login",
-        {
-          username,
-          password
-        }
-      );
+      const res = await axios.post(`${API_URL}users/login`, {
+        username,
+        password
+      });
       await storeToken(res.data.auth_token);
       navigation.navigate("Home");
     } catch (err) {
