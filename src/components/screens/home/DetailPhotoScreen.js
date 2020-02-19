@@ -1,61 +1,289 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Text, View, Button, Image } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE, Callout } from "react-native-maps";
-import axios from "axios";
 import styles from "./DetailPhotoScreenStyle";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import icon from "../../../../assets/locus.png";
 import { Linking } from "expo";
+import { getDistance } from "geolib";
+
+const mapStyle = [
+  {
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#ebe3cd"
+      }
+    ]
+  },
+  {
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#523735"
+      }
+    ]
+  },
+  {
+    elementType: "labels.text.stroke",
+    stylers: [
+      {
+        color: "#f5f1e6"
+      }
+    ]
+  },
+  {
+    featureType: "administrative",
+    elementType: "geometry.stroke",
+    stylers: [
+      {
+        color: "#c9b2a6"
+      }
+    ]
+  },
+  {
+    featureType: "administrative.land_parcel",
+    elementType: "geometry.stroke",
+    stylers: [
+      {
+        color: "#dcd2be"
+      }
+    ]
+  },
+  {
+    featureType: "administrative.land_parcel",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#ae9e90"
+      }
+    ]
+  },
+  {
+    featureType: "landscape.natural",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#dfd2ae"
+      }
+    ]
+  },
+  {
+    featureType: "poi",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#dfd2ae"
+      }
+    ]
+  },
+  {
+    featureType: "poi",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#93817c"
+      }
+    ]
+  },
+  {
+    featureType: "poi.park",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#a5b076"
+      }
+    ]
+  },
+  {
+    featureType: "poi.park",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#447530"
+      }
+    ]
+  },
+  {
+    featureType: "road",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#f5f1e6"
+      }
+    ]
+  },
+  {
+    featureType: "road.arterial",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#fdfcf8"
+      }
+    ]
+  },
+  {
+    featureType: "road.highway",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#f8c967"
+      }
+    ]
+  },
+  {
+    featureType: "road.highway",
+    elementType: "geometry.stroke",
+    stylers: [
+      {
+        color: "#e9bc62"
+      }
+    ]
+  },
+  {
+    featureType: "road.highway.controlled_access",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#e98d58"
+      }
+    ]
+  },
+  {
+    featureType: "road.highway.controlled_access",
+    elementType: "geometry.stroke",
+    stylers: [
+      {
+        color: "#db8555"
+      }
+    ]
+  },
+  {
+    featureType: "road.local",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#806b63"
+      }
+    ]
+  },
+  {
+    featureType: "transit.line",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#dfd2ae"
+      }
+    ]
+  },
+  {
+    featureType: "transit.line",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#8f7d77"
+      }
+    ]
+  },
+  {
+    featureType: "transit.line",
+    elementType: "labels.text.stroke",
+    stylers: [
+      {
+        color: "#ebe3cd"
+      }
+    ]
+  },
+  {
+    featureType: "transit.station",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#dfd2ae"
+      }
+    ]
+  },
+  {
+    featureType: "water",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#b9d3c2"
+      }
+    ]
+  },
+  {
+    featureType: "water",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#92998d"
+      }
+    ]
+  }
+];
 
 export default function DetailPhotoScreen({ route, navigation }) {
-  console.log(route.params.image.latitude, route.params.image.longitude);
-  // const getDirections = async (lat, lng) => {
-  //   try {
-  //     const res = await axios.get(
-  //       `https://maps.googleapis.com/maps/api/directions/json?origin=${lat},${lng}&destination=49.289819,-123.132738&key=AIzaSyCdi-QygTTR2juKfO73ICLvP5njdTHj-bI`
-  //     );
-  //     console.log(res.data);
-  //   } catch (err) {
-  //     console.log("Something went wrong", err);
-  //   }
-  // };
+  const [currentLocation, setCurrentLocation] = useState({});
 
-  const _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== "granted") {
-      console.log("Permission to access location was denied");
+  const distance = () => {
+    const result = getDistance(
+      {
+        latitude: route.params.image.latitude,
+        longitude: route.params.image.longitude
+      },
+      currentLocation,
+      1
+    );
+    if (result.toString().length <= 3) {
+      return result + "m";
+    } else {
+      return result / 1000 + "km";
     }
-
-    let location = await Location.getCurrentPositionAsync({});
-    console.log(location);
   };
 
-  // const lat = 49.289819;
-  // const lng = -123.132738;
+  const _getLocationAsync = async () => {
+    try {
+      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setCurrentLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude
+      });
+    } catch (err) {
+      console.log("Something went wrong", err);
+    }
+  };
 
-  // const scheme = Platform.select({ ios: "maps:0,0?q=", android: "geo:0,0?q=" });
-  // const latLng = `${lat},${lng}`;
-  // const label = "Custom Label";
-  // const url = Platform.select({
-  //   ios: `${scheme}${label}@${latLng}`,
-  //   android: `${scheme}${latLng}(${label})`
-  // });
-
-  const url =
-    "https://66.media.tumblr.com/45c127dfae4a1438fe0d8c33f385e5b3/tumblr_oxsan65onQ1vswa89o1_1280.jpg";
+  useEffect(() => {
+    _getLocationAsync();
+  }, []);
 
   const getDirections = () => {
     Linking.openURL(
-      "https://www.google.com/maps/dir/?api=1&destination=City+Hall%2C+New+York%2C+NY"
+      `https://www.google.com/maps/dir/?api=1&origin=${currentLocation.latitude},${currentLocation.longitude}&destination=${route.params.image.latitude},${route.params.image.longitude}`
     );
+  };
+
+  const markerRef = useRef(null);
+
+  const onRegionChangeComplete = () => {
+    if (markerRef && markerRef.current && markerRef.current.showCallout) {
+      markerRef.current.showCallout();
+    }
   };
 
   return (
     <View style={styles.container}>
       <MapView
+        onMapReady={onRegionChangeComplete}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
+        customMapStyle={mapStyle}
         showsUserLocation={true}
         initialRegion={{
           latitude: route.params.image.latitude,
@@ -65,6 +293,7 @@ export default function DetailPhotoScreen({ route, navigation }) {
         }}
       >
         <Marker
+          ref={markerRef}
           coordinate={{
             latitude: route.params.image.latitude,
             longitude: route.params.image.longitude
@@ -79,18 +308,20 @@ export default function DetailPhotoScreen({ route, navigation }) {
             }}
           />
           <Callout>
-            <Image source={{ uri: url }} style={{ height: 100, width: 100 }} />
+            <Image
+              source={{ uri: route.params.image.url }}
+              style={{ height: 100, width: 100 }}
+            />
           </Callout>
         </Marker>
       </MapView>
-      <Text>Detailed Photo with map!</Text>
-      <Button
+      <Button title="Directions" onPress={() => getDirections()} />
+      <Text>{distance()}</Text>
+      {/* <Button
         title="View fullscreen photo"
         onPress={() => navigation.navigate("Photo-full")}
       />
-
-      <Button title="google maps" onPress={() => getDirections()} />
-      <Button title="locate me" onPress={() => _getLocationAsync()} />
+      <Button title="locate me" onPress={() => distance()} /> */}
     </View>
   );
 }
