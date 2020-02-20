@@ -8,11 +8,13 @@ import {
   FlatList,
   Dimensions,
   ActivityIndicator,
-  ImageBackground
+  ImageBackground,
+  TouchableOpacity,
 } from "react-native";
-import { Tile, SearchBar } from "react-native-elements";
-import { CacheManager } from 'react-native-expo-image-cache';
+// import { Tile, SearchBar } from "react-native-elements";
+// import { CacheManager } from 'react-native-expo-image-cache';
 import LiveSearch from './LiveSearch';
+import Tile from './Tile';
 
 import axios from "axios";
 
@@ -83,53 +85,40 @@ export default function CategoriesScreen({ navigation }) {
     setCategories(searchResults);
   };
 
-  const renderTile = ({ item }) => {
-    return (
-        <Tile
-          style={styles.categoryTile}
-          key={item.id}
-          // imageSrc={{ uri: item.cover_photo_url}}
-          title={item.name}
-          titleStyle={{color:'red'}}
-          featured
-          onPress={() =>
-            navigation.navigate("Photos", {
-              categoryId: item.id
-            })
-          }
-          width={deviceWidth / 2}
-          height={deviceWidth / 2}
-          titleStyle={styles.categoryTitleStyle}
-          // imageProps={{style}}
-          ImageComponent={() => {
-            return (
-              <View>
-                {/* <Image
-                  source={{uri: item.cover_photo_url, cache: "force-cache"}}
-                  style={{width: deviceWidth / 2, height: deviceWidth / 2}}
-                />
-                <Text
-                  style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center'}}
-                >{item.name}</Text> */}
-                <ImageBackground 
-                  source={{uri: item.cover_photo_url, cache: "force-cache"}}
-                  style={{width: deviceWidth / 2, height: deviceWidth / 2}}
-                >
-                <Text>{item.name}</Text>
-                </ImageBackground>
-              </View> 
-            )
-          }}
-        />
-    );
-  }
+  // const renderTile = ({ item }) => {
+  //   return (
+  //       <Tile
+  //         style={styles.categoryTile}
+  //         key={item.id}
+  //         // imageSrc={{ uri: item.cover_photo_url}}
+  //         // title={item.name}
+  //         // titleStyle={{color:'red'}}
+  //         // featured
+  //         onPress={() =>
+  //           navigation.navigate("Photos", {
+  //             categoryId: item.id
+  //           })
+  //         }
+  //         width={deviceWidth / 2}
+  //         height={deviceWidth / 2}
+  //         titleStyle={styles.categoryTitleStyle}
+  //         // imageProps={{style}}
+  //         ImageComponent={() => {
+  //           return (
 
 
-  // const testUri = "https://locus-dev.s3.amazonaws.com/development%2Ff3OwtL.jpg";
-  // // CacheManager.cache(testUri, localURI => setValue(localURI));
-  // CacheManager.get(testUri).getPath().then(res => {
-  //   console.log(`cached URI: ${res}`);
-  // })
+  //               <ImageBackground 
+  //                 source={{uri: item.cover_photo_url, cache: "force-cache"}}
+  //                 style={{width: deviceWidth / 2, height: deviceWidth / 2}}
+  //               >
+  //                 {/* <Text>{item.name}</Text> */}
+  //               </ImageBackground>
+
+  //           )
+  //         }}
+  //       />
+  //   );
+  // }
   
   return (
     <View style={styles.container}>
@@ -144,41 +133,37 @@ export default function CategoriesScreen({ navigation }) {
         {loading && (
           <ActivityIndicator size="large" color="#0000ff" />
         )}
-        {!loading && (
+
+        {/* {!loading && (
           <FlatList
             numColumns={2}
             data={categories}
             keyExtractor={item => item.id}
             renderItem={renderTile}
           />
-        )}
-        {/* {categories.map((category) => {
-          return (
-            <Image
-              key={category.id}
-              source={{uri: category.cover_photo_url,
-                      cache: "only-if-cached"}}
-              style={{width:100, height: 100}}
-            />
-            // <Text>{category.cover_photo_url}</Text>
-          )
-        })} */}
-        {/* <FlatList
+        )} */}
+        
+        <FlatList
             numColumns={2}
             data={categories}
             keyExtractor={item => item.id}
             renderItem={({item}) => {
               console.log(`url: ${item.cover_photo_url}`);
               return (
-                <Image
-                  key={item.id}
-                  source={{uri: item.cover_photo_url,
-                          cache: "force-cache"}}
-                  style={{width:200, height: 200}}
+                // <TouchableOpacity>
+                //   <Image
+                //     key={item.id}
+                //     source={{uri: item.cover_photo_url,
+                //             cache: "force-cache"}}
+                //     style={{width:200, height: 200}}
+                //   />
+                // </TouchableOpacity>
+                <Tile
+                  item={item}
                 />
               );
             }}
-          /> */}
+          />
 
       </View>
     </View>
