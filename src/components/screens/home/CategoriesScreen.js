@@ -7,9 +7,11 @@ import {
   ScrollView,
   FlatList,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+  ImageBackground
 } from "react-native";
 import { Tile, SearchBar } from "react-native-elements";
+import { CacheManager } from 'react-native-expo-image-cache';
 import LiveSearch from './LiveSearch';
 
 import axios from "axios";
@@ -28,6 +30,8 @@ export default function CategoriesScreen({ navigation }) {
   const [searchValue, setSearchValue] = useState("");
   const [value, setValue] = useState("");
 
+  const [uri, setUri] = useState("");
+
   useEffect(() => {
     // navigation.addListener("focus", () => {
     //   console.log("focused");
@@ -38,10 +42,30 @@ export default function CategoriesScreen({ navigation }) {
 
   const fetchCategories = () => {
     axios.get(`${API_URL}categories`).then(res => {
-      setCategories(res.data.categories);
-      console.log(`response from backend ${categories}`);
-      setFullCategories(res.data.categories);
-      setLoading(false);
+
+      // for (let i = 0; i < res.data.categories.length; i++) {
+      //   res.data.categories[i].cover_photo_url = CacheManager.get(res.data.categories[i].cover_photo_url).getPath();
+      // }
+
+      // const pArr = res.data.categories.map((category, idx) => {
+      //   return CacheManager.get(category.cover_photo_url).getPath().then((url) => {
+      //     return {idx, url};
+      //   });
+      // });
+
+      // Promise.all(pArr).then(vArr => {
+      //   console.log(`vArr ${vArr}`);
+      //   vArr.forEach((cover) => {
+      //     const {idx, url} = cover || {};
+      //     res.data.categories[idx].cover_photo_url = url;
+      //   });
+      // }).then(() => {
+        setCategories(res.data.categories);
+        console.log(`response from backend ${categories}`);
+        setFullCategories(res.data.categories);
+        setLoading(false);
+      // })
+
     });
   }
 
@@ -59,6 +83,54 @@ export default function CategoriesScreen({ navigation }) {
     setCategories(searchResults);
   };
 
+  const renderTile = ({ item }) => {
+    return (
+        <Tile
+          style={styles.categoryTile}
+          key={item.id}
+          // imageSrc={{ uri: item.cover_photo_url}}
+          title={item.name}
+          titleStyle={{color:'red'}}
+          featured
+          onPress={() =>
+            navigation.navigate("Photos", {
+              categoryId: item.id
+            })
+          }
+          width={deviceWidth / 2}
+          height={deviceWidth / 2}
+          titleStyle={styles.categoryTitleStyle}
+          // imageProps={{style}}
+          ImageComponent={() => {
+            return (
+              <View>
+                {/* <Image
+                  source={{uri: item.cover_photo_url, cache: "force-cache"}}
+                  style={{width: deviceWidth / 2, height: deviceWidth / 2}}
+                />
+                <Text
+                  style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center'}}
+                >{item.name}</Text> */}
+                <ImageBackground 
+                  source={{uri: item.cover_photo_url, cache: "force-cache"}}
+                  style={{width: deviceWidth / 2, height: deviceWidth / 2}}
+                >
+                <Text>{item.name}</Text>
+                </ImageBackground>
+              </View> 
+            )
+          }}
+        />
+    );
+  }
+
+
+  // const testUri = "https://locus-dev.s3.amazonaws.com/development%2Ff3OwtL.jpg";
+  // // CacheManager.cache(testUri, localURI => setValue(localURI));
+  // CacheManager.get(testUri).getPath().then(res => {
+  //   console.log(`cached URI: ${res}`);
+  // })
+  
   return (
     <View style={styles.container}>
       <View style={styles.bannerContainer}>
@@ -76,25 +148,38 @@ export default function CategoriesScreen({ navigation }) {
           <FlatList
             numColumns={2}
             data={categories}
-            renderItem={({ item }) => (
-              <Tile
-                style={styles.categoryTile}
-                key={item.id}
-                imageSrc={{ uri: item.cover_photo_url }}
-                title={item.name}
-                featured
-                onPress={() =>
-                  navigation.navigate("Photos", {
-                    categoryId: item.id
-                  })
-                }
-                width={deviceWidth / 2}
-                height={deviceWidth / 2}
-                titleStyle={styles.categoryTitleStyle}
-              />
-            )}
+            keyExtractor={item => item.id}
+            renderItem={renderTile}
           />
         )}
+        {/* {categories.map((category) => {
+          return (
+            <Image
+              key={category.id}
+              source={{uri: category.cover_photo_url,
+                      cache: "only-if-cached"}}
+              style={{width:100, height: 100}}
+            />
+            // <Text>{category.cover_photo_url}</Text>
+          )
+        })} */}
+        {/* <FlatList
+            numColumns={2}
+            data={categories}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => {
+              console.log(`url: ${item.cover_photo_url}`);
+              return (
+                <Image
+                  key={item.id}
+                  source={{uri: item.cover_photo_url,
+                          cache: "force-cache"}}
+                  style={{width:200, height: 200}}
+                />
+              );
+            }}
+          /> */}
+
       </View>
     </View>
   );
