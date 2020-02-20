@@ -93,15 +93,20 @@ export default function UploadScreen() {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         exif: true
       });
+
+      //Resize the image to width 1080, while keeping the original aspect ratio
       console.log(`original width: ${pickerResult.width}, height ${pickerResult.height}`);
       let resizedDimension;
+      const downsizeRatio = pickerResult.width / 1080;
       if (pickerResult.width < pickerResult.height) {
-        resizedDimension = {width: 1080, height: 1350};
+        resizedDimension = {width: 1080, height: pickerResult.height / downsizeRatio};
       } else if (pickerResult.width > pickerResult.height) {
-        resizedDimension = {width: 1080, height: 566};
+        resizedDimension = {width: 1080, height: pickerResult.height / downsizeRatio};
       } else {
         resizedDimension = {width: 1080, height: 1080};
       }
+
+      console.log(`resizedDimension: {${resizedDimension.width}, ${resizedDimension.height}}`);
       const manipResult = await ImageManipulator.manipulateAsync(
         pickerResult.uri,
         [{resize: resizedDimension}],
