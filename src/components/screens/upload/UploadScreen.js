@@ -174,8 +174,12 @@ export default function UploadScreen() {
     setTags(tags.filter(tag => tag.name !== tagName));
   };
 
-  const tagsToShow = tags.map(tag => {
-    return <Tag key={tag.id} tagName={tag.name} delete={removeTag} />;
+  const tagsToShow = tags.map((tag, i) => {
+    return (
+      <FadeInView key={tag.id} delay={i * 100} duration={200}>
+        <Tag key={tag.id} tagName={tag.name} delete={removeTag} />
+      </FadeInView>
+    );
   });
 
   return (
@@ -198,7 +202,7 @@ export default function UploadScreen() {
             <ActivityIndicator size="large" color="#0000ff" />
           )}
           {mode === "LOADED" && (
-            <FadeInView duration={3000} delay={500}>
+            <FadeInView duration={0} delay={500}>
               <TextInput
                 style={styles.description}
                 placeholder="Add a description to your photo..."
