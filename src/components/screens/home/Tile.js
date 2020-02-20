@@ -1,21 +1,32 @@
 import React from "react";
-import { Text, View, Image, TouchableOpacity } from "react-native";
+import { Text, View, Image, TouchableOpacity, ImageBackground } from "react-native";
 import { SearchBar } from "react-native-elements";
 
-// import styles from "./LiveSearchStyle";
+import styles from "./TileStyle";
 
-export default function Tile(props, {navigation}) {
-  console.log(`navigation ${navigation}`);
+export default function Tile(props) {
   return (
     <TouchableOpacity
-      onPress={() => alert("hi")}
+      onPress={() => {
+        props.navigation.navigate("Photos", {
+            categoryId: props.item.id
+        });
+      }}
     >
-      <Image
+      <ImageBackground
         key={props.item.id}
         source={{uri: props.item.cover_photo_url,
                 cache: "force-cache"}}
-        style={{width:200, height: 200}}
-      />
+        style={{width: props.deviceWidth / 2, height: props.deviceWidth / 2}}
+      >
+        <View style={styles.categoryTextContainer}>
+          <Text
+            style={styles.categoryText}
+          >
+            {props.item.name}
+          </Text>
+        </View>
+      </ImageBackground>
     </TouchableOpacity>
   );
 }

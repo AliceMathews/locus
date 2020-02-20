@@ -143,28 +143,20 @@ export default function CategoriesScreen({ navigation }) {
           />
         )} */}
         
-        <FlatList
+        {!loading && (<FlatList
             numColumns={2}
             data={categories}
             keyExtractor={item => item.id}
             renderItem={({item}) => {
-              console.log(`url: ${item.cover_photo_url}`);
               return (
-                // <TouchableOpacity>
-                //   <Image
-                //     key={item.id}
-                //     source={{uri: item.cover_photo_url,
-                //             cache: "force-cache"}}
-                //     style={{width:200, height: 200}}
-                //   />
-                // </TouchableOpacity>
                 <Tile
                   item={item}
+                  navigation={navigation}
+                  deviceWidth={deviceWidth}
                 />
               );
             }}
-          />
-
+          />)}
       </View>
     </View>
   );
