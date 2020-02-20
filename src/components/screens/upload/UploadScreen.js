@@ -95,18 +95,10 @@ export default function UploadScreen() {
       });
 
       //Resize the image to width 1080, while keeping the original aspect ratio
-      console.log(`original width: ${pickerResult.width}, height ${pickerResult.height}`);
-      let resizedDimension;
-      const downsizeRatio = pickerResult.width / 1080;
-      if (pickerResult.width < pickerResult.height) {
-        resizedDimension = {width: 1080, height: pickerResult.height / downsizeRatio};
-      } else if (pickerResult.width > pickerResult.height) {
-        resizedDimension = {width: 1080, height: pickerResult.height / downsizeRatio};
-      } else {
-        resizedDimension = {width: 1080, height: 1080};
-      }
 
-      console.log(`resizedDimension: {${resizedDimension.width}, ${resizedDimension.height}}`);
+      const downsizeRatio = pickerResult.width / 1080;
+      const resizedDimension = {width: 1080, height: pickerResult.height / downsizeRatio};
+
       const manipResult = await ImageManipulator.manipulateAsync(
         pickerResult.uri,
         [{resize: resizedDimension}],
