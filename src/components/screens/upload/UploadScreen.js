@@ -28,6 +28,8 @@ import Empty from "./top/Empty";
 import CustomButton from "../../global/Button";
 import { MaterialIcons } from "@expo/vector-icons";
 
+import * as ImageManipulator from 'expo-image-manipulator';
+
 export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [tags, setTags] = useState([]);
@@ -86,19 +88,36 @@ export default function UploadScreen() {
       return;
     }
 
-    let pickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      exif: true
-    });
+    try {
+      let pickerResult = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        exif: true
+      });
+      console.log(`original width: ${pickerResult.width}, height ${pickerResult.height}`);
+      let resizedDimension;
+      if (pickerResult.width < pickerResult.height) {
+        resizedDimension = {width: 1080, height: 1350};
+      } else if (pickerResult.width > pickerResult.height) {
+        resizedDimension = {width: 1080, height: 566};
+      } else {
+        resizedDimension = {width: 1080, height: 1080};
+      }
+      const manipResult = await ImageManipulator.manipulateAsync(
+        pickerResult.uri,
+        [{resize: resizedDimension}],
+        {compress: 0.5, format: ImageManipulator.SaveFormat.JPEG}
+      );
+      if (pickerResult.cancelled === true) return;
 
-    if (pickerResult.cancelled === true) return;
-
-    setSelectedImage({
-      localUri: pickerResult.uri,
-      exif: pickerResult.exif,
-      type: pickerResult.type
-    });
-    setMode("IMAGE");
+      setSelectedImage({
+        localUri: manipResult.uri,
+        exif: pickerResult.exif,
+        type: pickerResult.type
+      });
+      setMode("IMAGE");
+    } catch(err) {
+      console.log(err)
+    }
   };
 
   const saveImage = () => {
