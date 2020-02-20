@@ -26,7 +26,7 @@ import {
 
 import Empty from "./top/Empty";
 import CustomButton from "../../global/Button";
-import FadeInView from "./bottom/Animated";
+import FadeInView from "../../global/FadeInView";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import * as ImageManipulator from "expo-image-manipulator";
