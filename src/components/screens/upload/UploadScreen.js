@@ -229,8 +229,14 @@ export default function UploadScreen({ token }) {
 
   useFocusEffect(() => {
     if (!token) {
-      Alert.alert("Please login");
-      navigation.navigate("User");
+      Alert.alert("Please login", "Please login to upload your photos", [
+        {
+          text: "OK",
+          onPress: () => {
+            navigation.navigate("User");
+          }
+        }
+      ]);
     }
   }, []);
 
