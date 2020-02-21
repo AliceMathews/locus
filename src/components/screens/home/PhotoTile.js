@@ -1,6 +1,8 @@
 import React from "react";
 import { Text, View, Image, TouchableOpacity, ImageBackground } from "react-native";
 
+import styles from './PhotoTileStyle';
+
 export default function PhotoTile(props) {
   return (
     <TouchableOpacity
@@ -15,7 +17,7 @@ export default function PhotoTile(props) {
           key={props.item.id}
           source={{uri: props.item.url,
                   cache: "force-cache"}}
-          style={{width: props.deviceWidth, height: props.deviceWidth}}
+          style={{width: props.deviceWidth, height: props.deviceWidth, ...styles.image}}
         ></ImageBackground>
       )}
       {!props.onlyOne && (
@@ -23,7 +25,7 @@ export default function PhotoTile(props) {
           key={props.item.id}
           source={{uri: props.item.url,
                   cache: "force-cache"}}
-          style={{width: props.deviceWidth / 2, height: props.deviceWidth / 2}}
+          style={{width: props.deviceWidth / 2, height: props.deviceWidth / 2, ...styles.image}}
         >
         </ImageBackground>
       )}     
