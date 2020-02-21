@@ -22,11 +22,13 @@ export default function CategoryTile(props) {
         style={{width: props.deviceWidth / 2, height: props.deviceWidth / 2}}
       >
         <View style={styles.categoryTextContainer}>
-          <Text
-            style={styles.categoryText}
-          >
-            {props.item.name}
-          </Text>
+          <View style={{justifyContent: 'center', backgroundColor: 'red'}}>
+            <Text
+              style={styles.categoryText}
+            >
+              {props.item.name}
+            </Text>
+          </View>
         </View>
       </ImageBackground>
       

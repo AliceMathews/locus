@@ -82,7 +82,7 @@ export default function CategoriesScreen({ navigation }) {
         <LiveSearch
           value={searchValue}
           onChangeText={text => searchFilterCategories(text)}
-          width={deviceWidth * 0.85}
+          width={deviceWidth * 0.95}
           loading={searching}
         />
       </View>
