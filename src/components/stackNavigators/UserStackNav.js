@@ -7,18 +7,23 @@ import RegisterScreen from "../screens/user/RegisterScreen";
 
 const UserStack = createStackNavigator();
 
-export default function UserStackNav({ storeToken, getToken }) {
+export default function UserStackNav({ authContext, state }) {
   return (
-    <UserStack.Navigator initialRouteName="Login">
-      <UserStack.Screen name="Profile">
-        {() => <ProfileScreen getToken={getToken} />}
-      </UserStack.Screen>
-      <UserStack.Screen name="Login">
-        {() => <LoginScreen storeToken={storeToken} />}
-      </UserStack.Screen>
+    <UserStack.Navigator>
+      {state.userToken ? (
+        <UserStack.Screen name="Profile">
+          {() => <ProfileScreen logout={authContext.signOut} />}
+        </UserStack.Screen>
+      ) : (
+        <UserStack.Screen name="Login">
+          {() => <LoginScreen signIn={authContext.signIn} />}
+        </UserStack.Screen>
+      )}
+
+      {/* 
       <UserStack.Screen name="Register">
-        {() => <RegisterScreen storeToken={storeToken} />}
-      </UserStack.Screen>
+        {() => <RegisterScreen />}
+      </UserStack.Screen> */}
     </UserStack.Navigator>
   );
 }

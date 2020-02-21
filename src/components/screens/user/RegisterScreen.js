@@ -13,7 +13,7 @@ import axios from "axios";
 import { API_URL } from "../../../../configKeys";
 import styles from "./RegisterScreenStyle";
 
-export default function RegisterScreen({ storeToken }) {
+export default function RegisterScreen() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
@@ -24,7 +24,7 @@ export default function RegisterScreen({ storeToken }) {
         username,
         password
       });
-      await storeToken(res.data.auth_token);
+      // await storeToken(res.data.auth_token);
       navigation.navigate("Home");
     } catch (err) {
       console.log(err);

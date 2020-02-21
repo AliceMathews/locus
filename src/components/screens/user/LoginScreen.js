@@ -16,23 +16,24 @@ import axios from "axios";
 
 import styles from "./LoginScreenStyle";
 
-export default function LoginScreen({ storeToken }) {
+export default function LoginScreen({ signIn }) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   // const [error, setError] = useState(null);
   const navigation = useNavigation();
   const login = async (username, password) => {
-    try {
-      const res = await axios.post(`${API_URL}users/login`, {
-        username,
-        password
-      });
-      await storeToken(res.data.auth_token);
-      navigation.navigate("Home");
-    } catch (err) {
-      // setError(err);
-      Alert.alert("Wrong Credentials");
-    }
+    signIn({ username, password });
+    // try {
+    //   const res = await axios.post(`${API_URL}users/login`, {
+    //     username,
+    //     password
+    //   });
+    //   // await storeToken(res.data.auth_token);
+    //   navigation.navigate("Home");
+    // } catch (err) {
+    //   // setError(err);
+    //   Alert.alert("Wrong Credentials");
+    // }
   };
 
   return (
