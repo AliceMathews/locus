@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   imageInfo: {
     flex: 1,
-    backgroundColor: "red",
+
     alignItems: "center",
     justifyContent: "space-evenly"
   },
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     flex: 0.65,
     flexDirection: "row",
     flexWrap: "wrap",
-    backgroundColor: "blue",
+
     paddingTop: 20,
     justifyContent: "space-evenly"
   },
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     flex: 0.2,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "orange",
+
     justifyContent: "space-evenly"
   }
 });

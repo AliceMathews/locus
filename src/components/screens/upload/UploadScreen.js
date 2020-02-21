@@ -205,7 +205,7 @@ export default function UploadScreen() {
               <ActivityIndicator size="large" color="#0000ff" />
             )}
             {mode === "LOADED" && (
-              <FadeInView style={{ flex: 1 }} duration={0} delay={500}>
+              <FadeInView style={{ flex: 1 }} duration={1000}>
                 <TextInput
                   style={styles.description}
                   placeholder="Add a description to your photo..."
