@@ -14,9 +14,13 @@ const styles = StyleSheet.create({
   },
   categoryTextBorder: {
     justifyContent: 'center',
-    backgroundColor: 'rgba(247,237,237,0.5)',
+    backgroundColor: 'rgba(247,237,237,0.25)',
     borderRadius: 10,
     padding: 5
+  },
+  categoryImage: {
+    borderWidth: 2, 
+    borderColor: 'rgba(247,237,237,0.5)'
   }
 });
 
