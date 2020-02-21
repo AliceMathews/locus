@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   },
   photosContainer: {
     flex: 6,
-    justifyContent: "space-evenly"
+    // justifyContent: "space-evenly"
   },
   banner: {
     width: 300,
