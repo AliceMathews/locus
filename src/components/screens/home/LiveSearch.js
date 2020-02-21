@@ -14,6 +14,7 @@ export default function LiveSearch(props) {
           value={props.value}
           showCancel={true}
           containerStyle={{width: props.width}}
+          showLoading={props.loading}
       />
   );
 }
