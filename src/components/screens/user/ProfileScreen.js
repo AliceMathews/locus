@@ -1,11 +1,10 @@
 import React from "react";
-import { Text, View, Image, Button, AsyncStorage } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { Text, View, Image, Button } from "react-native";
 import axios from "axios";
 import styles from "./ProfileScreenStyle";
 import { API_URL } from "../../../../configKeys";
 
-export default function ProfileScreen({ logout }) {
+export default function ProfileScreen({ signOut }) {
   return (
     <View style={styles.container}>
       <Text>User Profile!</Text>
@@ -16,10 +15,10 @@ export default function ProfileScreen({ logout }) {
             style={{ width: 300, height: 300 }}
           />
           <Text>{currentUser.username}</Text>
-          <Button title="Sign out" onPress={logout}></Button>
+          <Button title="Sign out" onPress={signOut}></Button>
         </>
       )}
-      <Button title="Sign out" onPress={logout}></Button>
+      <Button title="Sign out" onPress={signOut}></Button>
     </View>
   );
 }

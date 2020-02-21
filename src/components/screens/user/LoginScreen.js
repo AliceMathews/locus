@@ -5,36 +5,14 @@ import {
   View,
   TouchableOpacity,
   Keyboard,
-  TouchableWithoutFeedback,
-  TouchableHighlight,
-  Modal,
-  Alert
+  TouchableWithoutFeedback
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { API_URL } from "../../../../configKeys";
-import axios from "axios";
 
 import styles from "./LoginScreenStyle";
 
-export default function LoginScreen({ signIn }) {
-  const [userName, setUserName] = useState("");
+export default function LoginScreen({ signIn, signUp }) {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const [error, setError] = useState(null);
-  const navigation = useNavigation();
-  const login = async (username, password) => {
-    signIn({ username, password });
-    // try {
-    //   const res = await axios.post(`${API_URL}users/login`, {
-    //     username,
-    //     password
-    //   });
-    //   // await storeToken(res.data.auth_token);
-    //   navigation.navigate("Home");
-    // } catch (err) {
-    //   // setError(err);
-    //   Alert.alert("Wrong Credentials");
-    // }
-  };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -46,8 +24,8 @@ export default function LoginScreen({ signIn }) {
           placeholderTextColor="black"
           autoCapitalize="none"
           autoCorrect={false}
-          onChangeText={text => setUserName(text)}
-          value={userName}
+          onChangeText={text => setUsername(text)}
+          value={username}
         />
 
         <TextInput
@@ -62,16 +40,16 @@ export default function LoginScreen({ signIn }) {
         />
 
         <TouchableOpacity
-          disabled={!password || !userName}
+          disabled={!password || !username}
           style={styles.submitButton}
-          onPress={() => (Keyboard.dismiss(), login(userName, password))}
+          onPress={() => signIn({ username, password })}
         >
           <Text style={styles.submitButtonText}>Submit</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.submitButton}
-          onPress={() => navigation.navigate("Register")}
+          onPress={() => signUp({ username, password })}
         >
           <Text style={styles.submitButtonText}>Sign up</Text>
         </TouchableOpacity>

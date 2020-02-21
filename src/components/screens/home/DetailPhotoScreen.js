@@ -16,9 +16,11 @@ import icon from "../../../../assets/locus.png";
 import { Linking } from "expo";
 import { getDistance } from "geolib";
 
-export default function DetailPhotoScreen({ route, navigation }) {
+export default function DetailPhotoScreen({ route }) {
   const [currentLocation, setCurrentLocation] = useState({});
   const [showPhoto, setShowPhoto] = useState(false);
+
+  console.log(route.params.image);
 
   const distance = () => {
     const result = getDistance(
@@ -154,7 +156,7 @@ export default function DetailPhotoScreen({ route, navigation }) {
             Focal length |
             <Text style={styles.bold}>
               {" "}
-              {route.params.image.focal_length} Mm
+              {route.params.image.focul_length} Mm
             </Text>
           </Text>
         </View>
