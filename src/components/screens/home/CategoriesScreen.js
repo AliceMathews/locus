@@ -36,6 +36,7 @@ export default function CategoriesScreen({ navigation }) {
   const [uri, setUri] = useState("");
 
   const [refreshing, setRefreshing] = useState(false);
+  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -54,9 +55,7 @@ export default function CategoriesScreen({ navigation }) {
     setRefreshing(true);
     axios.get(`${API_URL}categories`).then(res => {
       setCategories(res.data.categories);
-      // console.log(`response from backend ${categories}`);
       setFullCategories(res.data.categories);
-      // setLoading(false);
       setRefreshing(false);
     });
   };
@@ -65,6 +64,7 @@ export default function CategoriesScreen({ navigation }) {
 
   const searchFilterCategories = text => {
     setSearchValue(text);
+    setSearching(true);
     const searchResults = fullCategories.filter(item => {
       const itemData = `${item.name.toUpperCase()}`;
 
@@ -73,6 +73,7 @@ export default function CategoriesScreen({ navigation }) {
       return itemData.indexOf(textData) > -1;
     });
     setCategories(searchResults);
+    setSearching(false);
   };
   
   return (
@@ -82,21 +83,13 @@ export default function CategoriesScreen({ navigation }) {
           value={searchValue}
           onChangeText={text => searchFilterCategories(text)}
           width={deviceWidth * 0.85}
+          loading={searching}
         />
       </View>
       <View style={styles.categoriesContainer}>
         {loading && (
           <ActivityIndicator size="large" color="#0000ff" />
         )}
-
-        {/* {!loading && (
-          <FlatList
-            numColumns={2}
-            data={categories}
-            keyExtractor={item => item.id}
-            renderItem={renderTile}
-          />
-        )} */}
         
         {!loading && (
           <FlatList
