@@ -16,10 +16,15 @@ export default function PhotosScreen({ route, navigation }) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
+  const [oneItem, setOneItem] = useState(false);
+
   useEffect(() => {
     axios.get(`${API_URL}categories/${categoryId}/images`).then(res => {
       setImages(res.data.images);
       setLoading(false);
+      if (res.data.images.length === 1) {
+        setOneItem(true);
+      }
     });
   }, []);
 
@@ -28,10 +33,16 @@ export default function PhotosScreen({ route, navigation }) {
     axios.get(`${API_URL}categories/${categoryId}/images`).then(res => {
       setImages(res.data.images);
       setRefreshing(false);
+      if (res.data.images.length === 1) {
+        setOneItem(true);
+      } else {
+        setOneItem(false);
+      }
     });
   };
 
   const deviceWidth = Dimensions.get("window").width;
+
   return (
     <View style={styles.container}>
       <View style={styles.bannerContainer}>
@@ -50,6 +61,7 @@ export default function PhotosScreen({ route, navigation }) {
                   item={item}
                   navigation={navigation}
                   deviceWidth={deviceWidth}
+                  onlyOne={oneItem}
               />
             )}
             refreshing={refreshing}
