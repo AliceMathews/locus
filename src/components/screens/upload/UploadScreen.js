@@ -26,9 +26,10 @@ import {
 
 import Empty from "./top/Empty";
 import CustomButton from "../../global/Button";
+import FadeInView from "../../global/FadeInView";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import * as ImageManipulator from 'expo-image-manipulator';
+import * as ImageManipulator from "expo-image-manipulator";
 
 export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -97,12 +98,15 @@ export default function UploadScreen() {
       //Resize the image to width 1080, while keeping the original aspect ratio
 
       const downsizeRatio = pickerResult.width / 1080;
-      const resizedDimension = {width: 1080, height: pickerResult.height / downsizeRatio};
+      const resizedDimension = {
+        width: 1080,
+        height: pickerResult.height / downsizeRatio
+      };
 
       const manipResult = await ImageManipulator.manipulateAsync(
         pickerResult.uri,
-        [{resize: resizedDimension}],
-        {compress: 0.5, format: ImageManipulator.SaveFormat.JPEG}
+        [{ resize: resizedDimension }],
+        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
       );
       if (pickerResult.cancelled === true) return;
 
@@ -112,8 +116,8 @@ export default function UploadScreen() {
         type: pickerResult.type
       });
       setMode("IMAGE");
-    } catch(err) {
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -170,8 +174,12 @@ export default function UploadScreen() {
     setTags(tags.filter(tag => tag.name !== tagName));
   };
 
-  const tagsToShow = tags.slice(0, 12).map(tag => {
-    return <Tag key={tag.id} tagName={tag.name} delete={removeTag} />;
+  const tagsToShow = tags.map((tag, i) => {
+    return (
+      <FadeInView key={tag.id} delay={i * 100} duration={200}>
+        <Tag key={tag.id} tagName={tag.name} delete={removeTag} />
+      </FadeInView>
+    );
   });
 
   return (
@@ -179,10 +187,12 @@ export default function UploadScreen() {
       <View style={styles.top}>
         {mode === "EMPTY" && <Empty press={pickImage} />}
         {mode !== "EMPTY" && (
-          <Image
-            source={{ uri: selectedImage.localUri }}
-            style={styles.thumbnail}
-          />
+          <FadeInView duration={1000}>
+            <Image
+              source={{ uri: selectedImage.localUri }}
+              style={styles.thumbnail}
+            />
+          </FadeInView>
         )}
       </View>
 
@@ -192,7 +202,7 @@ export default function UploadScreen() {
             <ActivityIndicator size="large" color="#0000ff" />
           )}
           {mode === "LOADED" && (
-            <>
+            <FadeInView duration={0} delay={500}>
               <TextInput
                 style={styles.description}
                 placeholder="Add a description to your photo..."
@@ -220,7 +230,7 @@ export default function UploadScreen() {
                   Save
                 </CustomButton>
               </View>
-            </>
+            </FadeInView>
           )}
           {mode === "SAVING" && (
             <ActivityIndicator size="large" color="#0000ff" />
