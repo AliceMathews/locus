@@ -44,7 +44,7 @@ export default function LoginScreen({ signIn, signUp }) {
           style={styles.submitButton}
           onPress={() => signIn({ username, password })}
         >
-          <Text style={styles.submitButtonText}>Submit</Text>
+          <Text style={styles.submitButtonText}>Login</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
