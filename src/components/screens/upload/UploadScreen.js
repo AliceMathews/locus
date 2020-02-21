@@ -7,7 +7,9 @@ import {
   SafeAreaView,
   TextInput,
   Text,
-  Alert
+  Alert,
+  TouchableWithoutFeedback,
+  Keyboard
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { RNS3 } from "react-native-aws3";
@@ -124,6 +126,46 @@ export default function UploadScreen({ token }) {
     }
   };
 
+  const openCamera = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera is required!");
+      return;
+    }
+
+    try {
+      let pickerResult = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        exif: true
+      });
+
+      //Resize the image to width 1080, while keeping the original aspect ratio
+
+      const downsizeRatio = pickerResult.width / 1080;
+      const resizedDimension = {
+        width: 1080,
+        height: pickerResult.height / downsizeRatio
+      };
+
+      const manipResult = await ImageManipulator.manipulateAsync(
+        pickerResult.uri,
+        [{ resize: resizedDimension }],
+        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
+      );
+      if (pickerResult.cancelled === true) return;
+
+      setSelectedImage({
+        localUri: manipResult.uri,
+        exif: pickerResult.exif,
+        type: pickerResult.type
+      });
+      setMode("IMAGE");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const saveImage = () => {
     console.log("saving");
     setMode("SAVING");
@@ -199,35 +241,67 @@ export default function UploadScreen({ token }) {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.top}>
-        {mode === "EMPTY" && <Empty press={pickImage} />}
-        {mode !== "EMPTY" && (
-          <FadeInView duration={1000}>
-            <Image
-              source={{ uri: selectedImage.localUri }}
-              style={styles.thumbnail}
-            />
-          </FadeInView>
-        )}
-      </View>
-
-      <View style={styles.bottom}>
-        <View style={styles.imageInfo}>
-          {mode === "LOADING-TAGS" && (
-            <ActivityIndicator size="large" color="#0000ff" />
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.top}>
+          {mode === "EMPTY" && <Empty press={pickImage} pressCam={openCamera} />}
+          {mode !== "EMPTY" && (
+            <FadeInView duration={1000}>
+              <Image
+                source={{ uri: selectedImage.localUri }}
+                style={styles.thumbnail}
+              />
+            </FadeInView>
           )}
-          {mode === "LOADED" && (
-            <FadeInView duration={0} delay={500}>
-              <TextInput
-                style={styles.description}
-                placeholder="Add a description to your photo..."
-                onChangeText={text => setDescription(text)}
-                value={description}
-              ></TextInput>
-              <View style={styles.tagsContainer}>{tagsToShow}</View>
-              <View style={styles.buttons}>
+        </View>
+
+        <View style={styles.bottom}>
+          <View style={styles.imageInfo}>
+            {mode === "LOADING-TAGS" && (
+              <ActivityIndicator size="large" color="#0000ff" />
+            )}
+            {mode === "LOADED" && (
+              <FadeInView style={{ flex: 1 }} duration={1000}>
+                <TextInput
+                  style={styles.description}
+                  placeholder="Add a description to your photo..."
+                  onChangeText={text => setDescription(text)}
+                  value={description}
+                ></TextInput>
+                <View style={styles.tagsContainer}>{tagsToShow}</View>
+                <View style={styles.buttons}>
+                  <CustomButton
+                    onPress={() => {
+                      setSelectedImage(null);
+                      setTags([]);
+                      setImageUrl("");
+                      setMode("EMPTY");
+                      setDescription("");
+                    }}
+                  >
+                    Cancel
+                  </CustomButton>
+                  <CustomButton
+                    onPress={() => {
+                      saveImage();
+                    }}
+                  >
+                    Save
+                  </CustomButton>
+                </View>
+              </FadeInView>
+            )}
+            {mode === "SAVING" && (
+              <ActivityIndicator size="large" color="#0000ff" />
+            )}
+            {mode === "SAVED" && (
+              <>
+                <View>
+                  <MaterialIcons name={"check-box"} size={24} color={"grey"} />
+                  <Text style={{ fontSize: 18 }}>Sucessfully saved</Text>
+                </View>
                 <CustomButton
+                  style={{ width: 300 }}
                   onPress={() => {
                     setSelectedImage(null);
                     setTags([]);
@@ -236,44 +310,14 @@ export default function UploadScreen({ token }) {
                     setDescription("");
                   }}
                 >
-                  Cancel
+                  Add image
                 </CustomButton>
-                <CustomButton
-                  onPress={() => {
-                    saveImage();
-                  }}
-                >
-                  Save
-                </CustomButton>
-              </View>
-            </FadeInView>
-          )}
-          {mode === "SAVING" && (
-            <ActivityIndicator size="large" color="#0000ff" />
-          )}
-          {mode === "SAVED" && (
-            <>
-              <View>
-                <MaterialIcons name={"check-box"} size={24} color={"grey"} />
-                <Text style={{ fontSize: 18 }}>Sucessfully saved</Text>
-              </View>
-              <CustomButton
-                style={{ width: 300 }}
-                onPress={() => {
-                  setSelectedImage(null);
-                  setTags([]);
-                  setImageUrl("");
-                  setMode("EMPTY");
-                  setDescription("");
-                }}
-              >
-                Add image
-              </CustomButton>
-            </>
-          )}
-          {mode === "ERROR" && <Text>Error saving</Text>}
+              </>
+            )}
+            {mode === "ERROR" && <Text>Error saving</Text>}
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
