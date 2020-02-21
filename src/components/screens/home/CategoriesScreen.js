@@ -7,10 +7,15 @@ import {
   ScrollView,
   FlatList,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+  ImageBackground,
+  TouchableOpacity,
 } from "react-native";
-import { Tile, SearchBar } from "react-native-elements";
+// import { Tile, SearchBar } from "react-native-elements";
+// import { CacheManager } from 'react-native-expo-image-cache';
 import LiveSearch from './LiveSearch';
+import Tile from './Tile';
+import CategoryTile from './CategoryTile';
 
 import axios from "axios";
 
@@ -28,11 +33,9 @@ export default function CategoriesScreen({ navigation }) {
   const [searchValue, setSearchValue] = useState("");
   const [value, setValue] = useState("");
 
+  const [uri, setUri] = useState("");
+
   useEffect(() => {
-    // navigation.addListener("focus", () => {
-    //   console.log("focused");
-    //   fetchCategories();
-    // })
     fetchCategories();
   }, []);
 
@@ -58,7 +61,7 @@ export default function CategoriesScreen({ navigation }) {
     });
     setCategories(searchResults);
   };
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.bannerContainer}>
@@ -72,29 +75,31 @@ export default function CategoriesScreen({ navigation }) {
         {loading && (
           <ActivityIndicator size="large" color="#0000ff" />
         )}
+
+        {/* {!loading && (
+          <FlatList
+            numColumns={2}
+            data={categories}
+            keyExtractor={item => item.id}
+            renderItem={renderTile}
+          />
+        )} */}
+        
         {!loading && (
           <FlatList
             numColumns={2}
             data={categories}
-            renderItem={({ item }) => (
-              <Tile
-                style={styles.categoryTile}
-                key={item.id}
-                imageSrc={{ uri: item.cover_photo_url }}
-                title={item.name}
-                featured
-                onPress={() =>
-                  navigation.navigate("Photos", {
-                    categoryId: item.id
-                  })
-                }
-                width={deviceWidth / 2}
-                height={deviceWidth / 2}
-                titleStyle={styles.categoryTitleStyle}
-              />
-            )}
-          />
-        )}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => {
+              return (
+                <CategoryTile
+                  item={item}
+                  navigation={navigation}
+                  deviceWidth={deviceWidth}
+                />
+              );
+            }}
+          />)}
       </View>
     </View>
   );

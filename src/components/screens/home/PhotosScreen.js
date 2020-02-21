@@ -7,6 +7,8 @@ import axios from "axios";
 import styles from "./PhotosScreenStyle";
 import { API_URL } from "../../../../configKeys";
 
+import PhotoTile from './PhotoTile';
+
 export default function PhotosScreen({ route, navigation }) {
   const { categoryId } = route.params;
 
@@ -35,17 +37,10 @@ export default function PhotosScreen({ route, navigation }) {
             numColumns={2}
             data={images}
             renderItem={({ item }) => (
-              <Tile
-                key={item.id}
-                imageSrc={{ uri: item.url }}
-                featured
-                onPress={() =>
-                  navigation.navigate("Photo", {
-                    image: item
-                  })
-                }
-                width={deviceWidth / 2}
-                height={deviceWidth / 2}
+              <PhotoTile
+                  item={item}
+                  navigation={navigation}
+                  deviceWidth={deviceWidth}
               />
             )}
           />
