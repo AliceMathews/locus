@@ -123,6 +123,46 @@ export default function UploadScreen() {
     }
   };
 
+  const openCamera = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera is required!");
+      return;
+    }
+
+    try {
+      let pickerResult = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        exif: true
+      });
+
+      //Resize the image to width 1080, while keeping the original aspect ratio
+
+      const downsizeRatio = pickerResult.width / 1080;
+      const resizedDimension = {
+        width: 1080,
+        height: pickerResult.height / downsizeRatio
+      };
+
+      const manipResult = await ImageManipulator.manipulateAsync(
+        pickerResult.uri,
+        [{ resize: resizedDimension }],
+        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
+      );
+      if (pickerResult.cancelled === true) return;
+
+      setSelectedImage({
+        localUri: manipResult.uri,
+        exif: pickerResult.exif,
+        type: pickerResult.type
+      });
+      setMode("IMAGE");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const saveImage = () => {
     console.log("saving");
     setMode("SAVING");
@@ -188,7 +228,7 @@ export default function UploadScreen() {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.top}>
-          {mode === "EMPTY" && <Empty press={pickImage} />}
+          {mode === "EMPTY" && <Empty press={pickImage} pressCam={openCamera} />}
           {mode !== "EMPTY" && (
             <FadeInView duration={1000}>
               <Image
