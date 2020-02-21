@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
   }, 
   bannerContainer: {
     flex: 1,
+    justifyContent: 'center'
   },
   photosContainer: {
     flex: 6,
@@ -18,6 +19,10 @@ const styles = StyleSheet.create({
     width: 300,
     height: 75
   },
+  categoryTitle: {
+    fontSize: 28,
+    fontWeight: 'bold'
+  }
 });
 
 export default styles;

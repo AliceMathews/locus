@@ -12,16 +12,20 @@ export default function UserStackNav({ authContext, state }) {
     <UserStack.Navigator>
       {state.userToken ? (
         <UserStack.Screen name="Profile">
-          {() => <ProfileScreen logout={authContext.signOut} />}
+          {() => <ProfileScreen signOut={authContext.signOut} />}
         </UserStack.Screen>
       ) : (
         <UserStack.Screen name="Login">
-          {() => <LoginScreen signIn={authContext.signIn} />}
+          {() => (
+            <LoginScreen
+              signIn={authContext.signIn}
+              signUp={authContext.signUp}
+            />
+          )}
         </UserStack.Screen>
       )}
 
-      {/* 
-      <UserStack.Screen name="Register">
+      {/* <UserStack.Screen name="Register">
         {() => <RegisterScreen />}
       </UserStack.Screen> */}
     </UserStack.Navigator>
