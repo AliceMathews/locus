@@ -1,20 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, Image, Button } from "react-native";
-import axios from "axios";
 import styles from "./ProfileScreenStyle";
 import { API_URL } from "../../../../configKeys";
+import axios from "axios";
 
-export default function ProfileScreen({ signOut }) {
+export default function ProfileScreen({ signOut, user }) {
   return (
     <View style={styles.container}>
-      <Text>User Profile!</Text>
       {false && (
         <>
           <Image
-            source={{ uri: currentUser.profile_pic }}
+            source={{ uri: user.profile_pic }}
             style={{ width: 300, height: 300 }}
           />
-          <Text>{currentUser.username}</Text>
+          <Text>{user.username}</Text>
           <Button title="Sign out" onPress={signOut}></Button>
         </>
       )}

@@ -20,8 +20,6 @@ export default function DetailPhotoScreen({ route }) {
   const [currentLocation, setCurrentLocation] = useState({});
   const [showPhoto, setShowPhoto] = useState(false);
 
-  console.log(route.params.image);
-
   const distance = () => {
     const result = getDistance(
       {
@@ -116,7 +114,7 @@ export default function DetailPhotoScreen({ route }) {
       </MapView>
       <View style={styles.botContainer}>
         <View style={styles.botHeader}>
-          <Text>Credit: {route.params.image.owner_id}</Text>
+          <Text>Credit: {route.params.image.username}</Text>
           <View style={styles.direction}>
             <CustomButton onPress={() => getDirections()}>
               Directions
