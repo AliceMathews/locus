@@ -15,23 +15,42 @@ export default function CategoryTile(props) {
         });
       }}
     >
-      <ImageBackground
-        key={props.item.id}
-        source={{uri: props.item.cover_photo_url,
-                cache: "force-cache"}}
-        style={{width: props.deviceWidth / 2, height: props.deviceWidth / 2, ...styles.categoryImage}}
-      >
-        <View style={styles.categoryTextContainer}>
-          <View style={styles.categoryTextBorder}>
-            <Text
-              style={styles.categoryText}
-            >
-              {props.item.name}
-            </Text>
+      {props.oneItem && (
+        <ImageBackground
+          key={props.item.id}
+          source={{uri: props.item.cover_photo_url,
+                  cache: "force-cache"}}
+          style={{width: props.deviceWidth, height: props.deviceWidth, ...styles.categoryImage}}
+        >
+          <View style={styles.categoryTextContainer}>
+            <View style={styles.categoryTextBorder}>
+              <Text
+                style={styles.categoryText}
+              >
+                {props.item.name}
+              </Text>
+            </View>
           </View>
-        </View>
-      </ImageBackground>
-      
+        </ImageBackground>
+      )}
+      {!props.oneItem && (
+        <ImageBackground
+          key={props.item.id}
+          source={{uri: props.item.cover_photo_url,
+                  cache: "force-cache"}}
+          style={{width: props.deviceWidth / 2, height: props.deviceWidth / 2, ...styles.categoryImage}}
+        >
+          <View style={styles.categoryTextContainer}>
+            <View style={styles.categoryTextBorder}>
+              <Text
+                style={styles.categoryText}
+              >
+                {props.item.name}
+              </Text>
+            </View>
+          </View>
+        </ImageBackground>
+      )}  
     </TouchableOpacity>
   );
 }
