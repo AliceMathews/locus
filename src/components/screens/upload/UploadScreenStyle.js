@@ -28,27 +28,29 @@ const styles = StyleSheet.create({
   },
   imageInfo: {
     flex: 1,
-    // backgroundColor: "red",
+
     alignItems: "center",
     justifyContent: "space-evenly"
   },
   description: {
     padding: 10,
     borderTopWidth: 1,
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    flex: 0.15
   },
   tagsContainer: {
-    flex: 0.7,
+    flex: 0.65,
     flexDirection: "row",
     flexWrap: "wrap",
-    // backgroundColor: "blue",
-    paddingTop: 20
+
+    paddingTop: 20,
+    justifyContent: "space-evenly"
   },
   buttons: {
-    flex: 0.3,
+    flex: 0.2,
     flexDirection: "row",
-    // backgroundColor: "orange",
     alignItems: "center",
+
     justifyContent: "space-evenly"
   }
 });
