@@ -15,6 +15,7 @@ import {
 // import { CacheManager } from 'react-native-expo-image-cache';
 import LiveSearch from './LiveSearch';
 import Tile from './Tile';
+import CategoryTile from './CategoryTile';
 
 import axios from "axios";
 
@@ -35,39 +36,15 @@ export default function CategoriesScreen({ navigation }) {
   const [uri, setUri] = useState("");
 
   useEffect(() => {
-    // navigation.addListener("focus", () => {
-    //   console.log("focused");
-    //   fetchCategories();
-    // })
     fetchCategories();
   }, []);
 
   const fetchCategories = () => {
     axios.get(`${API_URL}categories`).then(res => {
-
-      // for (let i = 0; i < res.data.categories.length; i++) {
-      //   res.data.categories[i].cover_photo_url = CacheManager.get(res.data.categories[i].cover_photo_url).getPath();
-      // }
-
-      // const pArr = res.data.categories.map((category, idx) => {
-      //   return CacheManager.get(category.cover_photo_url).getPath().then((url) => {
-      //     return {idx, url};
-      //   });
-      // });
-
-      // Promise.all(pArr).then(vArr => {
-      //   console.log(`vArr ${vArr}`);
-      //   vArr.forEach((cover) => {
-      //     const {idx, url} = cover || {};
-      //     res.data.categories[idx].cover_photo_url = url;
-      //   });
-      // }).then(() => {
-        setCategories(res.data.categories);
-        console.log(`response from backend ${categories}`);
-        setFullCategories(res.data.categories);
-        setLoading(false);
-      // })
-
+      setCategories(res.data.categories);
+      console.log(`response from backend ${categories}`);
+      setFullCategories(res.data.categories);
+      setLoading(false);
     });
   }
 
@@ -84,41 +61,6 @@ export default function CategoriesScreen({ navigation }) {
     });
     setCategories(searchResults);
   };
-
-  // const renderTile = ({ item }) => {
-  //   return (
-  //       <Tile
-  //         style={styles.categoryTile}
-  //         key={item.id}
-  //         // imageSrc={{ uri: item.cover_photo_url}}
-  //         // title={item.name}
-  //         // titleStyle={{color:'red'}}
-  //         // featured
-  //         onPress={() =>
-  //           navigation.navigate("Photos", {
-  //             categoryId: item.id
-  //           })
-  //         }
-  //         width={deviceWidth / 2}
-  //         height={deviceWidth / 2}
-  //         titleStyle={styles.categoryTitleStyle}
-  //         // imageProps={{style}}
-  //         ImageComponent={() => {
-  //           return (
-
-
-  //               <ImageBackground 
-  //                 source={{uri: item.cover_photo_url, cache: "force-cache"}}
-  //                 style={{width: deviceWidth / 2, height: deviceWidth / 2}}
-  //               >
-  //                 {/* <Text>{item.name}</Text> */}
-  //               </ImageBackground>
-
-  //           )
-  //         }}
-  //       />
-  //   );
-  // }
   
   return (
     <View style={styles.container}>
@@ -143,13 +85,14 @@ export default function CategoriesScreen({ navigation }) {
           />
         )} */}
         
-        {!loading && (<FlatList
+        {!loading && (
+          <FlatList
             numColumns={2}
             data={categories}
             keyExtractor={item => item.id}
             renderItem={({item}) => {
               return (
-                <Tile
+                <CategoryTile
                   item={item}
                   navigation={navigation}
                   deviceWidth={deviceWidth}
