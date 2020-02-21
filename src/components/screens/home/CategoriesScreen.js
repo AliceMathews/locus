@@ -35,6 +35,8 @@ export default function CategoriesScreen({ navigation }) {
 
   const [uri, setUri] = useState("");
 
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -47,6 +49,17 @@ export default function CategoriesScreen({ navigation }) {
       setLoading(false);
     });
   }
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    axios.get(`${API_URL}categories`).then(res => {
+      setCategories(res.data.categories);
+      // console.log(`response from backend ${categories}`);
+      setFullCategories(res.data.categories);
+      // setLoading(false);
+      setRefreshing(false);
+    });
+  };
 
   const deviceWidth = Dimensions.get("window").width;
 
@@ -99,6 +112,8 @@ export default function CategoriesScreen({ navigation }) {
                 />
               );
             }}
+            onRefresh={onRefresh}
+            refreshing={refreshing}
           />)}
       </View>
     </View>

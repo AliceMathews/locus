@@ -14,6 +14,7 @@ export default function PhotosScreen({ route, navigation }) {
 
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     axios.get(`${API_URL}categories/${categoryId}/images`).then(res => {
@@ -22,11 +23,19 @@ export default function PhotosScreen({ route, navigation }) {
     });
   }, []);
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    axios.get(`${API_URL}categories/${categoryId}/images`).then(res => {
+      setImages(res.data.images);
+      setRefreshing(false);
+    });
+  };
+
   const deviceWidth = Dimensions.get("window").width;
   return (
     <View style={styles.container}>
       <View style={styles.bannerContainer}>
-        <Text>Photos</Text>
+        <Text style={styles.categoryTitle}>Photos of {route.params.categoryName}</Text>
       </View>
       <View style={styles.photosContainer}>
         {loading && (
@@ -43,6 +52,8 @@ export default function PhotosScreen({ route, navigation }) {
                   deviceWidth={deviceWidth}
               />
             )}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
           />
         )}  
       </View>

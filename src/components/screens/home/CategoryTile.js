@@ -10,7 +10,8 @@ export default function CategoryTile(props) {
     <TouchableOpacity
       onPress={() => {
         props.navigation.navigate("Photos", {
-            categoryId: props.item.id
+            categoryId: props.item.id,
+            categoryName: props.item.name
         });
       }}
     >
