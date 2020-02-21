@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   View,
   Image,
   ActivityIndicator,
   SafeAreaView,
   TextInput,
-  Text
+  Text,
+  Alert
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { RNS3 } from "react-native-aws3";
@@ -31,12 +33,13 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 import * as ImageManipulator from "expo-image-manipulator";
 
-export default function UploadScreen() {
+export default function UploadScreen({ token }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [tags, setTags] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [mode, setMode] = useState("EMPTY");
   const [description, setDescription] = useState("");
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (selectedImage !== null) {
@@ -181,6 +184,13 @@ export default function UploadScreen() {
       </FadeInView>
     );
   });
+
+  useFocusEffect(() => {
+    if (!token) {
+      Alert.alert("Please login");
+      navigation.navigate("User");
+    }
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

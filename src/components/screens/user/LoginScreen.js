@@ -48,6 +48,7 @@ export default function LoginScreen({ signIn, signUp }) {
         </TouchableOpacity>
 
         <TouchableOpacity
+          disabled={!password || !username}
           style={styles.submitButton}
           onPress={() => signUp({ username, password })}
         >

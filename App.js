@@ -1,10 +1,10 @@
-import React, { useEffect, useReducer, useMemo } from "react";
+import React, { useEffect, useReducer, useMemo, createContext } from "react";
 import { AsyncStorage, Alert } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AppLoading } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { API_URL } from "./configKeys";
+import { logout } from "./src/hooks/AuthFlowHook";
 import axios from "axios";
 
 import HomeStackNav from "./src/components/stackNavigators/HomeStackNav";
@@ -13,7 +13,6 @@ import UserStackNav from "./src/components/stackNavigators/UserStackNav";
 import SplashScreen from "./src/components/screens/splash/Splash";
 
 const Tab = createBottomTabNavigator();
-// const AuthContext = React.createContext();
 
 export default function App() {
   const [state, dispatch] = useReducer(
@@ -74,10 +73,8 @@ export default function App() {
             password: data.password
           });
           await storeToken(res.data.auth_token);
-          // navigation.navigate("Home");
           dispatch({ type: "SIGN_IN", token: res.data.auth_token });
         } catch (err) {
-          // setError(err);
           console.log("err", err);
           Alert.alert("Wrong Credentials");
         }
@@ -91,7 +88,6 @@ export default function App() {
             password: data.password
           });
           await storeToken(res.data.auth_token);
-          // navigation.navigate("Home");
           dispatch({ type: "SIGN_IN", token: res.data.auth_token });
         } catch (err) {
           console.log(err);
@@ -132,7 +128,9 @@ export default function App() {
           {() => <UserStackNav authContext={authContext} state={state} />}
         </Tab.Screen>
         <Tab.Screen name="Home">{() => <HomeStackNav />}</Tab.Screen>
-        <Tab.Screen name="Upload">{() => <UploadStackNav />}</Tab.Screen>
+        <Tab.Screen name="Upload">
+          {() => <UploadStackNav token={state.userToken} />}
+        </Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
   );
@@ -150,36 +148,7 @@ const storeToken = async token => {
 //     let userDataJSON = await AsyncStorage.getItem("userData");
 //     let userData = JSON.parse(userDataJSON);
 //     console.log("this is the auth token", userData);
-//     setCurrentSession(userData);
 //   } catch (error) {
 //     console.log("Something went wrong", error);
 //   }
 // };
-
-const logoutBackend = async () => {
-  console.log("starting backend logout");
-  try {
-    let userData = await AsyncStorage.getItem("userToken");
-    let data = JSON.parse(userData);
-    const res = await axios.post(`${API_URL}users/logout`, {
-      data
-    });
-    console.log(res);
-  } catch (err) {
-    console.log("Something went wrong", error);
-  }
-};
-
-const logoutFrontend = async () => {
-  console.log("starting frontend logout");
-  try {
-    await AsyncStorage.removeItem("userToken");
-    console.log("Auth token removed");
-  } catch (err) {
-    console.log("Something went wrong", error);
-  }
-};
-
-const logout = async () => {
-  return Promise.all([logoutBackend(), logoutFrontend()]);
-};
