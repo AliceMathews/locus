@@ -8,7 +8,9 @@ export default function Tag(props) {
   const name = props.tagName;
   return (
     <TouchableOpacity style={styles.tag} onPress={() => props.delete(name)}>
-      <Text style={styles.label}>{name}</Text>
+      <Text numberOfLines={1} style={styles.label}>
+        {name}
+      </Text>
       <MaterialIcons name={"cancel"} size={15} color={"grey"} />
     </TouchableOpacity>
   );
