@@ -32,6 +32,7 @@ import FadeInView from "../../global/FadeInView";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import * as ImageManipulator from "expo-image-manipulator";
+import resizeImage from "../../../helpers/upload/resizeImage";
 
 export default function UploadScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -83,8 +84,18 @@ export default function UploadScreen() {
     }
   }, [selectedImage]);
 
-  const pickImage = async () => {
-    const permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+  const pickImage = () => {
+    const options = {
+      permissions: ImagePicker.requestCameraRollPermissionsAsync,
+      launch: ImagePicker.launchImageLibraryAsync
+    };
+
+    pickImage1(options);
+  };
+
+  const pickImage1 = async options => {
+    // const permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+    const permissionResult = await options.permissions();
 
     if (permissionResult.granted === false) {
       alert("Permission to access camera roll is required!");
@@ -92,24 +103,26 @@ export default function UploadScreen() {
     }
 
     try {
-      let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      let pickerResult = await options.launch({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         exif: true
       });
 
       //Resize the image to width 1080, while keeping the original aspect ratio
 
-      const downsizeRatio = pickerResult.width / 1080;
-      const resizedDimension = {
-        width: 1080,
-        height: pickerResult.height / downsizeRatio
-      };
+      // const downsizeRatio = pickerResult.width / 1080;
+      // const resizedDimension = {
+      //   width: 1080,
+      //   height: pickerResult.height / downsizeRatio
+      // };
 
-      const manipResult = await ImageManipulator.manipulateAsync(
-        pickerResult.uri,
-        [{ resize: resizedDimension }],
-        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
-      );
+      // const manipResult = await ImageManipulator.manipulateAsync(
+      //   pickerResult.uri,
+      //   [{ resize: resizedDimension }],
+      //   { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
+      // );
+
+      const manipResult = await resizeImage(pickerResult);
       if (pickerResult.cancelled === true) return;
 
       setSelectedImage({
@@ -122,6 +135,21 @@ export default function UploadScreen() {
       console.log(err);
     }
   };
+
+  // const resizeImage = pickerResult => {
+  //   const downsizeRatio = pickerResult.width / 1080;
+  //   const resizedDimension = {
+  //     width: 1080,
+  //     height: pickerResult.height / downsizeRatio
+  //   };
+
+  //   const manipResult = ImageManipulator.manipulateAsync(
+  //     pickerResult.uri,
+  //     [{ resize: resizedDimension }],
+  //     { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
+  //   );
+  //   return manipResult;
+  // };
 
   const openCamera = async () => {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
@@ -228,7 +256,9 @@ export default function UploadScreen() {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.top}>
-          {mode === "EMPTY" && <Empty press={pickImage} pressCam={openCamera} />}
+          {mode === "EMPTY" && (
+            <Empty press={pickImage} pressCam={openCamera} />
+          )}
           {mode !== "EMPTY" && (
             <FadeInView duration={1000}>
               <Image
