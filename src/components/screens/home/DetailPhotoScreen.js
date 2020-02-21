@@ -124,9 +124,11 @@ export default function DetailPhotoScreen({ route }) {
         </View>
 
         <View>
-          <View style={styles.titleSection}>
-            <Text style={styles.title}>{route.params.image.description}</Text>
-          </View>
+          {route.params.image.description === "" || (
+            <View style={styles.titleSection}>
+              <Text style={styles.title}>{route.params.image.description}</Text>
+            </View>
+          )}
 
           <Text style={styles.info}>
             Camera Make |
