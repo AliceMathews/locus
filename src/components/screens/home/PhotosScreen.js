@@ -35,7 +35,7 @@ export default function PhotosScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.bannerContainer}>
-        <Text>Photos</Text>
+        <Text style={styles.categoryTitle}>Photos of {route.params.categoryName}</Text>
       </View>
       <View style={styles.photosContainer}>
         {loading && (
