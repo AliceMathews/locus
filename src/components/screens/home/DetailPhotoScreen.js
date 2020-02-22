@@ -19,7 +19,7 @@ import icon from "../../../../assets/locus.png";
 import { Linking } from "expo";
 import { getDistance } from "geolib";
 
-export default function DetailPhotoScreen({ route }) {
+export default function DetailPhotoScreen({ route, navigation }) {
   const [currentLocation, setCurrentLocation] = useState({});
   const [showPhoto, setShowPhoto] = useState(false);
 
@@ -137,7 +137,9 @@ export default function DetailPhotoScreen({ route }) {
       </MapView>
       <View style={styles.botContainer}>
         <View style={styles.botHeader}>
-          <Text>Credit: {route.params.image.username}</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Chat", {sendToId: route.params.image.owner_id})}>
+            <Text>Credit: {route.params.image.username}</Text>
+          </TouchableOpacity>
           <View style={styles.direction}>
             <CustomButton onPress={() => getDirections()}>
               Directions
