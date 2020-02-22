@@ -30,6 +30,7 @@ import {
 
 import Empty from "./top/Empty";
 import Saved from "./top/Saved";
+import Error from "./top/Error";
 import CustomButton from "../../global/Button";
 import FadeInView from "../../global/FadeInView";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -249,7 +250,12 @@ export default function UploadScreen({ token }) {
               <Saved />
             </FadeInView>
           )}
-          {mode !== "EMPTY" && mode !== "SAVED" && (
+          {mode === "Error" && (
+            <FadeInView duration={1000}>
+              <Error />
+            </FadeInView>
+          )}
+          {mode !== "EMPTY" && mode !== "SAVED" && mode !== "ERROR" && (
             <FadeInView duration={1000}>
               <Image
                 source={{ uri: selectedImage.localUri }}
@@ -295,7 +301,7 @@ export default function UploadScreen({ token }) {
             {mode === "SAVING" && (
               <ActivityIndicator size="large" color="#0000ff" />
             )}
-            {mode === "SAVED" && (
+            {(mode === "SAVED" || mode === "ERROR") && (
               <FadeInView duration={1000} delay={1000}>
                 <CustomButton
                   type={"big"}
