@@ -148,7 +148,6 @@ export default function UploadScreen({ token }) {
 
   const openCamera = async () => {
     await _getLocationAsync();
-    console.log(currentLocation);
     const options = {
       permissions: ImagePicker.requestCameraPermissionsAsync,
       launch: ImagePicker.launchCameraAsync
@@ -157,13 +156,27 @@ export default function UploadScreen({ token }) {
     pickImage(options);
   };
 
+  const checkLocation = () => {
+    if (!selectedImage.exif.GPSLongitude && !selectedImage.exif.GPSLatitude) {
+      const exifCopy = {
+        ...selectedImage.exif,
+        GPSLongitude: currentLocation.longitude,
+        GPSLatitude: currentLocation.latitude
+      };
+      return exifCopy;
+      setSelectedImage({ ...selectedImage, exif: exifCopy });
+      console.log("HERE");
+    }
+  };
+
   const saveImage = () => {
     console.log("saving");
     setMode("SAVING");
+    exif = checkLocation();
 
     const imageData = {
       owner_id: 1,
-      exif: selectedImage.exif,
+      exif: exif,
       description: description,
       url: imageUrl,
       views: 0,
@@ -213,7 +226,11 @@ export default function UploadScreen({ token }) {
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.top}>
           {mode === "EMPTY" && (
-            <Empty press={openLibrary} pressCam={openCamera} />
+            <Empty
+              press={openLibrary}
+              pressCam={openCamera}
+              checkGPS={checkLocation}
+            />
           )}
           {mode !== "EMPTY" && (
             <FadeInView duration={1000}>

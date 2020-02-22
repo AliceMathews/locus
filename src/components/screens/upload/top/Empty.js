@@ -14,7 +14,9 @@ export default function EmptyTop(props) {
         name={"add-a-photo"}
         size={40}
         color={"blue"}
-        onPress={() => props.pressCam()}
+        onPress={() => {
+          props.pressCam();
+        }}
       />
     </>
   );
