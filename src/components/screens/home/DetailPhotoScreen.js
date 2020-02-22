@@ -32,10 +32,12 @@ export default function DetailPhotoScreen({ route, navigation }) {
       currentLocation,
       1
     );
+    console.log(result.toString());
+
     if (result.toString().length <= 3) {
-      return result + "m";
+      return result + " m";
     } else {
-      return result / 1000 + "km";
+      return (result / 1000).toFixed(0) + " km";
     }
   };
 
@@ -135,55 +137,82 @@ export default function DetailPhotoScreen({ route, navigation }) {
           )}
         </Marker>
       </MapView>
+
       <View style={styles.botContainer}>
         <View style={styles.botHeader}>
-          <TouchableOpacity onPress={() => navigation.navigate("Chat", {sendToId: route.params.image.owner_id})}>
-            <Text>Credit: {route.params.image.username}</Text>
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Chat", {
+                  sendToId: route.params.image.owner_id
+                })
+              }
+            >
+              <Text style={styles.username}>
+                Credit:{" "}
+                <Text style={styles.bold}>{route.params.image.username} </Text>
+              </Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.direction}>
             <CustomButton onPress={() => getDirections()}>
               Directions
             </CustomButton>
-            <Text>{distance()}</Text>
+            <Text style={{ color: "#a6a6a6" }}>{distance()}</Text>
           </View>
         </View>
 
-        <View>
-          {route.params.image.description === "" || (
-            <View style={styles.titleSection}>
+        {route.params.image.description === "" || (
+          <View style={styles.titleSection}>
+            <View>
               <Text style={styles.title}>{route.params.image.description}</Text>
             </View>
-          )}
+          </View>
+        )}
 
+        <View style={styles.infoContainer}>
           <Text style={styles.info}>
             Camera Make |
             <Text style={styles.bold}> {route.params.image.camera_make}</Text>
           </Text>
-          <Text style={styles.info}>
-            Aperture |
-            <Text style={styles.bold}> F{route.params.image.aperture}</Text>
-          </Text>
-          <Text style={styles.info}>
-            Exposure |
-            <Text style={styles.bold}> + {route.params.image.exposure}</Text>
-          </Text>
-          <Text style={styles.info}>
-            ISO | <Text style={styles.bold}>{route.params.image.iso}</Text>
-          </Text>
-          <Text style={styles.info}>
-            Shutter speed |
-            <Text style={styles.bold}>
-              {" "}
-              {route.params.image.shutter_speed} S
-            </Text>
-          </Text>
-          <Text style={styles.info}>
-            Focal length |
-            <Text style={styles.bold}>
-              {" "}
-              {route.params.image.focul_length} Mm
-            </Text>
-          </Text>
+
+          <View style={styles.cameraSettings}>
+            <View>
+              <Text style={styles.info}>
+                Aperture |
+                <Text style={styles.bold}>
+                  {" "}
+                  F{route.params.image.aperture.toFixed(2)}
+                </Text>
+              </Text>
+              <Text style={styles.info}>
+                Exposure |
+                <Text style={styles.bold}>
+                  {" "}
+                  + {route.params.image.exposure.toFixed(3)}
+                </Text>
+              </Text>
+              <Text style={styles.info}>
+                ISO | <Text style={styles.bold}>{route.params.image.iso}</Text>
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.info}>
+                Shutter speed |
+                <Text style={styles.bold}>
+                  {" "}
+                  {route.params.image.shutter_speed.toFixed(2)} S
+                </Text>
+              </Text>
+              <Text style={styles.info}>
+                Focal length |
+                <Text style={styles.bold}>
+                  {" "}
+                  {route.params.image.focul_length} Mm
+                </Text>
+              </Text>
+            </View>
+          </View>
         </View>
       </View>
     </SafeAreaView>
