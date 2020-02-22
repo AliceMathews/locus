@@ -32,10 +32,12 @@ export default function DetailPhotoScreen({ route, navigation }) {
       currentLocation,
       1
     );
+    console.log(result.toString());
+
     if (result.toString().length <= 3) {
-      return result + "m";
+      return result + " m";
     } else {
-      return result / 1000 + "km";
+      return (result / 1000).toFixed(0) + " km";
     }
   };
 
@@ -147,7 +149,8 @@ export default function DetailPhotoScreen({ route, navigation }) {
               }
             >
               <Text style={styles.username}>
-                Credit: {route.params.image.username}
+                Credit:{" "}
+                <Text style={styles.bold}>{route.params.image.username} </Text>
               </Text>
             </TouchableOpacity>
           </View>
@@ -177,13 +180,16 @@ export default function DetailPhotoScreen({ route, navigation }) {
             <View>
               <Text style={styles.info}>
                 Aperture |
-                <Text style={styles.bold}> F{route.params.image.aperture}</Text>
+                <Text style={styles.bold}>
+                  {" "}
+                  F{route.params.image.aperture.toFixed(2)}
+                </Text>
               </Text>
               <Text style={styles.info}>
                 Exposure |
                 <Text style={styles.bold}>
                   {" "}
-                  + {route.params.image.exposure}
+                  + {route.params.image.exposure.toFixed(3)}
                 </Text>
               </Text>
               <Text style={styles.info}>
@@ -195,7 +201,7 @@ export default function DetailPhotoScreen({ route, navigation }) {
                 Shutter speed |
                 <Text style={styles.bold}>
                   {" "}
-                  {route.params.image.shutter_speed} S
+                  {route.params.image.shutter_speed.toFixed(2)} S
                 </Text>
               </Text>
               <Text style={styles.info}>
