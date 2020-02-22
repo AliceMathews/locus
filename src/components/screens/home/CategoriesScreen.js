@@ -42,10 +42,6 @@ export default function CategoriesScreen({ navigation }) {
     fetchCategories();
   }, []);
 
-  // userEffect(() => {
-
-  // }, [categories]);
-
   const fetchCategories = () => {
     axios.get(`${API_URL}categories`).then(res => {
       setCategories(res.data.categories);
