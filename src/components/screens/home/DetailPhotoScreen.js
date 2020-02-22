@@ -135,19 +135,22 @@ export default function DetailPhotoScreen({ route, navigation }) {
           )}
         </Marker>
       </MapView>
+
       <View style={styles.botContainer}>
         <View style={styles.botHeader}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("Chat", {
-                sendToId: route.params.image.owner_id
-              })
-            }
-          >
-            <Text style={styles.username}>
-              Credit: {route.params.image.username}
-            </Text>
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Chat", {
+                  sendToId: route.params.image.owner_id
+                })
+              }
+            >
+              <Text style={styles.username}>
+                Credit: {route.params.image.username}
+              </Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.direction}>
             <CustomButton onPress={() => getDirections()}>
               Directions
@@ -156,13 +159,13 @@ export default function DetailPhotoScreen({ route, navigation }) {
           </View>
         </View>
 
-        <View style={styles.titleSection}>
-          {route.params.image.description === "" || (
+        {route.params.image.description === "" || (
+          <View style={styles.titleSection}>
             <View>
               <Text style={styles.title}>{route.params.image.description}</Text>
             </View>
-          )}
-        </View>
+          </View>
+        )}
 
         <View style={styles.infoContainer}>
           <Text style={styles.info}>

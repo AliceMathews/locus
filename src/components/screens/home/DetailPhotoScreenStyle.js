@@ -30,9 +30,9 @@ const styles = StyleSheet.create({
   },
   botHeader: {
     flex: 0.2,
+    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    flexDirection: "row",
     padding: 10,
 
     borderBottomWidth: 1
