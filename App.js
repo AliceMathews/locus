@@ -120,8 +120,8 @@ export default function App() {
           }
         })}
         tabBarOptions={{
-          activeTintColor: "tomato",
-          inactiveTintColor: "gray"
+          activeTintColor: "#496382",
+          inactiveTintColor: "#c5d5d6"
         }}
       >
         <Tab.Screen name="User">
