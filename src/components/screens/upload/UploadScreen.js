@@ -36,12 +36,17 @@ import { MaterialIcons } from "@expo/vector-icons";
 import resizeImage from "../../../helpers/upload/resizeImage";
 import generateFileName from "../../../helpers/upload/generateFileName";
 
+import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
+
 export default function UploadScreen({ token }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [tags, setTags] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [mode, setMode] = useState("EMPTY");
   const [description, setDescription] = useState("");
+  const [currentLocation, setCurrentLocation] = useState({});
+
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -87,6 +92,23 @@ export default function UploadScreen({ token }) {
     }
   }, [selectedImage]);
 
+  const _getLocationAsync = async () => {
+    try {
+      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      console.log(location);
+      setCurrentLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude
+      });
+    } catch (err) {
+      console.log("Something went wrong", err);
+    }
+  };
+
   const openLibrary = () => {
     const options = {
       permissions: ImagePicker.requestCameraRollPermissionsAsync,
@@ -125,6 +147,7 @@ export default function UploadScreen({ token }) {
   };
 
   const openCamera = async () => {
+    await _getLocationAsync();
     const options = {
       permissions: ImagePicker.requestCameraPermissionsAsync,
       launch: ImagePicker.launchCameraAsync
@@ -133,13 +156,27 @@ export default function UploadScreen({ token }) {
     pickImage(options);
   };
 
+  const checkLocation = () => {
+    if (!selectedImage.exif.GPSLongitude && !selectedImage.exif.GPSLatitude) {
+      const exifCopy = {
+        ...selectedImage.exif,
+        GPSLongitude: currentLocation.longitude,
+        GPSLatitude: currentLocation.latitude
+      };
+      return exifCopy;
+      setSelectedImage({ ...selectedImage, exif: exifCopy });
+      console.log("HERE");
+    }
+  };
+
   const saveImage = () => {
     console.log("saving");
     setMode("SAVING");
+    exif = checkLocation();
 
     const imageData = {
       owner_id: 1,
-      exif: selectedImage.exif,
+      exif: exif,
       description: description,
       url: imageUrl,
       views: 0,
@@ -189,7 +226,11 @@ export default function UploadScreen({ token }) {
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.top}>
           {mode === "EMPTY" && (
-            <Empty press={openLibrary} pressCam={openCamera} />
+            <Empty
+              press={openLibrary}
+              pressCam={openCamera}
+              checkGPS={checkLocation}
+            />
           )}
           {mode !== "EMPTY" && (
             <FadeInView duration={1000}>
