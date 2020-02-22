@@ -11,7 +11,7 @@ export default function Tag(props) {
       <Text numberOfLines={1} style={styles.label}>
         {name}
       </Text>
-      <MaterialIcons name={"cancel"} size={15} color={"grey"} />
+      <MaterialIcons name={"cancel"} size={15} color={"#183152"} />
     </TouchableOpacity>
   );
 }
