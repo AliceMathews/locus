@@ -36,12 +36,17 @@ import { MaterialIcons } from "@expo/vector-icons";
 import resizeImage from "../../../helpers/upload/resizeImage";
 import generateFileName from "../../../helpers/upload/generateFileName";
 
+import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
+
 export default function UploadScreen({ token }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [tags, setTags] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [mode, setMode] = useState("EMPTY");
   const [description, setDescription] = useState("");
+  const [currentLocation, setCurrentLocation] = useState({});
+
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -87,6 +92,23 @@ export default function UploadScreen({ token }) {
     }
   }, [selectedImage]);
 
+  const _getLocationAsync = async () => {
+    try {
+      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      console.log(location);
+      setCurrentLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude
+      });
+    } catch (err) {
+      console.log("Something went wrong", err);
+    }
+  };
+
   const openLibrary = () => {
     const options = {
       permissions: ImagePicker.requestCameraRollPermissionsAsync,
@@ -125,6 +147,8 @@ export default function UploadScreen({ token }) {
   };
 
   const openCamera = async () => {
+    await _getLocationAsync();
+    console.log(currentLocation);
     const options = {
       permissions: ImagePicker.requestCameraPermissionsAsync,
       launch: ImagePicker.launchCameraAsync
