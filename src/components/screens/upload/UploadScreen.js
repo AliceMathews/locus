@@ -29,6 +29,7 @@ import {
 } from "../../../../configKeys";
 
 import Empty from "./top/Empty";
+import Saved from "./top/Saved";
 import CustomButton from "../../global/Button";
 import FadeInView from "../../global/FadeInView";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -38,6 +39,7 @@ import generateFileName from "../../../helpers/upload/generateFileName";
 
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
+import { reset } from "expo/build/AR";
 
 export default function UploadScreen({ token }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -202,6 +204,14 @@ export default function UploadScreen({ token }) {
     setTags(tags.filter(tag => tag.name !== tagName));
   };
 
+  const resetState = () => {
+    setSelectedImage(null);
+    setTags([]);
+    setImageUrl("");
+    setMode("EMPTY");
+    setDescription("");
+  };
+
   const tagsToShow = tags.map((tag, i) => {
     return (
       <FadeInView key={tag.id} delay={i * 100} duration={200}>
@@ -234,7 +244,12 @@ export default function UploadScreen({ token }) {
               checkGPS={checkLocation}
             />
           )}
-          {mode !== "EMPTY" && (
+          {mode === "SAVED" && (
+            <FadeInView duration={1000}>
+              <Saved />
+            </FadeInView>
+          )}
+          {mode !== "EMPTY" && mode !== "SAVED" && (
             <FadeInView duration={1000}>
               <Image
                 source={{ uri: selectedImage.localUri }}
@@ -262,11 +277,12 @@ export default function UploadScreen({ token }) {
                 <View style={styles.buttons}>
                   <CustomButton
                     onPress={() => {
-                      setSelectedImage(null);
-                      setTags([]);
-                      setImageUrl("");
-                      setMode("EMPTY");
-                      setDescription("");
+                      // setSelectedImage(null);
+                      // setTags([]);
+                      // setImageUrl("");
+                      // setMode("EMPTY");
+                      // setDescription("");
+                      resetState();
                     }}
                   >
                     Cancel
@@ -286,21 +302,19 @@ export default function UploadScreen({ token }) {
             )}
             {mode === "SAVED" && (
               <>
-                <View>
-                  <MaterialIcons name={"check-box"} size={24} color={"grey"} />
-                  <Text style={{ fontSize: 18 }}>Sucessfully saved</Text>
-                </View>
                 <CustomButton
-                  style={{ width: 300 }}
+                  type={"big"}
                   onPress={() => {
-                    setSelectedImage(null);
-                    setTags([]);
-                    setImageUrl("");
-                    setMode("EMPTY");
-                    setDescription("");
+                    resetState();
                   }}
                 >
-                  Add image
+                  Add another
+                </CustomButton>
+                <CustomButton type={"big"} onPress={() => {}}>
+                  All photos
+                </CustomButton>
+                <CustomButton type={"big"} onPress={() => {}}>
+                  My photos
                 </CustomButton>
               </>
             )}

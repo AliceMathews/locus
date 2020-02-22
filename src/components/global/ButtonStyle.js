@@ -10,6 +10,15 @@ const styles = StyleSheet.create({
     margin: 3,
     borderRadius: 5
   },
+  buttonBig: {
+    alignItems: "center",
+    backgroundColor: "#183152",
+    padding: 3,
+    width: 150,
+    height: 30,
+    margin: 3,
+    borderRadius: 5
+  },
   label: {
     fontSize: 22,
     color: "white"
