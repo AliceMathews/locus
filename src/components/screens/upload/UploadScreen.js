@@ -163,9 +163,11 @@ export default function UploadScreen({ token }) {
         GPSLongitude: currentLocation.longitude,
         GPSLatitude: currentLocation.latitude
       };
-      return exifCopy;
       setSelectedImage({ ...selectedImage, exif: exifCopy });
       console.log("HERE");
+      return exifCopy;
+    } else {
+      return { ...selectedImage.exif };
     }
   };
 
