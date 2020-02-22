@@ -158,7 +158,7 @@ export default function DetailPhotoScreen({ route, navigation }) {
             <CustomButton onPress={() => getDirections()}>
               Directions
             </CustomButton>
-            <Text>{distance()}</Text>
+            <Text style={{ color: "#a6a6a6" }}>{distance()}</Text>
           </View>
         </View>
 
