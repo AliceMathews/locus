@@ -14,7 +14,16 @@ const styles = StyleSheet.create({
     width: 35,
     borderRadius: 50
   },
-  thumbnail: { height: 100, width: 100, borderRadius: 30, borderWidth: 1 },
+  thumbnail_android: {
+    height: 100,
+    width: 100
+  },
+  thumbnail_ios: {
+    height: 100,
+    width: 100,
+    borderRadius: 30,
+    borderWidth: 1
+  },
   botContainer: {
     flex: 1,
     padding: 10

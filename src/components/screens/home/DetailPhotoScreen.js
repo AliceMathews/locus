@@ -5,9 +5,12 @@ import {
   Image,
   Modal,
   SafeAreaView,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from "react-native";
+import FadeInView from "../../global/FadeInView";
 import CustomButton from "../../global/Button";
+import WebView from "react-native-webview";
 import MapView, { Marker, PROVIDER_GOOGLE, Callout } from "react-native-maps";
 import { styles, retro, Aubergine } from "./DetailPhotoScreenStyle";
 import * as Location from "expo-location";
@@ -64,9 +67,11 @@ export default function DetailPhotoScreen({ route }) {
 
   const markerRef = useRef(null);
 
-  const onRegionChangeComplete = () => {
+  const displayCallout = () => {
     if (markerRef && markerRef.current && markerRef.current.showCallout) {
-      markerRef.current.showCallout();
+      setTimeout(() => {
+        markerRef.current.showCallout();
+      }, 500);
     }
   };
 
@@ -84,7 +89,7 @@ export default function DetailPhotoScreen({ route }) {
       </Modal>
 
       <MapView
-        onMapReady={onRegionChangeComplete}
+        onMapReady={displayCallout}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         customMapStyle={retro}
@@ -103,13 +108,31 @@ export default function DetailPhotoScreen({ route }) {
             longitude: route.params.image.longitude
           }}
         >
-          <Image source={icon} style={styles.icon} />
-          <Callout onPress={() => setShowPhoto(true)} tooltip={true}>
-            <Image
-              source={{ uri: route.params.image.url }}
-              style={styles.thumbnail}
-            />
-          </Callout>
+          {Platform.OS === "ios" && (
+            <>
+              <Image source={icon} style={styles.icon} />
+              <Callout onPress={() => setShowPhoto(true)} tooltip={true}>
+                <Image
+                  source={{ uri: route.params.image.url }}
+                  style={styles.thumbnail_ios}
+                />
+              </Callout>
+            </>
+          )}
+          {Platform.OS === "android" && (
+            <View>
+              <FadeInView duration={500}>
+                <Image source={icon} style={styles.icon} />
+              </FadeInView>
+              <Callout onPress={() => setShowPhoto(true)} tooltip={true}>
+                <WebView
+                  source={{ uri: route.params.image.url }}
+                  style={styles.thumbnail_android}
+                  resizeMode={"cover"}
+                />
+              </Callout>
+            </View>
+          )}
         </Marker>
       </MapView>
       <View style={styles.botContainer}>
