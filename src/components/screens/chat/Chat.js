@@ -16,11 +16,10 @@ export default function Chat({ navgiation, route }) {
 
 
   useEffect(() => {
+    const socket = io("https://826a3840.ngrok.io");
   });
 
-  // const messages = chatMessages.map((msg) => (
-  //   <Text>{msg}</Text>
-  // ));
+  
   console.log(chatMessages);
 
   const onSubmitEditing = () => {
