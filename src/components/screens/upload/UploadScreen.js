@@ -33,7 +33,8 @@ import CustomButton from "../../global/Button";
 import FadeInView from "../../global/FadeInView";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import * as ImageManipulator from "expo-image-manipulator";
+import resizeImage from "../../../helpers/upload/resizeImage";
+import generateFileName from "../../../helpers/upload/generateFileName";
 
 export default function UploadScreen({ token }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -86,8 +87,17 @@ export default function UploadScreen({ token }) {
     }
   }, [selectedImage]);
 
-  const pickImage = async () => {
-    const permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+  const openLibrary = () => {
+    const options = {
+      permissions: ImagePicker.requestCameraRollPermissionsAsync,
+      launch: ImagePicker.launchImageLibraryAsync
+    };
+
+    pickImage(options);
+  };
+
+  const pickImage = async options => {
+    const permissionResult = await options.permissions();
 
     if (permissionResult.granted === false) {
       alert("Permission to access camera roll is required!");
@@ -95,24 +105,12 @@ export default function UploadScreen({ token }) {
     }
 
     try {
-      let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      let pickerResult = await options.launch({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         exif: true
       });
 
-      //Resize the image to width 1080, while keeping the original aspect ratio
-
-      const downsizeRatio = pickerResult.width / 1080;
-      const resizedDimension = {
-        width: 1080,
-        height: pickerResult.height / downsizeRatio
-      };
-
-      const manipResult = await ImageManipulator.manipulateAsync(
-        pickerResult.uri,
-        [{ resize: resizedDimension }],
-        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
-      );
+      const manipResult = await resizeImage(pickerResult);
       if (pickerResult.cancelled === true) return;
 
       setSelectedImage({
@@ -127,43 +125,12 @@ export default function UploadScreen({ token }) {
   };
 
   const openCamera = async () => {
-    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    const options = {
+      permissions: ImagePicker.requestCameraPermissionsAsync,
+      launch: ImagePicker.launchCameraAsync
+    };
 
-    if (permissionResult.granted === false) {
-      alert("Permission to access camera is required!");
-      return;
-    }
-
-    try {
-      let pickerResult = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        exif: true
-      });
-
-      //Resize the image to width 1080, while keeping the original aspect ratio
-
-      const downsizeRatio = pickerResult.width / 1080;
-      const resizedDimension = {
-        width: 1080,
-        height: pickerResult.height / downsizeRatio
-      };
-
-      const manipResult = await ImageManipulator.manipulateAsync(
-        pickerResult.uri,
-        [{ resize: resizedDimension }],
-        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
-      );
-      if (pickerResult.cancelled === true) return;
-
-      setSelectedImage({
-        localUri: manipResult.uri,
-        exif: pickerResult.exif,
-        type: pickerResult.type
-      });
-      setMode("IMAGE");
-    } catch (err) {
-      console.log(err);
-    }
+    pickImage(options);
   };
 
   const saveImage = () => {
@@ -190,29 +157,6 @@ export default function UploadScreen({ token }) {
         setMode("ERROR");
         console.log(e);
       });
-  };
-
-  const generateFileName = () => {
-    let count = 0;
-    let randomString = "";
-
-    while (count < 6) {
-      let randomNumber = Math.floor(Math.random() * (122 - 48 + 1) + 48);
-      let randomChar = "";
-
-      if (randomNumber >= 58 && randomNumber <= 64) {
-        continue;
-      } else if (randomNumber >= 91 && randomNumber <= 96) {
-        continue;
-      } else {
-        //convert to character
-        randomChar = String.fromCharCode(randomNumber);
-        randomString += randomChar;
-        count++;
-      }
-    }
-
-    return `${randomString}.jpg`;
   };
 
   const removeTag = tagName => {
@@ -244,7 +188,9 @@ export default function UploadScreen({ token }) {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.top}>
-          {mode === "EMPTY" && <Empty press={pickImage} pressCam={openCamera} />}
+          {mode === "EMPTY" && (
+            <Empty press={openLibrary} pressCam={openCamera} />
+          )}
           {mode !== "EMPTY" && (
             <FadeInView duration={1000}>
               <Image

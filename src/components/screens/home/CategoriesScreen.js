@@ -31,16 +31,20 @@ export default function CategoriesScreen({ navigation }) {
   const [fullCategories, setFullCategories] = useState([]);
 
   const [searchValue, setSearchValue] = useState("");
-  const [value, setValue] = useState("");
-
-  const [uri, setUri] = useState("");
 
   const [refreshing, setRefreshing] = useState(false);
   const [searching, setSearching] = useState(false);
 
+  const [oneItem, setOneItem] = useState(false);
+
+
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  // userEffect(() => {
+
+  // }, [categories]);
 
   const fetchCategories = () => {
     axios.get(`${API_URL}categories`).then(res => {
@@ -48,6 +52,11 @@ export default function CategoriesScreen({ navigation }) {
       console.log(`response from backend ${categories}`);
       setFullCategories(res.data.categories);
       setLoading(false);
+      if (res.data.categories === 1) {
+        setOneItem(true);
+      } else {
+        setOneItem(false);
+      }
     });
   }
 
@@ -57,6 +66,11 @@ export default function CategoriesScreen({ navigation }) {
       setCategories(res.data.categories);
       setFullCategories(res.data.categories);
       setRefreshing(false);
+      if (res.data.categories === 1) {
+        setOneItem(true);
+      } else {
+        setOneItem(false);
+      }
     });
   };
 
@@ -72,6 +86,11 @@ export default function CategoriesScreen({ navigation }) {
 
       return itemData.indexOf(textData) > -1;
     });
+    if (searchResults.length === 1) {
+      setOneItem(true);
+    } else {
+      setOneItem(false);
+    }
     setCategories(searchResults);
     setSearching(false);
   };
@@ -82,7 +101,7 @@ export default function CategoriesScreen({ navigation }) {
         <LiveSearch
           value={searchValue}
           onChangeText={text => searchFilterCategories(text)}
-          width={deviceWidth * 0.85}
+          width={deviceWidth * 0.95}
           loading={searching}
         />
       </View>
@@ -102,6 +121,7 @@ export default function CategoriesScreen({ navigation }) {
                   item={item}
                   navigation={navigation}
                   deviceWidth={deviceWidth}
+                  oneItem={oneItem}
                 />
               );
             }}

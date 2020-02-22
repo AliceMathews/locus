@@ -1,15 +1,9 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  categoryText: {
-    fontSize: 24,
-    color: 'white',
-    fontWeight: 'bold'
-  },
-  categoryTextContainer: {
-    justifyContent: 'center',
-    flex: 1,
-    alignItems: 'center'
+  image: {
+    borderWidth: 2, 
+    borderColor: 'rgba(247,237,237,0.5)'
   }
 });
 
