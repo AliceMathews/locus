@@ -277,11 +277,6 @@ export default function UploadScreen({ token }) {
                 <View style={styles.buttons}>
                   <CustomButton
                     onPress={() => {
-                      // setSelectedImage(null);
-                      // setTags([]);
-                      // setImageUrl("");
-                      // setMode("EMPTY");
-                      // setDescription("");
                       resetState();
                     }}
                   >
@@ -301,7 +296,7 @@ export default function UploadScreen({ token }) {
               <ActivityIndicator size="large" color="#0000ff" />
             )}
             {mode === "SAVED" && (
-              <>
+              <FadeInView duration={1000} delay={1000}>
                 <CustomButton
                   type={"big"}
                   onPress={() => {
@@ -310,13 +305,25 @@ export default function UploadScreen({ token }) {
                 >
                   Add another
                 </CustomButton>
-                <CustomButton type={"big"} onPress={() => {}}>
+                <CustomButton
+                  type={"big"}
+                  onPress={() => {
+                    navigation.navigate("Home");
+                    resetState();
+                  }}
+                >
                   All photos
                 </CustomButton>
-                <CustomButton type={"big"} onPress={() => {}}>
+                <CustomButton
+                  type={"big"}
+                  onPress={() => {
+                    navigation.navigate("User");
+                    resetState();
+                  }}
+                >
                   My photos
                 </CustomButton>
-              </>
+              </FadeInView>
             )}
             {mode === "ERROR" && <Text>Error saving</Text>}
           </View>
