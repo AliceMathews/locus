@@ -6,10 +6,14 @@ import axios from "axios";
 
 import PhotoTile from '../home/PhotoTile';
 
-export default function ProfileScreen({ signOut, user, token, navigation }) {
+import UserPhotoTile from './UserPhotoTile';
+
+
+export default function ProfileScreen({ signOut, user, token }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [oneItem, setOneItem] = useState(false);
 
   useEffect(() => {
     axios.get(`${API_URL}users/myinfo`, {headers: {"authorization": token}}).then(res => {
@@ -18,7 +22,12 @@ export default function ProfileScreen({ signOut, user, token, navigation }) {
       axios.get(`${API_URL}users/${userId}/images`).then(res => {
         setImages(res.data);
         setLoading(false);
-      })
+        if (res.data.length === 1) {
+          setOneItem(true);
+        } else {
+          setOneItem(false);
+        }
+      });
     });
   }, []);
   console.log(images);
@@ -48,11 +57,10 @@ export default function ProfileScreen({ signOut, user, token, navigation }) {
                 keyExtractor={item => item.id}
                 renderItem={({item}) => {
                   return (
-                    <PhotoTile
+                    <UserPhotoTile
                       item={item}
-                      // navigation={navigation}
                       deviceWidth={deviceWidth}
-                      oneItem={false}
+                      oneItem={oneItem}
                     />
                   );
                 }}
