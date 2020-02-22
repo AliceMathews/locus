@@ -29,17 +29,45 @@ const styles = StyleSheet.create({
     padding: 10
   },
   botHeader: {
+    flex: 0.2,
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
     padding: 10,
+
     borderBottomWidth: 1
+  },
+  username: {
+    fontSize: 20
   },
   direction: {
     alignItems: "center"
   },
+
+  titleSection: {
+    flex: 0.2,
+    borderBottomWidth: 1,
+    justifyContent: "center",
+    padding: 10
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "400"
+  },
+
+  infoContainer: {
+    flex: 0.6,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    justifyContent: "space-between"
+  },
   info: {
-    padding: 2
+    paddingVertical: 4,
+    paddingRight: 25,
+    fontSize: 18
+  },
+  cameraSettings: {
+    flexDirection: "row"
   },
   expanded: {
     width: "100%",
@@ -48,14 +76,6 @@ const styles = StyleSheet.create({
   },
   bold: {
     fontWeight: "700"
-  },
-  titleSection: {
-    height: Dimensions.get("window").height / 10,
-    borderBottomWidth: 1
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "400"
   }
 });
 

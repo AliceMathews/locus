@@ -137,8 +137,16 @@ export default function DetailPhotoScreen({ route, navigation }) {
       </MapView>
       <View style={styles.botContainer}>
         <View style={styles.botHeader}>
-          <TouchableOpacity onPress={() => navigation.navigate("Chat", {sendToId: route.params.image.owner_id})}>
-            <Text>Credit: {route.params.image.username}</Text>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Chat", {
+                sendToId: route.params.image.owner_id
+              })
+            }
+          >
+            <Text style={styles.username}>
+              Credit: {route.params.image.username}
+            </Text>
           </TouchableOpacity>
           <View style={styles.direction}>
             <CustomButton onPress={() => getDirections()}>
@@ -148,42 +156,54 @@ export default function DetailPhotoScreen({ route, navigation }) {
           </View>
         </View>
 
-        <View>
+        <View style={styles.titleSection}>
           {route.params.image.description === "" || (
-            <View style={styles.titleSection}>
+            <View>
               <Text style={styles.title}>{route.params.image.description}</Text>
             </View>
           )}
+        </View>
 
+        <View style={styles.infoContainer}>
           <Text style={styles.info}>
             Camera Make |
             <Text style={styles.bold}> {route.params.image.camera_make}</Text>
           </Text>
-          <Text style={styles.info}>
-            Aperture |
-            <Text style={styles.bold}> F{route.params.image.aperture}</Text>
-          </Text>
-          <Text style={styles.info}>
-            Exposure |
-            <Text style={styles.bold}> + {route.params.image.exposure}</Text>
-          </Text>
-          <Text style={styles.info}>
-            ISO | <Text style={styles.bold}>{route.params.image.iso}</Text>
-          </Text>
-          <Text style={styles.info}>
-            Shutter speed |
-            <Text style={styles.bold}>
-              {" "}
-              {route.params.image.shutter_speed} S
-            </Text>
-          </Text>
-          <Text style={styles.info}>
-            Focal length |
-            <Text style={styles.bold}>
-              {" "}
-              {route.params.image.focul_length} Mm
-            </Text>
-          </Text>
+
+          <View style={styles.cameraSettings}>
+            <View>
+              <Text style={styles.info}>
+                Aperture |
+                <Text style={styles.bold}> F{route.params.image.aperture}</Text>
+              </Text>
+              <Text style={styles.info}>
+                Exposure |
+                <Text style={styles.bold}>
+                  {" "}
+                  + {route.params.image.exposure}
+                </Text>
+              </Text>
+              <Text style={styles.info}>
+                ISO | <Text style={styles.bold}>{route.params.image.iso}</Text>
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.info}>
+                Shutter speed |
+                <Text style={styles.bold}>
+                  {" "}
+                  {route.params.image.shutter_speed} S
+                </Text>
+              </Text>
+              <Text style={styles.info}>
+                Focal length |
+                <Text style={styles.bold}>
+                  {" "}
+                  {route.params.image.focul_length} Mm
+                </Text>
+              </Text>
+            </View>
+          </View>
         </View>
       </View>
     </SafeAreaView>
