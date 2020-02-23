@@ -25,9 +25,9 @@ export default function SavedSuccess(props) {
     }
   });
 
-  const photoInfo = reqInfo.map(setting => {
+  const photoInfo = reqInfo.map((setting, i) => {
     return (
-      <Text style={styles.text}>
+      <Text key={i} style={styles.text}>
         {setting[0]} | <Text style={styles.bold}>{setting[1]}</Text>
       </Text>
     );
