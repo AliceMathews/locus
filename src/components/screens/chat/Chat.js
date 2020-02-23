@@ -8,6 +8,8 @@ import { API_URL } from '../../../../configKeys';
 import styles from './ChatStyle';
 import { ThemeProvider } from "@react-navigation/native";
 
+import { GiftedChat } from 'react-native-gifted-chat';
+
 // const socket = io("https://826a3840.ngrok.io");
 
 // export default function Chat({ navgiation, route }) {
@@ -80,14 +82,15 @@ YellowBox.ignoreWarnings([
 ]);
 
 export default class Chat extends Component {
+  
+
   constructor(props) {
     super(props);
     this.state = {
-       chatMessage: "",
-       chatMessages: []
+       messages: [],
+       socketId: ""
     };
     this.deviceWidth = Dimensions.get("window").width;
-    this.room = "abc123";
     this.imageId = props.route.params.imageId;
     console.log(`image: ${this.imageId}`)
   }
@@ -97,46 +100,58 @@ export default class Chat extends Component {
     this.socket.on("connect", () => {
       this.socket.emit('room', this.imageId);
       console.log(`conencted as ${this.socket.id}`)
-      this.socketId = this.socket.id;
+      this.setState({ socketId: this.socket.id});
     })
     this.socket.on("chat message", msg => {
         console.log(`got a message from ${msg.id}`)
         if (this.socketId === msg.id) {
           console.log("I got a message from myself");
         }
-        this.setState({ chatMessages: [...this.state.chatMessages, msg.message]});
+        this.setState(previousState => ({
+          messages: GiftedChat.append(previousState.messages, msg),
+        }));
     });
+
+
+    this.setState({
+      messages: [
+        {
+          _id: 1,
+          text: 'Hello developer',
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: 'React Native',
+            avatar: 'https://placeimg.com/140/140/any',
+          },
+        },
+      ],
+    })
   } 
 
-  submitChatMessage() {
-    console.log(`sending ${this.state.chatMessage} from ${this.socketId}`)
-    this.socket.emit('chat message', this.state.chatMessage);
-    this.setState({chatMessage: ''});
+  onSend(messages=[]) {
+    this.socket.emit('chat message', messages);
+    console.log("message: ");
+    console.log(messages);
+    // this.setState(previousState => ({
+    //   messages: GiftedChat.append(previousState.messages, messages),
+    // }))
   }
 
   render() {
-    const chatMessages = this.state.chatMessages.map(chatMessage => (
-      <Text style={{borderWidth: 2, fontSize: 20}}>{chatMessage}</Text>
-    ));
-
     return (
-      <View style={styles.container}>
-        <View style={styles.messagesContainer}>
-          {chatMessages}
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            autoCorrect={false}
-            value={this.state.chatMessage}
-            onSubmitEditing={() => this.submitChatMessage()}
-            onChangeText={chatMessage => {
-              this.setState({chatMessage});
-            }}
-          />
-        </View>
-      </View>
+      <GiftedChat
+        messages={this.state.messages}
+        onSend={messages => this.onSend(messages)}
+        user={{
+          _id: this.state.socketId || 1,
+          avatar: "https://img.icons8.com/ios-filled/344/user-male-circle.png"
+        }}
+        renderUsernameOnMessage={true}
+      />
     );
   }
+
+
 
 }
