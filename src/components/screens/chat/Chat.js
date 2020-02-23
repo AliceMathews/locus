@@ -16,7 +16,7 @@ import { ThemeProvider } from "@react-navigation/native";
 
 //   const [message, setMessage] = useState("");
 //   const [chatMessages, setChatMessages] = useState([]);
-//   // const [socket, setSocket] = useState(null);
+//   const [socket, setSocket] = useState(io("https://99504048.ngrok.io"));
 
 
 //   useEffect(() => {
@@ -74,6 +74,7 @@ import { ThemeProvider } from "@react-navigation/native";
 //   );
 // }
 
+
 export default class Chat extends Component {
   constructor(props) {
     super(props);
@@ -88,16 +89,20 @@ export default class Chat extends Component {
   }
 
   componentDidMount() {
-    this.socket = io("https://076b68fe.ngrok.io");
+    this.socket = io("https://99504048.ngrok.io");
     this.socket.on("connect", () => {
       this.socket.emit('room', this.imageId);
+      console.log(`conencted as ${this.socket.id}`)
+      this.socketId = this.socket.id;
     })
     this.socket.on("chat message", msg => {
-          this.setState({ chatMessages: [...this.state.chatMessages, msg]});
+        console.log(`got a message from ${msg.id}`)
+        this.setState({ chatMessages: [...this.state.chatMessages, msg.message]});
     });
   } 
 
   submitChatMessage() {
+    console.log(`sending ${this.state.chatMessage} from ${this.socketId}`)
     this.socket.emit('chat message', this.state.chatMessage);
     this.setState({chatMessage: ''});
   }
@@ -114,7 +119,7 @@ export default class Chat extends Component {
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{height: 40, borderWidth: 2, position: 'absolute', width: this.deviceWidth * 0.9}}
+            style={styles.input}
             autoCorrect={false}
             value={this.state.chatMessage}
             onSubmitEditing={() => this.submitChatMessage()}
