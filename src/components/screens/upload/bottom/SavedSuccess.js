@@ -6,38 +6,31 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import FadeInView from "../../../global/FadeInView";
 import CustomButton from "../../../global/Button";
 
-// import styles from "./SavedStyle";
+import styles from "./SavedSuccessStyle";
 
 export default function SavedSuccess(props) {
   const navigation = useNavigation();
   return (
     <FadeInView duration={1000} delay={1000}>
-      <CustomButton
-        type={"big"}
-        onPress={() => {
-          props.reset;
-        }}
-      >
-        Add another
-      </CustomButton>
-      <CustomButton
-        type={"big"}
-        onPress={() => {
-          navigation.navigate("Home");
-          props.reset();
-        }}
-      >
-        All photos
-      </CustomButton>
-      <CustomButton
-        type={"big"}
-        onPress={() => {
-          navigation.navigate("User");
-          props.reset();
-        }}
-      >
-        My photos
-      </CustomButton>
+      <View style={styles.buttons}>
+        <CustomButton
+          type={"big"}
+          onPress={() => {
+            props.reset;
+          }}
+        >
+          Add another
+        </CustomButton>
+        <CustomButton
+          type={"big"}
+          onPress={() => {
+            props.reset();
+            navigation.navigate("User");
+          }}
+        >
+          My photos
+        </CustomButton>
+      </View>
     </FadeInView>
   );
 }
