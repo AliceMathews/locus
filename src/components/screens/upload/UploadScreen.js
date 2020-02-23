@@ -180,7 +180,7 @@ export default function UploadScreen({ token }) {
     exif = checkLocation();
 
     const imageData = {
-      owner_id: 1,
+      owner_token: token,
       exif: exif,
       description: description,
       url: imageUrl,
@@ -250,7 +250,7 @@ export default function UploadScreen({ token }) {
               <Saved />
             </FadeInView>
           )}
-          {mode === "Error" && (
+          {mode === "ERROR" && (
             <FadeInView duration={1000}>
               <Error />
             </FadeInView>
@@ -331,7 +331,6 @@ export default function UploadScreen({ token }) {
                 </CustomButton>
               </FadeInView>
             )}
-            {mode === "ERROR" && <Text>Error saving</Text>}
           </View>
         </View>
       </SafeAreaView>
