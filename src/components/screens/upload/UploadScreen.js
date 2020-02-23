@@ -27,6 +27,8 @@ import {
 } from "../../../../configKeys";
 
 import useSelectImage from "../../../hooks/useSelectImage";
+import checkLocation from "../../../helpers/upload/exifGPSCheck";
+import generateFileName from "../../../helpers/upload/generateFileName";
 
 import Empty from "./top/Empty";
 import Saved from "./top/Saved";
@@ -36,14 +38,10 @@ import FadeInView from "../../global/FadeInView";
 import SavedSuccess from "./bottom/SavedSuccess";
 import TagContainer from "./bottom/TagContainer";
 
-import resizeImage from "../../../helpers/upload/resizeImage";
-import generateFileName from "../../../helpers/upload/generateFileName";
-
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 
 export default function UploadScreen({ token }) {
-  // const [selectedImage, setSelectedImage] = useState(null);
   const [tags, setTags] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [mode, setMode] = useState("EMPTY");
@@ -119,82 +117,14 @@ export default function UploadScreen({ token }) {
     }
   };
 
-  // const openLibrary = () => {
-  //   const options = {
-  //     permissions: ImagePicker.requestCameraRollPermissionsAsync,
-  //     launch: ImagePicker.launchImageLibraryAsync
-  //   };
-
-  //   pickImage(options);
-  // };
-
-  // const pickImage = async options => {
-  //   const permissionResult = await options.permissions();
-
-  //   if (permissionResult.granted === false) {
-  //     alert("Permission to access camera roll is required!");
-  //     return;
-  //   }
-
-  //   try {
-  //     let pickerResult = await options.launch({
-  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //       exif: true
-  //     });
-
-  //     const manipResult = await resizeImage(pickerResult);
-  //     if (pickerResult.cancelled === true) return;
-
-  //     setSelectedImage({
-  //       localUri: manipResult.uri,
-  //       exif: pickerResult.exif,
-  //       type: pickerResult.type
-  //     });
-  //     setMode("IMAGE");
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-  // const openCamera = async () => {
-  //   await _getLocationAsync();
-  //   const options = {
-  //     permissions: ImagePicker.requestCameraPermissionsAsync,
-  //     launch: ImagePicker.launchCameraAsync
-  //   };
-
-  //   pickImage(options);
-  // };
-
-  const checkLocation = () => {
-    if (!selectedImage.exif.GPSLongitude && !selectedImage.exif.GPSLatitude) {
-      const exifCopy = {
-        ...selectedImage.exif,
-        GPSLongitude: currentLocation.longitude,
-        GPSLatitude: currentLocation.latitude
-      };
-      setSelectedImage({ ...selectedImage, exif: exifCopy });
-      return exifCopy;
-    } else {
-      return { ...selectedImage.exif };
-    }
-  };
-
-  const saveImage = () => {
+  const saveImage = async () => {
+    await _getLocationAsync();
     setMode("SAVING");
-    // exif = checkLocation();
+    let exif = checkLocation(selectedImage.exif, currentLocation);
 
-    // const imageData = {
-    //   owner_token: token,
-    //   exif: exif,
-    //   description: description,
-    //   url: imageUrl,
-    //   views: 0,
-    //   tags: tags
-    // };
     const imageData = {
       owner_token: token,
-      exif: selectedImage.exif,
+      exif: exif,
       description: description,
       url: imageUrl,
       views: 0,
@@ -209,7 +139,7 @@ export default function UploadScreen({ token }) {
       })
       .catch(e => {
         setMode("ERROR");
-        console.log(e);
+        console.log("ERROR", e);
       });
   };
 
