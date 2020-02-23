@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   },
   info: {
     paddingVertical: 4,
-    paddingRight: 25,
+    paddingRight: 20,
     fontSize: 18,
     color: "#a6a6a6"
   },
