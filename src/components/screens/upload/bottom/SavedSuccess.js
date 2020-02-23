@@ -44,7 +44,7 @@ export default function SavedSuccess(props) {
           <CustomButton
             type={"big"}
             onPress={() => {
-              props.reset;
+              props.reset();
             }}
           >
             Add another
