@@ -18,10 +18,13 @@ import * as Permissions from "expo-permissions";
 import icon from "../../../../assets/locus.png";
 import { Linking } from "expo";
 import { getDistance } from "geolib";
+import useScreenBrightness from "../../../hooks/useScreenBrightness";
 
 export default function DetailPhotoScreen({ route, navigation }) {
   const [currentLocation, setCurrentLocation] = useState({});
   const [showPhoto, setShowPhoto] = useState(false);
+  const { currentBrightness } = useScreenBrightness();
+  console.log(currentBrightness);
 
   const distance = () => {
     const result = getDistance(
