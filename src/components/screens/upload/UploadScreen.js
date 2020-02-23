@@ -38,22 +38,17 @@ import SavedSuccess from "./bottom/SavedSuccess";
 import TagContainer from "./bottom/TagContainer";
 
 export default function UploadScreen({ token }) {
+  const navigation = useNavigation();
   const [tags, setTags] = useState([]);
-  const [imageUrl, setImageUrl] = useState("");
   const [mode, setMode] = useState("EMPTY");
-  const [description, setDescription] = useState("");
   const [imageInfo, setImageInfo] = useState({});
-
+  const { currentLocation, _getLocationAsync } = useCurentLocation();
   const {
     selectedImage,
     setSelectedImage,
     openCamera,
     openLibrary
   } = useSelectImage();
-
-  const { currentLocation, _getLocationAsync } = useCurentLocation();
-
-  const navigation = useNavigation();
 
   useEffect(() => {
     if (selectedImage !== null) {
@@ -82,7 +77,6 @@ export default function UploadScreen({ token }) {
           }
           const url = res.body.postResponse.location;
           setImageInfo({ ...imageInfo, url });
-          // setImageUrl(url);
           return url;
         })
         .then(url => {
@@ -106,8 +100,7 @@ export default function UploadScreen({ token }) {
     const imageData = {
       owner_token: token,
       exif: exif,
-      description: description,
-      // url: imageUrl,
+      description: imageInfo.description,
       url: imageInfo.url,
       views: 0,
       tags: tags
@@ -132,9 +125,7 @@ export default function UploadScreen({ token }) {
   const resetState = () => {
     setSelectedImage(null);
     setTags([]);
-    setImageUrl("");
     setMode("EMPTY");
-    setDescription("");
     setImageInfo("");
   };
 
@@ -189,8 +180,10 @@ export default function UploadScreen({ token }) {
                   style={styles.description}
                   maxLength={50}
                   placeholder="Add a description to your photo..."
-                  onChangeText={text => setDescription(text)}
-                  value={description}
+                  onChangeText={text =>
+                    setImageInfo({ ...imageInfo, description: text })
+                  }
+                  value={imageInfo.description}
                 ></TextInput>
                 <TagContainer tags={tags} delete={removeTag} />
                 <View style={styles.buttons}>
