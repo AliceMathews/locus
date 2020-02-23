@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   View,
-  Image,
-  ActivityIndicator,
   SafeAreaView,
   TextInput,
   Alert,
@@ -29,12 +27,13 @@ import useCurentLocation from "../../../hooks/useCurrentLocation";
 import checkLocation from "../../../helpers/upload/exifGPSCheck";
 import generateFileName from "../../../helpers/upload/generateFileName";
 
+import CustomButton from "../../global/Button";
+import FadeInView from "../../global/FadeInView";
+import Spinner from "../../global/Spinner";
 import Empty from "./top/Empty";
 import Saved from "./top/Saved";
 import Error from "./top/Error";
 import ImageShow from "./top/ImageShow";
-import CustomButton from "../../global/Button";
-import FadeInView from "../../global/FadeInView";
 import SavedSuccess from "./bottom/SavedSuccess";
 import TagContainer from "./bottom/TagContainer";
 
@@ -159,9 +158,7 @@ export default function UploadScreen({ token }) {
 
         <View style={styles.bottom}>
           <View style={styles.imageInfo}>
-            {mode === "LOADING-TAGS" && (
-              <ActivityIndicator size="large" color="#55708E" />
-            )}
+            {mode === "LOADING-TAGS" && <Spinner />}
             {mode === "LOADED" && (
               <FadeInView style={{ flex: 1 }} duration={1000}>
                 <TextInput
@@ -192,9 +189,7 @@ export default function UploadScreen({ token }) {
                 </View>
               </FadeInView>
             )}
-            {mode === "SAVING" && (
-              <ActivityIndicator size="large" color="#55708E" />
-            )}
+            {mode === "SAVING" && <Spinner />}
             {(mode === "SAVED" || mode === "ERROR") && (
               <SavedSuccess info={imageInfo} reset={resetState} />
             )}
