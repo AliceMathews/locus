@@ -6,12 +6,10 @@ import {
   ActivityIndicator,
   SafeAreaView,
   TextInput,
-  Text,
   Alert,
   TouchableWithoutFeedback,
   Keyboard
 } from "react-native";
-import * as ImagePicker from "expo-image-picker";
 import { RNS3 } from "react-native-aws3";
 import axios from "axios";
 
@@ -27,6 +25,7 @@ import {
 } from "../../../../configKeys";
 
 import useSelectImage from "../../../hooks/useSelectImage";
+import useCurentLocation from "../../../hooks/useCurrentLocation";
 import checkLocation from "../../../helpers/upload/exifGPSCheck";
 import generateFileName from "../../../helpers/upload/generateFileName";
 
@@ -38,15 +37,11 @@ import FadeInView from "../../global/FadeInView";
 import SavedSuccess from "./bottom/SavedSuccess";
 import TagContainer from "./bottom/TagContainer";
 
-import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
-
 export default function UploadScreen({ token }) {
   const [tags, setTags] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [mode, setMode] = useState("EMPTY");
   const [description, setDescription] = useState("");
-  const [currentLocation, setCurrentLocation] = useState({});
   const [imageInfo, setImageInfo] = useState({});
 
   const {
@@ -55,6 +50,8 @@ export default function UploadScreen({ token }) {
     openCamera,
     openLibrary
   } = useSelectImage();
+
+  const { currentLocation, _getLocationAsync } = useCurentLocation();
 
   const navigation = useNavigation();
 
@@ -76,6 +73,7 @@ export default function UploadScreen({ token }) {
       };
 
       setMode("LOADING-TAGS");
+      _getLocationAsync();
 
       RNS3.put(file, options)
         .then(res => {
@@ -100,25 +98,7 @@ export default function UploadScreen({ token }) {
     }
   }, [selectedImage]);
 
-  const _getLocationAsync = async () => {
-    try {
-      let { status } = await Permissions.askAsync(Permissions.LOCATION);
-      if (status !== "granted") {
-        console.log("Permission to access location was denied");
-      }
-      let location = await Location.getCurrentPositionAsync({});
-      console.log(location);
-      setCurrentLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude
-      });
-    } catch (err) {
-      console.log("Something went wrong", err);
-    }
-  };
-
   const saveImage = async () => {
-    await _getLocationAsync();
     setMode("SAVING");
     let exif = checkLocation(selectedImage.exif, currentLocation);
 
