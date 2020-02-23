@@ -32,6 +32,7 @@ import generateFileName from "../../../helpers/upload/generateFileName";
 import Empty from "./top/Empty";
 import Saved from "./top/Saved";
 import Error from "./top/Error";
+import ImageShow from "./top/ImageShow";
 import CustomButton from "../../global/Button";
 import FadeInView from "../../global/FadeInView";
 import SavedSuccess from "./bottom/SavedSuccess";
@@ -152,12 +153,7 @@ export default function UploadScreen({ token }) {
           {mode === "SAVED" && <Saved />}
           {mode === "ERROR" && <Error />}
           {mode !== "EMPTY" && mode !== "SAVED" && mode !== "ERROR" && (
-            <FadeInView duration={1000}>
-              <Image
-                source={{ uri: selectedImage.localUri }}
-                style={styles.thumbnail}
-              />
-            </FadeInView>
+            <ImageShow uri={selectedImage.localUri} />
           )}
         </View>
 
