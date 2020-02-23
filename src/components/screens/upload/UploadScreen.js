@@ -3,7 +3,6 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   View,
   SafeAreaView,
-  TextInput,
   Alert,
   TouchableWithoutFeedback,
   Keyboard
@@ -27,15 +26,13 @@ import useCurentLocation from "../../../hooks/useCurrentLocation";
 import checkLocation from "../../../helpers/upload/exifGPSCheck";
 import generateFileName from "../../../helpers/upload/generateFileName";
 
-import CustomButton from "../../global/Button";
-import FadeInView from "../../global/FadeInView";
 import Spinner from "../../global/Spinner";
 import Empty from "./top/Empty";
 import Saved from "./top/Saved";
 import Error from "./top/Error";
 import ImageShow from "./top/ImageShow";
+import Loaded from "./bottom/Loaded";
 import SavedSuccess from "./bottom/SavedSuccess";
-import TagContainer from "./bottom/TagContainer";
 
 export default function UploadScreen({ token }) {
   const navigation = useNavigation();
@@ -68,7 +65,6 @@ export default function UploadScreen({ token }) {
       };
 
       setMode("LOADING-TAGS");
-      console.log(selectedImage);
 
       RNS3.put(file, options)
         .then(res => {
@@ -94,14 +90,14 @@ export default function UploadScreen({ token }) {
     }
   }, [selectedImage]);
 
-  const saveImage = async () => {
+  const saveImage = async description => {
     setMode("SAVING");
     let exif = checkLocation(selectedImage.exif, currentLocation);
 
     const imageData = {
       owner_token: token,
       exif: exif,
-      description: imageInfo.description,
+      description: description,
       url: imageInfo.url,
       views: 0,
       tags: tags
@@ -161,34 +157,12 @@ export default function UploadScreen({ token }) {
           <View style={styles.imageInfo}>
             {mode === "LOADING-TAGS" && <Spinner />}
             {mode === "LOADED" && (
-              <FadeInView style={{ flex: 1 }} duration={1000}>
-                <TextInput
-                  style={styles.description}
-                  maxLength={50}
-                  placeholder="Add a description to your photo..."
-                  onChangeText={text =>
-                    setImageInfo({ ...imageInfo, description: text })
-                  }
-                  value={imageInfo.description}
-                ></TextInput>
-                <TagContainer tags={tags} delete={removeTag} />
-                <View style={styles.buttons}>
-                  <CustomButton
-                    onPress={() => {
-                      resetState();
-                    }}
-                  >
-                    Cancel
-                  </CustomButton>
-                  <CustomButton
-                    onPress={() => {
-                      saveImage();
-                    }}
-                  >
-                    Save
-                  </CustomButton>
-                </View>
-              </FadeInView>
+              <Loaded
+                tags={tags}
+                removeTag={removeTag}
+                resetState={resetState}
+                saveImage={saveImage}
+              />
             )}
             {mode === "SAVING" && <Spinner />}
             {(mode === "SAVED" || mode === "ERROR") && (
