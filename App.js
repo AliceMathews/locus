@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useMemo, createContext } from "react";
-import { AsyncStorage, Alert } from "react-native";
+import { AsyncStorage, Alert, Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
