@@ -50,6 +50,7 @@ export default function UploadScreen({ token }) {
   const [mode, setMode] = useState("EMPTY");
   const [description, setDescription] = useState("");
   const [currentLocation, setCurrentLocation] = useState({});
+  const [imageInfo, setImageInfo] = useState({});
 
   const navigation = useNavigation();
 
@@ -193,6 +194,7 @@ export default function UploadScreen({ token }) {
     axios
       .post(`${API_URL}images`, { imageData })
       .then(res => {
+        setImageInfo(res.data);
         setMode("SAVED");
         console.log(res.data);
       })
@@ -212,6 +214,7 @@ export default function UploadScreen({ token }) {
     setImageUrl("");
     setMode("EMPTY");
     setDescription("");
+    setImageInfo("");
   };
 
   const tagsToShow = tags.map((tag, i) => {
@@ -303,7 +306,7 @@ export default function UploadScreen({ token }) {
               <ActivityIndicator size="large" color="#0000ff" />
             )}
             {(mode === "SAVED" || mode === "ERROR") && (
-              <SavedSuccess reset={resetState} />
+              <SavedSuccess info={imageInfo} reset={resetState} />
             )}
           </View>
         </View>
