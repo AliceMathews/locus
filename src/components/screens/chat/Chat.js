@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from "react";
-import { Text, View, Image, TouchableOpacity, ImageBackground, TextInput, FlatList, StyleSheet, Dimensions } from "react-native";
+import { Text, View, Image, TouchableOpacity, ImageBackground, TextInput, FlatList, StyleSheet, Dimensions, YellowBox } from "react-native";
 
 import io from 'socket.io-client';
 
@@ -75,6 +75,10 @@ import { ThemeProvider } from "@react-navigation/native";
 // }
 
 
+YellowBox.ignoreWarnings([
+  'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
+]);
+
 export default class Chat extends Component {
   constructor(props) {
     super(props);
@@ -97,6 +101,9 @@ export default class Chat extends Component {
     })
     this.socket.on("chat message", msg => {
         console.log(`got a message from ${msg.id}`)
+        if (this.socketId === msg.id) {
+          console.log("I got a message from myself");
+        }
         this.setState({ chatMessages: [...this.state.chatMessages, msg.message]});
     });
   } 
