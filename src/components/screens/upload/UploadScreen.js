@@ -68,7 +68,7 @@ export default function UploadScreen({ token }) {
       };
 
       setMode("LOADING-TAGS");
-      _getLocationAsync();
+      console.log(selectedImage);
 
       RNS3.put(file, options)
         .then(res => {
@@ -85,6 +85,7 @@ export default function UploadScreen({ token }) {
             .then(res => {
               setTags(res.data);
               setMode("LOADED");
+              _getLocationAsync();
             })
             .catch(e => {
               throw new Error("Error: ", e);
