@@ -81,7 +81,8 @@ export default function UploadScreen({ token }) {
             throw new Error("Failed to upload image to S3");
           }
           const url = res.body.postResponse.location;
-          setImageUrl(url);
+          setImageInfo({ ...imageInfo, url });
+          // setImageUrl(url);
           return url;
         })
         .then(url => {
@@ -106,7 +107,8 @@ export default function UploadScreen({ token }) {
       owner_token: token,
       exif: exif,
       description: description,
-      url: imageUrl,
+      // url: imageUrl,
+      url: imageInfo.url,
       views: 0,
       tags: tags
     };
