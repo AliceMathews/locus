@@ -8,7 +8,7 @@ export default function ErrorTop(props) {
   return (
     <>
       <View style={styles.container}>
-        <MaterialIcons name={"error"} size={24} color={"grey"} />
+        <MaterialIcons name={"error"} size={24} color={"#c25744"} />
         <Text style={styles.text}>Error Saving</Text>
       </View>
     </>

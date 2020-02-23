@@ -33,6 +33,7 @@ import Saved from "./top/Saved";
 import Error from "./top/Error";
 import CustomButton from "../../global/Button";
 import FadeInView from "../../global/FadeInView";
+import SavedSuccess from "./bottom/SavedSuccess";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import resizeImage from "../../../helpers/upload/resizeImage";
@@ -49,6 +50,7 @@ export default function UploadScreen({ token }) {
   const [mode, setMode] = useState("EMPTY");
   const [description, setDescription] = useState("");
   const [currentLocation, setCurrentLocation] = useState({});
+  const [imageInfo, setImageInfo] = useState({});
 
   const navigation = useNavigation();
 
@@ -180,7 +182,7 @@ export default function UploadScreen({ token }) {
     exif = checkLocation();
 
     const imageData = {
-      owner_id: 1,
+      owner_token: token,
       exif: exif,
       description: description,
       url: imageUrl,
@@ -192,6 +194,7 @@ export default function UploadScreen({ token }) {
     axios
       .post(`${API_URL}images`, { imageData })
       .then(res => {
+        setImageInfo(res.data);
         setMode("SAVED");
         console.log(res.data);
       })
@@ -211,6 +214,7 @@ export default function UploadScreen({ token }) {
     setImageUrl("");
     setMode("EMPTY");
     setDescription("");
+    setImageInfo("");
   };
 
   const tagsToShow = tags.map((tag, i) => {
@@ -250,7 +254,7 @@ export default function UploadScreen({ token }) {
               <Saved />
             </FadeInView>
           )}
-          {mode === "Error" && (
+          {mode === "ERROR" && (
             <FadeInView duration={1000}>
               <Error />
             </FadeInView>
@@ -302,36 +306,8 @@ export default function UploadScreen({ token }) {
               <ActivityIndicator size="large" color="#0000ff" />
             )}
             {(mode === "SAVED" || mode === "ERROR") && (
-              <FadeInView duration={1000} delay={1000}>
-                <CustomButton
-                  type={"big"}
-                  onPress={() => {
-                    resetState();
-                  }}
-                >
-                  Add another
-                </CustomButton>
-                <CustomButton
-                  type={"big"}
-                  onPress={() => {
-                    navigation.navigate("Home");
-                    resetState();
-                  }}
-                >
-                  All photos
-                </CustomButton>
-                <CustomButton
-                  type={"big"}
-                  onPress={() => {
-                    navigation.navigate("User");
-                    resetState();
-                  }}
-                >
-                  My photos
-                </CustomButton>
-              </FadeInView>
+              <SavedSuccess info={imageInfo} reset={resetState} />
             )}
-            {mode === "ERROR" && <Text>Error saving</Text>}
           </View>
         </View>
       </SafeAreaView>
