@@ -26,20 +26,53 @@ const styles = StyleSheet.create({
   },
   botContainer: {
     flex: 1,
-    padding: 10
+    padding: 10,
+    backgroundColor: "#262626"
   },
   botHeader: {
+    flex: 0.2,
+    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    flexDirection: "row",
     padding: 10,
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    borderColor: "#a6a6a6"
+  },
+  username: {
+    fontSize: 20,
+    color: "#a6a6a6"
   },
   direction: {
     alignItems: "center"
   },
+
+  titleSection: {
+    flex: 0.2,
+    borderBottomWidth: 1,
+    borderColor: "#a6a6a6",
+    justifyContent: "center",
+    padding: 10
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "white"
+  },
+
+  infoContainer: {
+    flex: 0.6,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    justifyContent: "space-between"
+  },
   info: {
-    padding: 2
+    paddingVertical: 4,
+    fontSize: 18,
+    color: "#a6a6a6"
+  },
+  cameraSettings: {
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   expanded: {
     width: "100%",
@@ -47,15 +80,8 @@ const styles = StyleSheet.create({
     resizeMode: "contain"
   },
   bold: {
-    fontWeight: "700"
-  },
-  titleSection: {
-    height: Dimensions.get("window").height / 10,
-    borderBottomWidth: 1
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "400"
+    fontWeight: "700",
+    color: "white"
   }
 });
 
