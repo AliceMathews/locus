@@ -144,7 +144,7 @@ export default function DetailPhotoScreen({ route, navigation }) {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate("Chat", {
-                  sendToId: route.params.image.owner_id
+                  imageId: route.params.image.id
                 })
               }
             >
