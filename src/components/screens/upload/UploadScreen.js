@@ -149,16 +149,8 @@ export default function UploadScreen({ token }) {
           {mode === "EMPTY" && (
             <Empty press={openLibrary} pressCam={openCamera} />
           )}
-          {mode === "SAVED" && (
-            <FadeInView duration={1000}>
-              <Saved />
-            </FadeInView>
-          )}
-          {mode === "ERROR" && (
-            <FadeInView duration={1000}>
-              <Error />
-            </FadeInView>
-          )}
+          {mode === "SAVED" && <Saved />}
+          {mode === "ERROR" && <Error />}
           {mode !== "EMPTY" && mode !== "SAVED" && mode !== "ERROR" && (
             <FadeInView duration={1000}>
               <Image
