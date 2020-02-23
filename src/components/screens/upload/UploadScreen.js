@@ -33,6 +33,7 @@ import Saved from "./top/Saved";
 import Error from "./top/Error";
 import CustomButton from "../../global/Button";
 import FadeInView from "../../global/FadeInView";
+import SavedSuccess from "./bottom/SavedSuccess";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import resizeImage from "../../../helpers/upload/resizeImage";
@@ -302,34 +303,7 @@ export default function UploadScreen({ token }) {
               <ActivityIndicator size="large" color="#0000ff" />
             )}
             {(mode === "SAVED" || mode === "ERROR") && (
-              <FadeInView duration={1000} delay={1000}>
-                <CustomButton
-                  type={"big"}
-                  onPress={() => {
-                    resetState();
-                  }}
-                >
-                  Add another
-                </CustomButton>
-                <CustomButton
-                  type={"big"}
-                  onPress={() => {
-                    navigation.navigate("Home");
-                    resetState();
-                  }}
-                >
-                  All photos
-                </CustomButton>
-                <CustomButton
-                  type={"big"}
-                  onPress={() => {
-                    navigation.navigate("User");
-                    resetState();
-                  }}
-                >
-                  My photos
-                </CustomButton>
-              </FadeInView>
+              <SavedSuccess reset={resetState} />
             )}
           </View>
         </View>
