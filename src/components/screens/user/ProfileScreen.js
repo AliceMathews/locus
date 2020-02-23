@@ -15,6 +15,8 @@ export default function ProfileScreen({ signOut, user, token }) {
   const [loading, setLoading] = useState(true);
   const [oneItem, setOneItem] = useState(false);
 
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
     axios.get(`${API_URL}users/myinfo`, {headers: {"authorization": token}}).then(res => {
       setCurrentUser(res.data);
@@ -30,6 +32,24 @@ export default function ProfileScreen({ signOut, user, token }) {
       });
     });
   }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    axios.get(`${API_URL}users/myinfo`, {headers: {"authorization": token}}).then(res => {
+      setCurrentUser(res.data);
+      const userId = res.data.id;
+      axios.get(`${API_URL}users/${userId}/images`).then(res => {
+        setImages(res.data);
+        setLoading(false);
+        setRefreshing(false);
+        if (res.data.length === 1) {
+          setOneItem(true);
+        } else {
+          setOneItem(false);
+        }
+      });
+    });
+  };
   console.log(images);
 
   const deviceWidth = Dimensions.get("window").width;
@@ -64,6 +84,8 @@ export default function ProfileScreen({ signOut, user, token }) {
                     />
                   );
                 }}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
               />
             )}
           </View>
