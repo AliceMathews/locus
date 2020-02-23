@@ -26,6 +26,8 @@ import {
   API_URL
 } from "../../../../configKeys";
 
+import useSelectImage from "../../../hooks/useSelectImage";
+
 import Empty from "./top/Empty";
 import Saved from "./top/Saved";
 import Error from "./top/Error";
@@ -41,13 +43,20 @@ import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 
 export default function UploadScreen({ token }) {
-  const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedImage, setSelectedImage] = useState(null);
   const [tags, setTags] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [mode, setMode] = useState("EMPTY");
   const [description, setDescription] = useState("");
   const [currentLocation, setCurrentLocation] = useState({});
   const [imageInfo, setImageInfo] = useState({});
+
+  const {
+    selectedImage,
+    setSelectedImage,
+    openCamera,
+    openLibrary
+  } = useSelectImage();
 
   const navigation = useNavigation();
 
@@ -76,7 +85,6 @@ export default function UploadScreen({ token }) {
             throw new Error("Failed to upload image to S3");
           }
           const url = res.body.postResponse.location;
-          console.log("image saved to s3");
           setImageUrl(url);
           return url;
         })
@@ -88,7 +96,7 @@ export default function UploadScreen({ token }) {
               setMode("LOADED");
             })
             .catch(e => {
-              console.log(e);
+              throw new Error("Error: ", e);
             });
         });
     }
@@ -111,52 +119,52 @@ export default function UploadScreen({ token }) {
     }
   };
 
-  const openLibrary = () => {
-    const options = {
-      permissions: ImagePicker.requestCameraRollPermissionsAsync,
-      launch: ImagePicker.launchImageLibraryAsync
-    };
+  // const openLibrary = () => {
+  //   const options = {
+  //     permissions: ImagePicker.requestCameraRollPermissionsAsync,
+  //     launch: ImagePicker.launchImageLibraryAsync
+  //   };
 
-    pickImage(options);
-  };
+  //   pickImage(options);
+  // };
 
-  const pickImage = async options => {
-    const permissionResult = await options.permissions();
+  // const pickImage = async options => {
+  //   const permissionResult = await options.permissions();
 
-    if (permissionResult.granted === false) {
-      alert("Permission to access camera roll is required!");
-      return;
-    }
+  //   if (permissionResult.granted === false) {
+  //     alert("Permission to access camera roll is required!");
+  //     return;
+  //   }
 
-    try {
-      let pickerResult = await options.launch({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        exif: true
-      });
+  //   try {
+  //     let pickerResult = await options.launch({
+  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //       exif: true
+  //     });
 
-      const manipResult = await resizeImage(pickerResult);
-      if (pickerResult.cancelled === true) return;
+  //     const manipResult = await resizeImage(pickerResult);
+  //     if (pickerResult.cancelled === true) return;
 
-      setSelectedImage({
-        localUri: manipResult.uri,
-        exif: pickerResult.exif,
-        type: pickerResult.type
-      });
-      setMode("IMAGE");
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //     setSelectedImage({
+  //       localUri: manipResult.uri,
+  //       exif: pickerResult.exif,
+  //       type: pickerResult.type
+  //     });
+  //     setMode("IMAGE");
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
-  const openCamera = async () => {
-    await _getLocationAsync();
-    const options = {
-      permissions: ImagePicker.requestCameraPermissionsAsync,
-      launch: ImagePicker.launchCameraAsync
-    };
+  // const openCamera = async () => {
+  //   await _getLocationAsync();
+  //   const options = {
+  //     permissions: ImagePicker.requestCameraPermissionsAsync,
+  //     launch: ImagePicker.launchCameraAsync
+  //   };
 
-    pickImage(options);
-  };
+  //   pickImage(options);
+  // };
 
   const checkLocation = () => {
     if (!selectedImage.exif.GPSLongitude && !selectedImage.exif.GPSLatitude) {
@@ -166,7 +174,6 @@ export default function UploadScreen({ token }) {
         GPSLatitude: currentLocation.latitude
       };
       setSelectedImage({ ...selectedImage, exif: exifCopy });
-      console.log("HERE");
       return exifCopy;
     } else {
       return { ...selectedImage.exif };
@@ -175,11 +182,19 @@ export default function UploadScreen({ token }) {
 
   const saveImage = () => {
     setMode("SAVING");
-    exif = checkLocation();
+    // exif = checkLocation();
 
+    // const imageData = {
+    //   owner_token: token,
+    //   exif: exif,
+    //   description: description,
+    //   url: imageUrl,
+    //   views: 0,
+    //   tags: tags
+    // };
     const imageData = {
       owner_token: token,
-      exif: exif,
+      exif: selectedImage.exif,
       description: description,
       url: imageUrl,
       views: 0,
