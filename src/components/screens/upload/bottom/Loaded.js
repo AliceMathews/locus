@@ -4,7 +4,7 @@ import { View } from "react-native";
 import FadeInView from "../../../global/FadeInView";
 import CustomButton from "../../../global/Button";
 
-import styles from "./SavedSuccessStyle";
+import styles from "./LoadedStyle";
 
 export default function Loaded(props) {
   return (
