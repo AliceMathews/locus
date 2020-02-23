@@ -137,7 +137,7 @@ export default function DetailPhotoScreen({ route, navigation }) {
       </MapView>
       <View style={styles.botContainer}>
         <View style={styles.botHeader}>
-          <TouchableOpacity onPress={() => navigation.navigate("Chat", {sendToId: route.params.image.owner_id})}>
+          <TouchableOpacity onPress={() => navigation.navigate("Chat", {imageId: route.params.image.id})}>
             <Text>Credit: {route.params.image.username}</Text>
           </TouchableOpacity>
           <View style={styles.direction}>

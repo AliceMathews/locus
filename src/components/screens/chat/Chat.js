@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 
 import { API_URL } from '../../../../configKeys';
 import styles from './ChatStyle';
+import { ThemeProvider } from "@react-navigation/native";
 
 // const socket = io("https://826a3840.ngrok.io");
 
@@ -81,10 +82,16 @@ export default class Chat extends Component {
        chatMessages: []
     };
     this.deviceWidth = Dimensions.get("window").width;
+    this.room = "abc123";
+    this.imageId = props.route.params.imageId;
+    console.log(`image: ${this.imageId}`)
   }
 
   componentDidMount() {
-    this.socket = io("https://826a3840.ngrok.io");
+    this.socket = io("https://076b68fe.ngrok.io");
+    this.socket.on("connect", () => {
+      this.socket.emit('room', this.imageId);
+    })
     this.socket.on("chat message", msg => {
           this.setState({ chatMessages: [...this.state.chatMessages, msg]});
     });
