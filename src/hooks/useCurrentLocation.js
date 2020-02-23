@@ -12,7 +12,7 @@ export default function useCurrentLocation() {
         console.log("Permission to access location was denied");
       }
       let location = await Location.getCurrentPositionAsync({});
-      console.log("RUNNING LOCATION FNC");
+
       setCurrentLocation({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude

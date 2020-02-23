@@ -33,7 +33,6 @@ export default function DetailPhotoScreen({ route, navigation }) {
       currentLocation,
       1
     );
-    console.log(result.toString());
 
     if (result.toString().length <= 3) {
       return result + " m";
