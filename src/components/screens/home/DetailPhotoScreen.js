@@ -97,7 +97,7 @@ export default function DetailPhotoScreen({ route, navigation }) {
         onMapReady={displayCallout}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        customMapStyle={retro}
+        customMapStyle={currentBrightness > 0.5 ? retro : Aubergine}
         showsUserLocation={true}
         initialRegion={{
           latitude: route.params.image.latitude,
