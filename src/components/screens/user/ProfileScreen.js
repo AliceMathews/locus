@@ -64,10 +64,10 @@ export default function ProfileScreen({ signOut, user, token }) {
   console.log(images);
 
   const deviceWidth = Dimensions.get("window").width;
-
+  // console.log(currentUser);
   return (
     <View style={{ flex: 1 }}>
-      {currentUser && (
+      {!!currentUser && (
         <>
           <View style={styles.profileInfoContainer}>
             <Image

@@ -9,6 +9,7 @@ import LoginScreen from "../screens/user/LoginScreen";
 const UserStack = createStackNavigator();
 
 export default function UserStackNav({ authContext, state }) {
+  console.log(state.userToken);
   return (
     <UserStack.Navigator>
       {state.userToken ? (

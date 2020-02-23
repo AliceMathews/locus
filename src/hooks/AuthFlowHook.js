@@ -4,6 +4,34 @@ import axios from "axios";
 import { API_URL } from "../../configKeys";
 
 const AuthFlowHook = () => {
+  const logoutBackend = async () => {
+    console.log("starting backend logout");
+    try {
+      let userData = await AsyncStorage.getItem("userToken");
+      let data = JSON.parse(userData);
+      const res = await axios.post(`${API_URL}users/logout`, {
+        data
+      });
+      console.log(res);
+    } catch (err) {
+      console.log("Something went wrong", err);
+    }
+  };
+
+  const logoutFrontend = async () => {
+    console.log("starting frontend logout");
+    try {
+      await AsyncStorage.removeItem("userToken");
+      console.log("Auth token removed");
+    } catch (err) {
+      console.log("Something went wrong", err);
+    }
+  };
+
+  const logout = async () => {
+    return Promise.all([logoutBackend(), logoutFrontend()]);
+  };
+
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -40,10 +68,16 @@ const AuthFlowHook = () => {
       try {
         userToken = await AsyncStorage.getItem("userToken");
         // After restoring token, we may need to validate it in production apps
-
+        const res = await axios.get(`${API_URL}users/myinfo`, {
+          headers: { authorization: userToken }
+        });
+        if (res.data) {
+          dispatch({ type: "RESTORE_TOKEN", token: userToken });
+        } else {
+          dispatch({ type: "SIGN_OUT" });
+        }
         // This will switch to the App screen or Auth screen and this loading
         // screen will be unmounted and thrown away.
-        dispatch({ type: "RESTORE_TOKEN", token: userToken });
       } catch (e) {
         // Restoring token failed
         // Redirect to "Login"
@@ -88,34 +122,25 @@ const AuthFlowHook = () => {
     }),
     []
   );
+
+  const storeToken = async token => {
+    try {
+      await AsyncStorage.setItem("userToken", JSON.stringify(token));
+    } catch (error) {
+      console.log("Something went wrong", error);
+    }
+  };
+  // const getToken = async () => {
+  //   try {
+  //     let userDataJSON = await AsyncStorage.getItem("userData");
+  //     let userData = JSON.parse(userDataJSON);
+  //     console.log("this is the auth token", userData);
+  //   } catch (error) {
+  //     console.log("Something went wrong", error);
+  //   }
+  // };
+
+  return { state, authContext, logout };
 };
 
-const logoutBackend = async () => {
-  console.log("starting backend logout");
-  try {
-    let userData = await AsyncStorage.getItem("userToken");
-    let data = JSON.parse(userData);
-    const res = await axios.post(`${API_URL}users/logout`, {
-      data
-    });
-    console.log(res);
-  } catch (err) {
-    console.log("Something went wrong", err);
-  }
-};
-
-const logoutFrontend = async () => {
-  console.log("starting frontend logout");
-  try {
-    await AsyncStorage.removeItem("userToken");
-    console.log("Auth token removed");
-  } catch (err) {
-    console.log("Something went wrong", err);
-  }
-};
-
-const logout = async () => {
-  return Promise.all([logoutBackend(), logoutFrontend()]);
-};
-
-export { logout, AuthFlowHook };
+export default AuthFlowHook;

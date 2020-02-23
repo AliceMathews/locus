@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
 import { API_URL } from "./configKeys";
-import { logout } from "./src/hooks/AuthFlowHook";
+import AuthFlowHook from "./src/hooks/AuthFlowHook";
 import axios from "axios";
 
 import HomeStackNav from "./src/components/stackNavigators/HomeStackNav";
@@ -15,88 +15,97 @@ import SplashScreen from "./src/components/screens/splash/Splash";
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const [state, dispatch] = useReducer(
-    (prevState, action) => {
-      switch (action.type) {
-        case "RESTORE_TOKEN":
-          return {
-            ...prevState,
-            userToken: action.token,
-            isLoading: false
-          };
-        case "SIGN_IN":
-          return {
-            ...prevState,
-            isSignout: false,
-            userToken: action.token
-          };
-        case "SIGN_OUT":
-          return {
-            ...prevState,
-            isSignout: logout(),
-            userToken: null
-          };
-      }
-    },
-    {
-      isLoading: true,
-      isSignout: false,
-      userToken: null
-    }
-  );
+  const { state, authContext, logout } = AuthFlowHook();
 
-  useEffect(() => {
-    const bootstrapAsync = async () => {
-      let userToken;
+  // const [state, dispatch] = useReducer(
+  //   (prevState, action) => {
+  //     switch (action.type) {
+  //       case "RESTORE_TOKEN":
+  //         return {
+  //           ...prevState,
+  //           userToken: action.token,
+  //           isLoading: false
+  //         };
+  //       case "SIGN_IN":
+  //         return {
+  //           ...prevState,
+  //           isSignout: false,
+  //           userToken: action.token
+  //         };
+  //       case "SIGN_OUT":
+  //         return {
+  //           ...prevState,
+  //           isSignout: logout(),
+  //           isLoading: false,
+  //           userToken: null
+  //         };
+  //     }
+  //   },
+  //   {
+  //     isLoading: true,
+  //     isSignout: false,
+  //     userToken: null
+  //   }
+  // );
 
-      try {
-        userToken = await AsyncStorage.getItem("userToken");
-        // After restoring token, we may need to validate it in production apps
+  // useEffect(() => {
+  //   const bootstrapAsync = async () => {
+  //     let userToken;
 
-        // This will switch to the App screen or Auth screen and this loading
-        // screen will be unmounted and thrown away.
-        dispatch({ type: "RESTORE_TOKEN", token: userToken });
-      } catch (e) {
-        // Restoring token failed
-        // Redirect to "Login"
-      }
-    };
-    bootstrapAsync();
-  }, []);
+  //     try {
+  //       userToken = await AsyncStorage.getItem("userToken");
+  //       // After restoring token, we may need to validate it in production apps
+  //       const res = await axios.get(`${API_URL}users/myinfo`, {
+  //         headers: { authorization: userToken }
+  //       });
+  //       if (res.data) {
+  //         dispatch({ type: "RESTORE_TOKEN", token: userToken });
+  //       } else {
+  //         dispatch({ type: "SIGN_OUT" });
+  //       }
+  //       // This will switch to the App screen or Auth screen and this loading
+  //       // screen will be unmounted and thrown away.
+  //     } catch (e) {
+  //       // Restoring token failed
+  //       // Redirect to "Login"
+  //     }
+  //   };
+  //   bootstrapAsync();
+  // }, []);
 
-  const authContext = useMemo(
-    () => ({
-      signIn: async data => {
-        try {
-          const res = await axios.post(`${API_URL}users/login`, {
-            username: data.username,
-            password: data.password
-          });
-          await storeToken(res.data.auth_token);
-          dispatch({ type: "SIGN_IN", token: res.data.auth_token });
-        } catch (err) {
-          console.log("err", err);
-          Alert.alert("Wrong Credentials");
-        }
-      },
-      signOut: () => dispatch({ type: "SIGN_OUT" }),
-      signUp: async data => {
-        console.log(data);
-        try {
-          const res = await axios.post(`${API_URL}users/register`, {
-            username: data.username,
-            password: data.password
-          });
-          await storeToken(res.data.auth_token);
-          dispatch({ type: "SIGN_IN", token: res.data.auth_token });
-        } catch (err) {
-          console.log(err);
-          Alert.alert("Username already taken");
-        }
-      }
-    }),
-    []
-  );
+  // const authContext = useMemo(
+  //   () => ({
+  //     signIn: async data => {
+  //       try {
+  //         const res = await axios.post(`${API_URL}users/login`, {
+  //           username: data.username,
+  //           password: data.password
+  //         });
+  //         await storeToken(res.data.auth_token);
+  //         dispatch({ type: "SIGN_IN", token: res.data.auth_token });
+  //       } catch (err) {
+  //         console.log("err", err);
+  //         Alert.alert("Wrong Credentials");
+  //       }
+  //     },
+  //     signOut: () => dispatch({ type: "SIGN_OUT" }),
+  //     signUp: async data => {
+  //       console.log(data);
+  //       try {
+  //         const res = await axios.post(`${API_URL}users/register`, {
+  //           username: data.username,
+  //           password: data.password
+  //         });
+  //         await storeToken(res.data.auth_token);
+  //         dispatch({ type: "SIGN_IN", token: res.data.auth_token });
+  //       } catch (err) {
+  //         console.log(err);
+  //         Alert.alert("Username already taken");
+  //       }
+  //     }
+  //   }),
+  //   []
+  // );
 
   if (state.isLoading) {
     // We haven't finished checking for the token yet
@@ -135,20 +144,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const storeToken = async token => {
-  try {
-    await AsyncStorage.setItem("userToken", JSON.stringify(token));
-  } catch (error) {
-    console.log("Something went wrong", error);
-  }
-};
-// const getToken = async () => {
-//   try {
-//     let userDataJSON = await AsyncStorage.getItem("userData");
-//     let userData = JSON.parse(userDataJSON);
-//     console.log("this is the auth token", userData);
-//   } catch (error) {
-//     console.log("Something went wrong", error);
-//   }
-// };
