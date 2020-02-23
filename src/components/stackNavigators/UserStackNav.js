@@ -37,7 +37,23 @@ export default function UserStackNav({ authContext, state }) {
           )}
         </UserStack.Screen>
       ) : (
-        <UserStack.Screen name="Login">
+        <UserStack.Screen
+          name="Login"
+          options={{
+            headerTitle: (
+              <View>
+                <Image
+                  source={header}
+                  style={{
+                    alignSelf: "center",
+                    resizeMode: "contain",
+                    flex: 1
+                  }}
+                />
+              </View>
+            )
+          }}
+        >
           {() => (
             <LoginScreen
               signIn={authContext.signIn}
