@@ -34,14 +34,13 @@ import Error from "./top/Error";
 import CustomButton from "../../global/Button";
 import FadeInView from "../../global/FadeInView";
 import SavedSuccess from "./bottom/SavedSuccess";
-import { MaterialIcons } from "@expo/vector-icons";
+import TagContainer from "./bottom/TagContainer";
 
 import resizeImage from "../../../helpers/upload/resizeImage";
 import generateFileName from "../../../helpers/upload/generateFileName";
 
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
-import { reset } from "expo/build/AR";
 
 export default function UploadScreen({ token }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -177,7 +176,6 @@ export default function UploadScreen({ token }) {
   };
 
   const saveImage = () => {
-    console.log("saving");
     setMode("SAVING");
     exif = checkLocation();
 
@@ -190,13 +188,11 @@ export default function UploadScreen({ token }) {
       tags: tags
     };
 
-    console.log(imageData);
     axios
       .post(`${API_URL}images`, { imageData })
       .then(res => {
         setImageInfo(res.data);
         setMode("SAVED");
-        console.log(res.data);
       })
       .catch(e => {
         setMode("ERROR");
@@ -217,13 +213,13 @@ export default function UploadScreen({ token }) {
     setImageInfo("");
   };
 
-  const tagsToShow = tags.map((tag, i) => {
-    return (
-      <FadeInView key={tag.id} delay={i * 100} duration={200}>
-        <Tag key={tag.id} tagName={tag.name} delete={removeTag} />
-      </FadeInView>
-    );
-  });
+  // const tagsToShow = tags.map((tag, i) => {
+  //   return (
+  //     <FadeInView key={tag.id} delay={i * 100} duration={200}>
+  //       <Tag key={tag.id} tagName={tag.name} delete={removeTag} />
+  //     </FadeInView>
+  //   );
+  // });
 
   useFocusEffect(() => {
     if (!token) {
@@ -243,11 +239,7 @@ export default function UploadScreen({ token }) {
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.top}>
           {mode === "EMPTY" && (
-            <Empty
-              press={openLibrary}
-              pressCam={openCamera}
-              checkGPS={checkLocation}
-            />
+            <Empty press={openLibrary} pressCam={openCamera} />
           )}
           {mode === "SAVED" && (
             <FadeInView duration={1000}>
@@ -283,7 +275,8 @@ export default function UploadScreen({ token }) {
                   onChangeText={text => setDescription(text)}
                   value={description}
                 ></TextInput>
-                <View style={styles.tagsContainer}>{tagsToShow}</View>
+                {/* <View style={styles.tagsContainer}>{tagsToShow}</View> */}
+                <TagContainer tags={tags} delete={removeTag} />
                 <View style={styles.buttons}>
                   <CustomButton
                     onPress={() => {
