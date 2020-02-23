@@ -15,8 +15,6 @@ import * as ImagePicker from "expo-image-picker";
 import { RNS3 } from "react-native-aws3";
 import axios from "axios";
 
-import Tag from "./bottom/Tag";
-
 import styles from "./UploadScreenStyle";
 import {
   keyPrefix,
@@ -213,14 +211,6 @@ export default function UploadScreen({ token }) {
     setImageInfo("");
   };
 
-  // const tagsToShow = tags.map((tag, i) => {
-  //   return (
-  //     <FadeInView key={tag.id} delay={i * 100} duration={200}>
-  //       <Tag key={tag.id} tagName={tag.name} delete={removeTag} />
-  //     </FadeInView>
-  //   );
-  // });
-
   useFocusEffect(() => {
     if (!token) {
       Alert.alert("Please login", "Please login to upload your photos", [
@@ -264,7 +254,7 @@ export default function UploadScreen({ token }) {
         <View style={styles.bottom}>
           <View style={styles.imageInfo}>
             {mode === "LOADING-TAGS" && (
-              <ActivityIndicator size="large" color="#0000ff" />
+              <ActivityIndicator size="large" color="#55708E" />
             )}
             {mode === "LOADED" && (
               <FadeInView style={{ flex: 1 }} duration={1000}>
@@ -275,7 +265,6 @@ export default function UploadScreen({ token }) {
                   onChangeText={text => setDescription(text)}
                   value={description}
                 ></TextInput>
-                {/* <View style={styles.tagsContainer}>{tagsToShow}</View> */}
                 <TagContainer tags={tags} delete={removeTag} />
                 <View style={styles.buttons}>
                   <CustomButton
@@ -296,7 +285,7 @@ export default function UploadScreen({ token }) {
               </FadeInView>
             )}
             {mode === "SAVING" && (
-              <ActivityIndicator size="large" color="#0000ff" />
+              <ActivityIndicator size="large" color="#55708E" />
             )}
             {(mode === "SAVED" || mode === "ERROR") && (
               <SavedSuccess info={imageInfo} reset={resetState} />
