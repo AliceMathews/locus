@@ -67,12 +67,12 @@ const styles = StyleSheet.create({
   },
   info: {
     paddingVertical: 4,
-    paddingRight: 25,
     fontSize: 18,
     color: "#a6a6a6"
   },
   cameraSettings: {
-    flexDirection: "row"
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   expanded: {
     width: "100%",

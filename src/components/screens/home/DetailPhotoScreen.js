@@ -179,13 +179,6 @@ export default function DetailPhotoScreen({ route, navigation }) {
           <View style={styles.cameraSettings}>
             <View>
               <Text style={styles.info}>
-                Aperture |
-                <Text style={styles.bold}>
-                  {" "}
-                  F{route.params.image.aperture.toFixed(2)}
-                </Text>
-              </Text>
-              <Text style={styles.info}>
                 Exposure |
                 <Text style={styles.bold}>
                   {" "}
@@ -193,22 +186,30 @@ export default function DetailPhotoScreen({ route, navigation }) {
                 </Text>
               </Text>
               <Text style={styles.info}>
-                ISO | <Text style={styles.bold}>{route.params.image.iso}</Text>
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.info}>
-                Shutter speed |
-                <Text style={styles.bold}>
-                  {" "}
-                  {route.params.image.shutter_speed.toFixed(2)} S
-                </Text>
-              </Text>
-              <Text style={styles.info}>
                 Focal length |
                 <Text style={styles.bold}>
                   {" "}
                   {route.params.image.focul_length} Mm
+                </Text>
+              </Text>
+
+              <Text style={styles.info}>
+                Shutter speed |
+                <Text style={styles.bold}>
+                  {" "}
+                  {route.params.image.shutter_speed.toFixed(3)} S
+                </Text>
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.info}>
+                ISO | <Text style={styles.bold}>{route.params.image.iso}</Text>
+              </Text>
+              <Text style={styles.info}>
+                Aperture |
+                <Text style={styles.bold}>
+                  {" "}
+                  F{route.params.image.aperture.toFixed(2)}
                 </Text>
               </Text>
             </View>
