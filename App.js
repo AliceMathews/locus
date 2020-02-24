@@ -127,7 +127,7 @@ export default function App() {
         <Tab.Screen name="User">
           {() => <UserStackNav authContext={authContext} state={state} />}
         </Tab.Screen>
-        <Tab.Screen name="Home">{() => <HomeStackNav />}</Tab.Screen>
+        <Tab.Screen name="Home">{() => <HomeStackNav token={state.userToken} />}</Tab.Screen>
         <Tab.Screen name="Upload">
           {() => <UploadStackNav token={state.userToken} />}
         </Tab.Screen>
