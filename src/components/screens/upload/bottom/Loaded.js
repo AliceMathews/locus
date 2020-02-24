@@ -13,7 +13,7 @@ export default function Loaded(props) {
     <FadeInView style={{ flex: 1 }} duration={1000}>
       <TextInput
         style={styles.description}
-        maxLength={50}
+        maxLength={30}
         placeholder="Add a description to your photo..."
         onChangeText={text => setDescription(text)}
         value={description}

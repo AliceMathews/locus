@@ -41,6 +41,7 @@ export default function useSelectImage() {
       });
 
       const manipResult = await resizeImage(pickerResult);
+      console.log("i am the altered data", manipResult);
       if (pickerResult.cancelled === true) return;
 
       setSelectedImage({

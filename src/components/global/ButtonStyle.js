@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
-    backgroundColor: "#183152",
+    backgroundColor: "#55708E",
     padding: 3,
     width: 100,
     height: 30,
@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
   buttonBig: {
     alignItems: "center",
-    backgroundColor: "#183152",
+    backgroundColor: "#55708E",
     padding: 3,
     width: 150,
     height: 30,
