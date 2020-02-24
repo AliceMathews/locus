@@ -105,7 +105,7 @@ export default class Chat extends Component {
     this.socket = io(ROOT_URL);
     // this.socket.emit('room', this.imageId);
     this.socket.on("connect", () => {
-      this.socket.emit('room', this.imageId);
+      this.socket.emit('room', {roomId: this.imageId, name: this.username});
       console.log(`conencted as ${this.socket.id}`)
       this.setState({ socketId: this.socket.id});
     })
@@ -126,7 +126,7 @@ export default class Chat extends Component {
           [
             {
                 _id: this.generateId(),
-                text: 'Someone has joined the room',
+                text: `${msg} has joined the room`,
                 createdAt: new Date(),
                 user: {
                   _id: "woenfowienfowienfow",
@@ -146,7 +146,7 @@ export default class Chat extends Component {
           [
             {
                 _id: this.generateId(),
-                text: 'Someone has left the room',
+                text: `${msg} has left the room`,
                 createdAt: new Date(),
                 user: {
                   _id: "woenfowienfowienfow",
@@ -177,7 +177,7 @@ export default class Chat extends Component {
 
     const listener = this.navigation.addListener('blur', () => {
       console.log("blur");
-      this.socket.emit("leave");
+      this.socket.emit("leave", this.username);
     })
   } 
 
