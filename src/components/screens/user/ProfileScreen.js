@@ -42,7 +42,6 @@ export default function ProfileScreen({ signOut, user, token }) {
       });
   }, []);
 
-
   const onRefresh = () => {
     setRefreshing(true);
     axios
@@ -63,7 +62,15 @@ export default function ProfileScreen({ signOut, user, token }) {
       });
   };
 
-
+  const deleteImage = id => {
+    console.log("DELETING");
+    axios
+      .delete(`${API_URL}images/${id}`)
+      .then(res => {
+        onRefresh();
+      })
+      .catch(e => console.log);
+  };
 
   const deviceWidth = Dimensions.get("window").width;
 
@@ -92,6 +99,7 @@ export default function ProfileScreen({ signOut, user, token }) {
                       item={item}
                       deviceWidth={deviceWidth}
                       oneItem={oneItem}
+                      delete={deleteImage}
                     />
                   );
                 }}
