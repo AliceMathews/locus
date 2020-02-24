@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
-  Button,
   FlatList,
   Dimensions,
-  Image,
+  Switch,
   ActivityIndicator
 } from "react-native";
 import { Tile } from "react-native-elements";
+import ToggleSwitch from "toggle-switch-react-native";
 import useCurrentLocation from "../../../hooks/useCurrentLocation";
 import { getDistance, convertSpeed } from "geolib";
 import CustomButton from "../../global/Button";
@@ -28,19 +28,12 @@ export default function PhotosScreen({ route, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
 
   const [oneItem, setOneItem] = useState(false);
+  const [toggle, setToggle] = useState(false);
   const { currentLocation, _getLocationAsync } = useCurrentLocation();
-
-  // useEffect(() => {
-  //   _getLocationAsync();
-  // }, [images]);
 
   useEffect(() => {
     _getLocationAsync();
     axios.get(`${API_URL}categories/${categoryId}/images`).then(res => {
-      // res.data.images.forEach(image => {
-      //   image.distance = distance(image);
-      // });
-      console.log(res.data.images);
       setImages(res.data.images);
       setLoading(false);
       if (res.data.images.length === 1) {
@@ -82,8 +75,12 @@ export default function PhotosScreen({ route, navigation }) {
       image.distance = distance(image);
     });
     imagesToSort.sort((a, b) => a.distance - b.distance);
-    console.log("SORTED");
-    console.log(imagesToSort);
+    setImages(imagesToSort);
+  };
+
+  const orderById = () => {
+    const imagesToSort = [...images];
+    imagesToSort.sort((a, b) => a.id - b.id);
     setImages(imagesToSort);
   };
 
@@ -95,7 +92,13 @@ export default function PhotosScreen({ route, navigation }) {
         <Text style={styles.categoryTitle}>
           Photos of {route.params.categoryName}
         </Text>
-        <CustomButton onPress={() => orderByLocation()}>Closest</CustomButton>
+        <Switch
+          value={toggle}
+          onChange={() => {
+            setToggle(toggle === false ? true : false);
+            toggle === false ? orderByLocation() : orderById();
+          }}
+        />
       </View>
       <View style={styles.photosContainer}>
         {loading && <ActivityIndicator size="large" color="#0000ff" />}

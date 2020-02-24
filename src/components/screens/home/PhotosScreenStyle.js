@@ -6,13 +6,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center"
-  }, 
+  },
   bannerContainer: {
     flex: 1,
-    justifyContent: 'center'
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   photosContainer: {
-    flex: 6,
+    flex: 6
     // justifyContent: "space-evenly"
   },
   banner: {
@@ -21,7 +23,7 @@ const styles = StyleSheet.create({
   },
   categoryTitle: {
     fontSize: 28,
-    fontWeight: 'bold'
+    fontWeight: "bold"
   }
 });
 
