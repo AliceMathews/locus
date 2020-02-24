@@ -27,12 +27,16 @@ export default function HomeStackNav({ token }) {
               />
             )
           }}
-        >{() => <CategoriesScreen token={token} />}</HomeStack.Screen>  
+        >
+          {() => <CategoriesScreen token={token} />}
+        </HomeStack.Screen>
       ) : (
-        <HomeStack.Screen name="Categories">{() => <CategoriesScreen token={token} />}</HomeStack.Screen>
+        <HomeStack.Screen name="Categories">
+          {() => <CategoriesScreen token={token} />}
+        </HomeStack.Screen>
       )}
       <HomeStack.Screen name="Photos" component={PhotosScreen} />
-      <HomeStack.Screen name="Photo" component={(DetailPhotoScreen)} />
+      <HomeStack.Screen name="Photo" component={DetailPhotoScreen} />
       <HomeStack.Screen name="Chat" component={Chat} />
       <HomeStack.Screen name="Photo-full" component={FullPhotoScreen} />
     </HomeStack.Navigator>

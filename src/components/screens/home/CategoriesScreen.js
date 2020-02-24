@@ -9,13 +9,13 @@ import {
   Dimensions,
   ActivityIndicator,
   ImageBackground,
-  TouchableOpacity,
+  TouchableOpacity
 } from "react-native";
 // import { Tile, SearchBar } from "react-native-elements";
 // import { CacheManager } from 'react-native-expo-image-cache';
-import LiveSearch from './LiveSearch';
-import Tile from './Tile';
-import CategoryTile from './CategoryTile';
+import LiveSearch from "./LiveSearch";
+import Tile from "./Tile";
+import CategoryTile from "./CategoryTile";
 
 import axios from "axios";
 
@@ -25,7 +25,6 @@ import styles from "./CategoriesScreenStyle";
 import { useNavigation } from "@react-navigation/native";
 
 export default function CategoriesScreen({ token }) {
-
   const navigation = useNavigation();
 
   const [categories, setCategories] = useState([]);
@@ -59,7 +58,7 @@ export default function CategoriesScreen({ token }) {
         setOneItem(false);
       }
     });
-  }
+  };
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -95,32 +94,32 @@ export default function CategoriesScreen({ token }) {
     setCategories(searchResults);
     setSearching(false);
   };
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.bannerContainer}>
         <TouchableOpacity
-          onPress={() => flatListRef.current.scrollToOffset({index: 0, animated: true})}
+          onPress={() =>
+            flatListRef.current.scrollToOffset({ index: 0, animated: true })
+          }
         >
-        <LiveSearch
-          value={searchValue}
-          onChangeText={text => searchFilterCategories(text)}
-          width={deviceWidth * 0.95}
-          loading={searching}
-        />
+          <LiveSearch
+            value={searchValue}
+            onChangeText={text => searchFilterCategories(text)}
+            width={deviceWidth * 0.95}
+            loading={searching}
+          />
         </TouchableOpacity>
       </View>
       <View style={styles.categoriesContainer}>
-        {loading && (
-          <ActivityIndicator size="large" color="#0000ff" />
-        )}
-        
+        {loading && <ActivityIndicator size="large" color="#0000ff" />}
+
         {!loading && (
           <FlatList
             numColumns={2}
             data={categories}
             keyExtractor={item => item.id}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               return (
                 <CategoryTile
                   item={item}
@@ -134,7 +133,8 @@ export default function CategoriesScreen({ token }) {
             onRefresh={onRefresh}
             refreshing={refreshing}
             ref={flatListRef}
-          />)}
+          />
+        )}
       </View>
     </View>
   );

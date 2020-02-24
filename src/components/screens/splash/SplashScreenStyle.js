@@ -1,11 +1,14 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
+    width: Dimensions.get("screen").width,
+    height: Dimensions.get("screen").height,
+    backgroundColor: "#000",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    zIndex: -99,
+    position: "absolute"
   }
 });
 
