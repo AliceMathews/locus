@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, ImageBackground, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import Spinner from "../../global/Spinner";
+
 import styles from "./UserPhotoTileStyle";
 
 export default function UserPhotoTile(props) {
