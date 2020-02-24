@@ -1,21 +1,15 @@
 import React, { useState, useEffect, Component } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  ImageBackground,
-  TextInput,
-  FlatList,
-  StyleSheet,
-  Dimensions
-} from "react-native";
+import { Text, View, Image, TouchableOpacity, ImageBackground, TextInput, FlatList, StyleSheet, Dimensions, YellowBox } from "react-native";
 
-import io from "socket.io-client";
+import io from 'socket.io-client';
 
-import { API_URL } from "../../../../configKeys";
-import styles from "./ChatStyle";
+
+import { API_URL } from '../../../../configKeys';
+import styles from './ChatStyle';
+
 import { ThemeProvider } from "@react-navigation/native";
+
+import { GiftedChat } from 'react-native-gifted-chat';
 
 // const socket = io("https://826a3840.ngrok.io");
 
@@ -25,7 +19,7 @@ import { ThemeProvider } from "@react-navigation/native";
 
 //   const [message, setMessage] = useState("");
 //   const [chatMessages, setChatMessages] = useState([]);
-//   // const [socket, setSocket] = useState(null);
+//   const [socket, setSocket] = useState(io("https://99504048.ngrok.io"));
 
 //   useEffect(() => {
 //     // const newSocket = io("https://826a3840.ngrok.io");
@@ -81,59 +75,85 @@ import { ThemeProvider } from "@react-navigation/native";
 //   );
 // }
 
+
+YellowBox.ignoreWarnings([
+  'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
+]);
+
 export default class Chat extends Component {
+  
+
   constructor(props) {
     super(props);
     this.state = {
-      chatMessage: "",
-      chatMessages: []
+       messages: [],
+       socketId: ""
     };
     this.deviceWidth = Dimensions.get("window").width;
-    this.room = "abc123";
     this.imageId = props.route.params.imageId;
-    console.log(`image: ${this.imageId}`);
+    this.userId = props.route.params.user.id;
+    this.username = props.route.params.user.username;
+    this.avatar = props.route.params.user.profile_pic;
+    console.log(`image: ${this.imageId}`)
+    console.log("userId");
+    console.log(this.userId);
   }
 
   componentDidMount() {
-    this.socket = io("https://076b68fe.ngrok.io");
+    this.socket = io("https://5c117309.ngrok.io");
     this.socket.on("connect", () => {
-      this.socket.emit("room", this.imageId);
-    });
+      this.socket.emit('room', this.imageId);
+      console.log(`conencted as ${this.socket.id}`)
+      this.setState({ socketId: this.socket.id});
+    })
     this.socket.on("chat message", msg => {
-      this.setState({ chatMessages: [...this.state.chatMessages, msg] });
+        console.log(`got a message from ${msg.id}`)
+        if (this.socketId === msg.id) {
+          console.log("I got a message from myself");
+        }
+        this.setState(previousState => ({
+          messages: GiftedChat.append(previousState.messages, msg),
+        }));
     });
-  }
 
-  submitChatMessage() {
-    this.socket.emit("chat message", this.state.chatMessage);
-    this.setState({ chatMessage: "" });
+
+    this.setState({
+      messages: [
+        // {
+        //   _id: 1,
+        //   text: 'Hello developer',
+        //   createdAt: new Date(),
+        //   user: {
+        //     _id: 2,
+        //     name: 'React Native',
+        //     avatar: 'https://placeimg.com/140/140/any',
+        //   },
+        // },
+      ],
+    })
+  } 
+
+  onSend(messages=[]) {
+    this.socket.emit('chat message', messages);
+    console.log("message: ");
+    console.log(messages);
+    // this.setState(previousState => ({
+    //   messages: GiftedChat.append(previousState.messages, messages),
+    // }))
   }
 
   render() {
-    const chatMessages = this.state.chatMessages.map(chatMessage => (
-      <Text style={{ borderWidth: 2, fontSize: 20 }}>{chatMessage}</Text>
-    ));
-
     return (
-      <View style={styles.container}>
-        <View style={styles.messagesContainer}>{chatMessages}</View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={{
-              height: 40,
-              borderWidth: 2,
-              position: "absolute",
-              width: this.deviceWidth * 0.9
-            }}
-            autoCorrect={false}
-            value={this.state.chatMessage}
-            onSubmitEditing={() => this.submitChatMessage()}
-            onChangeText={chatMessage => {
-              this.setState({ chatMessage });
-            }}
-          />
-        </View>
-      </View>
+      <GiftedChat
+        messages={this.state.messages}
+        onSend={messages => this.onSend(messages)}
+        user={{
+          _id: this.userId,
+          avatar: this.avatar,
+          name: this.username
+        }}
+        renderUsernameOnMessage={true}
+      />
     );
   }
 }

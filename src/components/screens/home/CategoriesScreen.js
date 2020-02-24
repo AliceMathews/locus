@@ -22,8 +22,12 @@ import axios from "axios";
 import { API_URL } from "../../../../configKeys";
 
 import styles from "./CategoriesScreenStyle";
+import { useNavigation } from "@react-navigation/native";
 
-export default function CategoriesScreen({ navigation }) {
+export default function CategoriesScreen({ token }) {
+
+  const navigation = useNavigation();
+
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -115,6 +119,7 @@ export default function CategoriesScreen({ navigation }) {
                   navigation={navigation}
                   deviceWidth={deviceWidth}
                   oneItem={oneItem}
+                  token={token}
                 />
               );
             }}

@@ -18,6 +18,7 @@ export default function PhotosScreen({ route, navigation }) {
 
   const [oneItem, setOneItem] = useState(false);
 
+
   useEffect(() => {
     axios.get(`${API_URL}categories/${categoryId}/images`).then(res => {
       setImages(res.data.images);
@@ -62,6 +63,7 @@ export default function PhotosScreen({ route, navigation }) {
                   navigation={navigation}
                   deviceWidth={deviceWidth}
                   onlyOne={oneItem}
+                  token={route.params.token}
               />
             )}
             refreshing={refreshing}

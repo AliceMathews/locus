@@ -16,6 +16,8 @@ export default function LiveSearch(props) {
           showCancel
           containerStyle={{width: props.width}}
           showLoading={props.loading}
+          containerStyle={{backgroundColor: 'white'}}
+          inputContainerStyle={{height: 50}}
         />
       )}
       {Platform.OS === 'android' && (
