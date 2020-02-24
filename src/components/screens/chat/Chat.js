@@ -4,7 +4,7 @@ import { Text, View, Image, TouchableOpacity, ImageBackground, TextInput, FlatLi
 import io from 'socket.io-client';
 
 
-import { API_URL } from '../../../../configKeys';
+import { ROOT_URL } from '../../../../configKeys';
 import styles from './ChatStyle';
 
 import { ThemeProvider } from "@react-navigation/native";
@@ -100,7 +100,8 @@ export default class Chat extends Component {
   }
 
   componentDidMount() {
-    this.socket = io("https://5c117309.ngrok.io");
+    this.socket = io(ROOT_URL);
+    // this.socket.emit('room', this.imageId);
     this.socket.on("connect", () => {
       this.socket.emit('room', this.imageId);
       console.log(`conencted as ${this.socket.id}`)
