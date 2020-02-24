@@ -7,9 +7,10 @@ import io from 'socket.io-client';
 import { ROOT_URL } from '../../../../configKeys';
 import styles from './ChatStyle';
 
-import { ThemeProvider } from "@react-navigation/native";
+import { ThemeProvider, useNavigation } from "@react-navigation/native";
 
 import { GiftedChat } from 'react-native-gifted-chat';
+
 
 // const socket = io("https://826a3840.ngrok.io");
 
@@ -116,6 +117,10 @@ export default class Chat extends Component {
           messages: GiftedChat.append(previousState.messages, msg),
         }));
     });
+
+    this.socket.on("new person", msg => {
+      console.log("new person joined the room");
+    })
 
 
     this.setState({
