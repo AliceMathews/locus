@@ -1,16 +1,15 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 2,
-    justifyContent: "center",
-    backgroundColor: "#F5FCFF"
-  },
   input: {
     margin: 15,
     height: 40,
     borderColor: "black",
-    borderWidth: 1
+    borderWidth: 1,
+    padding: 8,
+    borderWidth: 0,
+    borderBottomColor: "black",
+    borderBottomWidth: 1
   },
   submitButton: {
     backgroundColor: "black",
