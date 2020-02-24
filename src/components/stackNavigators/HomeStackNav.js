@@ -16,16 +16,16 @@ export default function HomeStackNav() {
       <HomeStack.Screen
         name="Categories"
         component={CategoriesScreen}
-        options={{
-          headerTitle: (
-            <View>
-              <Image
-                source={header}
-                style={{ alignSelf: "center", resizeMode: "contain", flex: 1 }}
-              />
-            </View>
-          )
-        }}
+        // options={{
+        //   headerTitle: (
+        //     <View>
+        //       <Image
+        //         source={header}
+        //         style={{ alignSelf: "center", resizeMode: "contain", flex: 1 }}
+        //       />
+        //     </View>
+        //   )
+        // }}
       />
       <HomeStack.Screen name="Photos" component={PhotosScreen} />
       <HomeStack.Screen name="Photo" component={DetailPhotoScreen} />

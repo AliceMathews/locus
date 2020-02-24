@@ -13,15 +13,16 @@ import CustomButton from "../../global/Button";
 import WebView from "react-native-webview";
 import MapView, { Marker, PROVIDER_GOOGLE, Callout } from "react-native-maps";
 import { styles, retro, Aubergine } from "./DetailPhotoScreenStyle";
-import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
 import icon from "../../../../assets/locus.png";
 import { Linking } from "expo";
 import { getDistance } from "geolib";
+import useScreenBrightness from "../../../hooks/useScreenBrightness";
+import useCurrentLocation from "../../../hooks/useCurrentLocation";
 
 export default function DetailPhotoScreen({ route, navigation }) {
-  const [currentLocation, setCurrentLocation] = useState({});
   const [showPhoto, setShowPhoto] = useState(false);
+  const { currentBrightness } = useScreenBrightness();
+  const { currentLocation, _getLocationAsync } = useCurrentLocation();
 
   const distance = () => {
     const result = getDistance(
@@ -32,28 +33,11 @@ export default function DetailPhotoScreen({ route, navigation }) {
       currentLocation,
       1
     );
-    console.log(result.toString());
 
     if (result.toString().length <= 3) {
       return result + " m";
     } else {
       return (result / 1000).toFixed(0) + " km";
-    }
-  };
-
-  const _getLocationAsync = async () => {
-    try {
-      let { status } = await Permissions.askAsync(Permissions.LOCATION);
-      if (status !== "granted") {
-        console.log("Permission to access location was denied");
-      }
-      let location = await Location.getCurrentPositionAsync({});
-      setCurrentLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude
-      });
-    } catch (err) {
-      console.log("Something went wrong", err);
     }
   };
 
@@ -94,7 +78,7 @@ export default function DetailPhotoScreen({ route, navigation }) {
         onMapReady={displayCallout}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        customMapStyle={retro}
+        customMapStyle={currentBrightness > 0.5 ? retro : Aubergine}
         showsUserLocation={true}
         initialRegion={{
           latitude: route.params.image.latitude,
