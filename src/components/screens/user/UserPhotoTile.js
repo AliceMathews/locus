@@ -1,5 +1,5 @@
-import React from "react";
-import { View, ImageBackground } from "react-native";
+import React, { useState } from "react";
+import { View, ImageBackground, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import styles from "./UserPhotoTileStyle";
@@ -33,7 +33,25 @@ export default function UserPhotoTile(props) {
             size={30}
             color={"#183152"}
             style={{ opacity: 0.74 }}
-            onPress={() => props.delete(props.item.id)}
+            onPress={() => {
+              Alert.alert(
+                "Delete Image",
+                "Are you sure you want to delete?",
+                [
+                  {
+                    text: "Yes",
+                    onPress: () => {
+                      props.delete(props.item.id);
+                    }
+                  },
+                  {
+                    text: "No",
+                    style: "cancel"
+                  }
+                ],
+                { cancelable: false }
+              );
+            }}
           />
         </ImageBackground>
       )}
