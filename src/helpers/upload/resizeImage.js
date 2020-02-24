@@ -7,7 +7,6 @@ const resizeImage = pickerResult => {
       const y = pickerResult.height;
       pickerResult.width = y;
       pickerResult.height = x;
-      console.log("when i leave", pickerResult);
     }
   }
 
