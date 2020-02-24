@@ -18,8 +18,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     flex: 0.4,
     padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#666666",
     padding: 60
   },
   bottom: {
