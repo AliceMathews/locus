@@ -27,7 +27,6 @@ export default function LoginScreen({ signIn, signUp }) {
           onChangeText={text => setUsername(text)}
           value={username}
         />
-
         <TextInput
           style={styles.input}
           underlineColorAndroid="transparent"
@@ -38,7 +37,6 @@ export default function LoginScreen({ signIn, signUp }) {
           onChangeText={text => setPassword(text)}
           value={password}
         />
-
         <TouchableOpacity
           disabled={!password || !username}
           style={styles.submitButton}
@@ -46,7 +44,6 @@ export default function LoginScreen({ signIn, signUp }) {
         >
           <Text style={styles.submitButtonText}>Login</Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           disabled={!password || !username}
           style={styles.submitButton}
