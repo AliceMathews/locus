@@ -42,6 +42,7 @@ export default function ProfileScreen({ signOut, user, token }) {
       });
   }, []);
 
+
   const onRefresh = () => {
     setRefreshing(true);
     axios
@@ -61,7 +62,8 @@ export default function ProfileScreen({ signOut, user, token }) {
         });
       });
   };
-  console.log(images);
+
+
 
   const deviceWidth = Dimensions.get("window").width;
   return (
