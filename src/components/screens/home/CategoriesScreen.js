@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Text,
   View,
@@ -25,7 +25,6 @@ import styles from "./CategoriesScreenStyle";
 import { useNavigation } from "@react-navigation/native";
 
 export default function CategoriesScreen({ token }) {
-
   const navigation = useNavigation();
 
   const [categories, setCategories] = useState([]);
@@ -40,6 +39,8 @@ export default function CategoriesScreen({ token }) {
   const [searching, setSearching] = useState(false);
 
   const [oneItem, setOneItem] = useState(false);
+
+  const flatListRef = useRef();
 
   useEffect(() => {
     fetchCategories();
@@ -97,12 +98,18 @@ export default function CategoriesScreen({ token }) {
   return (
     <View style={styles.container}>
       <View style={styles.bannerContainer}>
-        <LiveSearch
-          value={searchValue}
-          onChangeText={text => searchFilterCategories(text)}
-          width={deviceWidth * 0.95}
-          loading={searching}
-        />
+        <TouchableOpacity
+          onPress={() =>
+            flatListRef.current.scrollToOffset({ index: 0, animated: true })
+          }
+        >
+          <LiveSearch
+            value={searchValue}
+            onChangeText={text => searchFilterCategories(text)}
+            width={deviceWidth * 0.95}
+            loading={searching}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.categoriesContainer}>
         {loading && <ActivityIndicator size="large" color="#0000ff" />}
@@ -125,6 +132,7 @@ export default function CategoriesScreen({ token }) {
             }}
             onRefresh={onRefresh}
             refreshing={refreshing}
+            ref={flatListRef}
           />
         )}
       </View>
