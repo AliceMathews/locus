@@ -9,12 +9,14 @@ import Chat from "../screens/chat/Chat";
 
 const HomeStack = createStackNavigator();
 
-export default function HomeStackNav() {
+export default function HomeStackNav({ token }) {
   return (
     <HomeStack.Navigator initialRouteName="Categories">
-      <HomeStack.Screen name="Categories" component={CategoriesScreen} />
+      <HomeStack.Screen name="Categories">
+        {() => <CategoriesScreen token={token} />}
+      </HomeStack.Screen>
       <HomeStack.Screen name="Photos" component={PhotosScreen} />
-      <HomeStack.Screen name="Photo" component={DetailPhotoScreen} />
+      <HomeStack.Screen name="Photo" component={(DetailPhotoScreen)} />
       <HomeStack.Screen name="Chat" component={Chat} />
       <HomeStack.Screen name="Photo-full" component={FullPhotoScreen} />
     </HomeStack.Navigator>
