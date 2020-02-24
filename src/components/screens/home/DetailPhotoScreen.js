@@ -52,11 +52,17 @@ export default function DetailPhotoScreen({ route, navigation }) {
   };
 
   const _getUserInfoAsync = async () => {
-    const user = await axios.get(`${API_URL}users/myinfo`, {headers: {"authorization": route.params.token}});
-    console.log(`user: `);
-    console.log(user.data);
-    //Only if this user id is set then we display a button to go to chat!!
-    setUser(user.data);
+    try {
+      const currentUser = await axios.get(`${API_URL}users/myinfo`, {headers: {"authorization": route.params.token}});
+      console.log(`user: `);
+      console.log(currentUser);
+      //Only if this user id is set then we display a button to go to chat!!
+      if (currentUser.data) {
+        setUser(currentUser.data);
+      }
+    } catch(err) {
+      console.log(err);
+    }
   }
 
   useEffect(() => {
