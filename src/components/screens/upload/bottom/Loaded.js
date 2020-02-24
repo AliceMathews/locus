@@ -18,7 +18,9 @@ export default function Loaded(props) {
         onChangeText={text => setDescription(text)}
         value={description}
       ></TextInput>
-      <TagContainer tags={props.tags} delete={props.removeTag} />
+      <View style={styles.tags}>
+        <TagContainer tags={props.tags} delete={props.removeTag} />
+      </View>
       <View style={styles.buttons}>
         <CustomButton
           onPress={() => {

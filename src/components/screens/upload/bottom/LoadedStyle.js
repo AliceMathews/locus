@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
     flex: 0.15,
     fontSize: 18,
     color: "#666666"
-    // backgroundColor: "#e6f2ff"
   },
   buttons: {
     flex: 0.2,
@@ -17,6 +16,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
 
     justifyContent: "space-evenly"
+  },
+  tags: {
+    flex: 0.65,
+    justifyContent: "center"
   }
 });
 

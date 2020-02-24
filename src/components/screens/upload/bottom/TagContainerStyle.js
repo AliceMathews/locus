@@ -1,12 +1,11 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.65,
     flexDirection: "row",
     flexWrap: "wrap",
-    paddingTop: 20,
-    justifyContent: "space-evenly"
+    width: Dimensions.get("screen").width * 0.9,
+    paddingHorizontal: (Dimensions.get("screen").width * 0.9 - 312) / 2
   }
 });
 

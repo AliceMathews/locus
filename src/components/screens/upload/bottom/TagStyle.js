@@ -8,17 +8,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     width: 100,
     marginBottom: 5,
+    marginHorizontal: 2,
     flexDirection: "row",
     justifyContent: "space-between",
     borderRadius: 5,
-    // shadowColor: "#000",
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 3
-    // },
-    // shadowOpacity: 0.27,
-    // shadowRadius: 4.65,
-
     elevation: 3
   },
   label: {
