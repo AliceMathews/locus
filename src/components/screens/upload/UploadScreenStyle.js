@@ -18,17 +18,16 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     flex: 0.4,
     padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#666666"
+    padding: 60
   },
   bottom: {
     flexDirection: "column",
     flex: 0.6,
-    padding: 20
+    padding: 20,
+    backgroundColor: "#fff"
   },
   imageInfo: {
     flex: 1,
-
     alignItems: "center",
     justifyContent: "space-evenly"
   },
