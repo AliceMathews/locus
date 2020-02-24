@@ -16,6 +16,7 @@ import { styles, retro, Aubergine } from "./DetailPhotoScreenStyle";
 import icon from "../../../../assets/locus.png";
 import { Linking } from "expo";
 import { getDistance } from "geolib";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import axios from 'axios';
 import { API_URL } from '../../../../configKeys';
@@ -51,11 +52,17 @@ export default function DetailPhotoScreen({ route, navigation }) {
   };
 
   const _getUserInfoAsync = async () => {
-    const user = await axios.get(`${API_URL}users/myinfo`, {headers: {"authorization": route.params.token}});
-    console.log(`user: `);
-    console.log(user.data);
-    //Only if this user id is set then we display a button to go to chat!!
-    setUser(user.data);
+    try {
+      const currentUser = await axios.get(`${API_URL}users/myinfo`, {headers: {"authorization": route.params.token}});
+      console.log(`user: `);
+      console.log(currentUser);
+      //Only if this user id is set then we display a button to go to chat!!
+      if (currentUser.data) {
+        setUser(currentUser.data);
+      }
+    } catch(err) {
+      console.log(err);
+    }
   }
 
   useEffect(() => {
@@ -142,19 +149,11 @@ export default function DetailPhotoScreen({ route, navigation }) {
 
       <View style={styles.botContainer}>
         <View style={styles.botHeader}>
-          <View>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("Chat", {
-                  imageId: route.params.image.id
-                })
-              }
-            >
-              <Text style={styles.username}>
-                Credit:{" "}
-                <Text style={styles.bold}>{route.params.image.username} </Text>
-              </Text>
-            </TouchableOpacity>
+          <View style={styles.userInfoAndChatContainer}>
+            <Text style={styles.username}>
+              Credit:{" "}
+              <Text style={styles.bold}>{route.params.image.username} </Text>
+            </Text>
             {user && 
               (
                 <TouchableOpacity
@@ -164,8 +163,13 @@ export default function DetailPhotoScreen({ route, navigation }) {
                       user: user
                     })
                   }}
+                  style={{marginLeft: 5}}
                 >
-                  <Text>Chat</Text>
+                  <MaterialIcons
+                    name={"chat"}
+                    size={30}
+                    color={"grey"}
+                  />
                 </TouchableOpacity>
               )
             }

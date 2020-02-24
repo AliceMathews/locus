@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Text,
   View,
@@ -41,6 +41,7 @@ export default function CategoriesScreen({ token }) {
 
   const [oneItem, setOneItem] = useState(false);
 
+  const flatListRef = useRef();
 
   useEffect(() => {
     fetchCategories();
@@ -98,12 +99,16 @@ export default function CategoriesScreen({ token }) {
   return (
     <View style={styles.container}>
       <View style={styles.bannerContainer}>
+        <TouchableOpacity
+          onPress={() => flatListRef.current.scrollToOffset({index: 0, animated: true})}
+        >
         <LiveSearch
           value={searchValue}
           onChangeText={text => searchFilterCategories(text)}
           width={deviceWidth * 0.95}
           loading={searching}
         />
+        </TouchableOpacity>
       </View>
       <View style={styles.categoriesContainer}>
         {loading && (
@@ -128,6 +133,7 @@ export default function CategoriesScreen({ token }) {
             }}
             onRefresh={onRefresh}
             refreshing={refreshing}
+            ref={flatListRef}
           />)}
       </View>
     </View>
