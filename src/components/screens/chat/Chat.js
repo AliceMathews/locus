@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 
 import { API_URL } from '../../../../configKeys';
 import styles from './ChatStyle';
+
 import { ThemeProvider } from "@react-navigation/native";
 
 import { GiftedChat } from 'react-native-gifted-chat';
@@ -20,7 +21,6 @@ import { GiftedChat } from 'react-native-gifted-chat';
 //   const [chatMessages, setChatMessages] = useState([]);
 //   const [socket, setSocket] = useState(io("https://99504048.ngrok.io"));
 
-
 //   useEffect(() => {
 //     // const newSocket = io("https://826a3840.ngrok.io");
 //     // setSocket(newSocket);
@@ -34,13 +34,12 @@ import { GiftedChat } from 'react-native-gifted-chat';
 //       setChatMessages([...chatMessages, msg]);
 //       console.log(`message received in front end ${msg}`);
 //       console.log(chatMessages);
-      
+
 //     });
 //   },[]);
 
 //   // console.log(socket);
 
-  
 //   // console.log(chatMessages);
 
 //   const onSubmitEditing = () => {
@@ -157,7 +156,4 @@ export default class Chat extends Component {
       />
     );
   }
-
-
-
 }
