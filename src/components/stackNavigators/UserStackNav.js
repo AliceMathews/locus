@@ -22,7 +22,7 @@ export default function UserStackNav({ authContext, state }) {
           )}
         </UserStack.Screen>
       ) : (
-        <UserStack.Screen name="Login">
+        <UserStack.Screen name="Login" options={{ headerShown: false }}>
           {() => (
             <LoginScreen
               signIn={authContext.signIn}

@@ -1,22 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextInput,
   Text,
   View,
   TouchableOpacity,
   Keyboard,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Animated
 } from "react-native";
-
+import SplashScreen from "../splash/Splash";
 import styles from "./LoginScreenStyle";
 
 export default function LoginScreen({ signIn, signUp }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [fadeAnim] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 2000,
+      useNativeDriver: true
+    }).start();
+  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
+      <Animated.View
+        style={{ opacity: fadeAnim, flex: 1, justifyContent: "center" }}
+      >
         <TextInput
           style={styles.input}
           underlineColorAndroid="transparent"
@@ -51,7 +63,8 @@ export default function LoginScreen({ signIn, signUp }) {
         >
           <Text style={styles.submitButtonText}>Sign up</Text>
         </TouchableOpacity>
-      </View>
+        <SplashScreen />
+      </Animated.View>
     </TouchableWithoutFeedback>
   );
 }

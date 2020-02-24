@@ -6,7 +6,7 @@ import styles from "./SplashScreenStyle";
 export default function SplashScreen() {
   return (
     <View style={styles.container}>
-      <Image source={splash} resizeMode="center"></Image>
+      <Image source={splash} resizeMode="cover"></Image>
     </View>
   );
 }

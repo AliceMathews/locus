@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  FlatList,
-  Dimensions,
-  Switch,
-  ActivityIndicator
-} from "react-native";
+
+
+import React, { useState, useEffect, useRef } from "react";
+import { Text, View, Button, FlatList, Dimensions, Image, ActivityIndicator, TouchableOpacity, Switch } from "react-native";
+import { Tile } from "react-native-elements";
+
 
 import useCurrentLocation from "../../../hooks/useCurrentLocation";
 import { getDistance } from "geolib";
@@ -23,8 +20,14 @@ export default function PhotosScreen({ route, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
 
   const [oneItem, setOneItem] = useState(false);
+
   const [toggle, setToggle] = useState(false);
   const { currentLocation, _getLocationAsync } = useCurrentLocation();
+
+
+  const flatListRef = useRef();
+
+
 
   useEffect(() => {
     _getLocationAsync();
@@ -84,10 +87,14 @@ export default function PhotosScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.bannerContainer}>
-        <Text style={styles.categoryTitle}>
-          Photos of {route.params.categoryName}
-        </Text>
-        <View style={styles.toggle}>
+
+        <TouchableOpacity
+          onPress={() => {
+            flatListRef.current.scrollToOffset({index: 0, animated: true});
+          }}
+        >
+          <Text style={styles.categoryTitle}>Photos of {route.params.categoryName}</Text>
+          <View style={styles.toggle}>
           <Switch
             value={toggle}
             onChange={() => {
@@ -98,7 +105,9 @@ export default function PhotosScreen({ route, navigation }) {
             thumbColor={"#6E89A6"}
           />
           <Text style={styles.proximity}>Proximity</Text>
-        </View>
+          </View>
+        </TouchableOpacity>
+
       </View>
       <View style={styles.photosContainer}>
         {loading && <ActivityIndicator size="large" color="#0000ff" />}
@@ -117,6 +126,7 @@ export default function PhotosScreen({ route, navigation }) {
             )}
             refreshing={refreshing}
             onRefresh={onRefresh}
+            ref={flatListRef}
           />
         )}
       </View>

@@ -16,13 +16,13 @@ import { styles, retro, Aubergine } from "./DetailPhotoScreenStyle";
 import icon from "../../../../assets/locus.png";
 import { Linking } from "expo";
 import { getDistance } from "geolib";
+import { MaterialIcons } from "@expo/vector-icons";
 
-import axios from 'axios';
-import { API_URL } from '../../../../configKeys';
+import axios from "axios";
+import { API_URL } from "../../../../configKeys";
 
 import useScreenBrightness from "../../../hooks/useScreenBrightness";
 import useCurrentLocation from "../../../hooks/useCurrentLocation";
-
 
 export default function DetailPhotoScreen({ route, navigation }) {
   const [showPhoto, setShowPhoto] = useState(false);
@@ -31,7 +31,6 @@ export default function DetailPhotoScreen({ route, navigation }) {
 
   const { currentBrightness } = useScreenBrightness();
   const { currentLocation, _getLocationAsync } = useCurrentLocation();
-
 
   const distance = () => {
     const result = getDistance(
@@ -51,12 +50,20 @@ export default function DetailPhotoScreen({ route, navigation }) {
   };
 
   const _getUserInfoAsync = async () => {
-    const user = await axios.get(`${API_URL}users/myinfo`, {headers: {"authorization": route.params.token}});
-    console.log(`user: `);
-    console.log(user.data);
-    //Only if this user id is set then we display a button to go to chat!!
-    setUser(user.data);
-  }
+    try {
+      const currentUser = await axios.get(`${API_URL}users/myinfo`, {
+        headers: { authorization: route.params.token }
+      });
+      console.log(`user: `);
+      console.log(currentUser);
+      //Only if this user id is set then we display a button to go to chat!!
+      if (currentUser.data) {
+        setUser(currentUser.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     _getLocationAsync();
@@ -142,33 +149,24 @@ export default function DetailPhotoScreen({ route, navigation }) {
 
       <View style={styles.botContainer}>
         <View style={styles.botHeader}>
-          <View>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("Chat", {
-                  imageId: route.params.image.id
-                })
-              }
-            >
-              <Text style={styles.username}>
-                Credit:{" "}
-                <Text style={styles.bold}>{route.params.image.username} </Text>
-              </Text>
-            </TouchableOpacity>
-            {user && 
-              (
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("Chat", {
-                      imageId: route.params.image.id,
-                      user: user
-                    })
-                  }}
-                >
-                  <Text>Chat</Text>
-                </TouchableOpacity>
-              )
-            }
+          <View style={styles.userInfoAndChatContainer}>
+            <Text style={styles.username}>
+              Credit:{" "}
+              <Text style={styles.bold}>{route.params.image.username} </Text>
+            </Text>
+            {user && (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("Chat", {
+                    imageId: route.params.image.id,
+                    user: user
+                  });
+                }}
+                style={{ marginLeft: 5 }}
+              >
+                <MaterialIcons name={"chat"} size={30} color={"grey"} />
+              </TouchableOpacity>
+            )}
           </View>
           <View style={styles.direction}>
             <CustomButton onPress={() => getDirections()}>
@@ -189,7 +187,7 @@ export default function DetailPhotoScreen({ route, navigation }) {
         <View style={styles.infoContainer}>
           <Text style={styles.info}>
             Camera Make |
-            <Text style={styles.bold}> {route.params.image.camera_make}</Text>
+            <Text style={styles.bold}>{route.params.image.camera_make}</Text>
           </Text>
 
           <View style={styles.cameraSettings}>
@@ -197,14 +195,12 @@ export default function DetailPhotoScreen({ route, navigation }) {
               <Text style={styles.info}>
                 Exposure |
                 <Text style={styles.bold}>
-                  {" "}
                   + {route.params.image.exposure.toFixed(3)}
                 </Text>
               </Text>
               <Text style={styles.info}>
                 Focal length |
                 <Text style={styles.bold}>
-                  {" "}
                   {route.params.image.focul_length} Mm
                 </Text>
               </Text>
@@ -212,8 +208,7 @@ export default function DetailPhotoScreen({ route, navigation }) {
               <Text style={styles.info}>
                 Shutter speed |
                 <Text style={styles.bold}>
-                  {" "}
-                  {route.params.image.shutter_speed.toFixed(3)} S
+                  {route.params.image.shutter_speed.toFixed(3)} Ms
                 </Text>
               </Text>
             </View>
@@ -224,7 +219,6 @@ export default function DetailPhotoScreen({ route, navigation }) {
               <Text style={styles.info}>
                 Aperture |
                 <Text style={styles.bold}>
-                  {" "}
                   F{route.params.image.aperture.toFixed(2)}
                 </Text>
               </Text>
