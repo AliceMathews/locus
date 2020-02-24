@@ -1,37 +1,43 @@
 import { useEffect, useReducer, useMemo } from "react";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, Alert } from "react-native";
 import axios from "axios";
 import { API_URL } from "../../configKeys";
 
+const storeToken = async token => {
+  try {
+    await AsyncStorage.setItem("userToken", JSON.stringify(token));
+  } catch (error) {
+    console.log("Something went wrong", error);
+  }
+};
+
+const logoutBackend = async () => {
+  try {
+    let userData = await AsyncStorage.getItem("userToken");
+    let data = JSON.parse(userData);
+    const res = await axios.post(`${API_URL}users/logout`, {
+      data
+    });
+    console.log(res);
+  } catch (err) {
+    console.log("Something went wrong, backend", err);
+  }
+};
+
+const logoutFrontend = async () => {
+  try {
+    await AsyncStorage.removeItem("userToken");
+    console.log("Auth token removed");
+  } catch (err) {
+    console.log("Something went wrong, frontend", err);
+  }
+};
+
+const logout = async () => {
+  return Promise.all([logoutBackend(), logoutFrontend()]);
+};
+
 const AuthFlowHook = () => {
-  const logoutBackend = async () => {
-    console.log("starting backend logout");
-    try {
-      let userData = await AsyncStorage.getItem("userToken");
-      let data = JSON.parse(userData);
-      const res = await axios.post(`${API_URL}users/logout`, {
-        data
-      });
-      console.log(res);
-    } catch (err) {
-      console.log("Something went wrong", err);
-    }
-  };
-
-  const logoutFrontend = async () => {
-    console.log("starting frontend logout");
-    try {
-      await AsyncStorage.removeItem("userToken");
-      console.log("Auth token removed");
-    } catch (err) {
-      console.log("Something went wrong", err);
-    }
-  };
-
-  const logout = async () => {
-    return Promise.all([logoutBackend(), logoutFrontend()]);
-  };
-
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -44,20 +50,18 @@ const AuthFlowHook = () => {
         case "SIGN_IN":
           return {
             ...prevState,
-            isSignout: false,
             userToken: action.token
           };
         case "SIGN_OUT":
           return {
             ...prevState,
-            isSignout: logout(),
+            isLoading: false,
             userToken: null
           };
       }
     },
     {
       isLoading: true,
-      isSignout: false,
       userToken: null
     }
   );
@@ -79,6 +83,7 @@ const AuthFlowHook = () => {
         // This will switch to the App screen or Auth screen and this loading
         // screen will be unmounted and thrown away.
       } catch (e) {
+        dispatch({ type: "SIGN_OUT" });
         // Restoring token failed
         // Redirect to "Login"
       }
@@ -95,27 +100,21 @@ const AuthFlowHook = () => {
             password: data.password
           });
           await storeToken(res.data.auth_token);
-          // navigation.navigate("Home");
           dispatch({ type: "SIGN_IN", token: res.data.auth_token });
         } catch (err) {
-          // setError(err);
-          console.log("err", err);
           Alert.alert("Wrong Credentials");
         }
       },
-      signOut: () => dispatch({ type: "SIGN_OUT" }),
+      signOut: () => (dispatch({ type: "SIGN_OUT" }), logout()),
       signUp: async data => {
-        console.log(data);
         try {
           const res = await axios.post(`${API_URL}users/register`, {
             username: data.username,
             password: data.password
           });
           await storeToken(res.data.auth_token);
-          // navigation.navigate("Home");
           dispatch({ type: "SIGN_IN", token: res.data.auth_token });
         } catch (err) {
-          console.log(err);
           Alert.alert("Username already taken");
         }
       }
@@ -123,24 +122,7 @@ const AuthFlowHook = () => {
     []
   );
 
-  const storeToken = async token => {
-    try {
-      await AsyncStorage.setItem("userToken", JSON.stringify(token));
-    } catch (error) {
-      console.log("Something went wrong", error);
-    }
-  };
-  // const getToken = async () => {
-  //   try {
-  //     let userDataJSON = await AsyncStorage.getItem("userData");
-  //     let userData = JSON.parse(userDataJSON);
-  //     console.log("this is the auth token", userData);
-  //   } catch (error) {
-  //     console.log("Something went wrong", error);
-  //   }
-  // };
-
-  return { state, authContext, logout };
+  return { state, authContext };
 };
 
 export default AuthFlowHook;
