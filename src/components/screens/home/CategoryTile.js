@@ -6,12 +6,14 @@ import styles from "./CategoryTileStyle";
 import Tile from './Tile';
 
 export default function CategoryTile(props) {
+  
   return (
     <TouchableOpacity
       onPress={() => {
         props.navigation.navigate("Photos", {
             categoryId: props.item.id,
-            categoryName: props.item.name
+            categoryName: props.item.name,
+            token: props.token
         });
       }}
     >

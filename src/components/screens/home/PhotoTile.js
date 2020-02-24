@@ -8,7 +8,8 @@ export default function PhotoTile(props) {
     <TouchableOpacity
       onPress={() => {
         props.navigation.navigate("Photo", {
-            image: props.item
+            image: props.item,
+            token: props.token
         });
       }}
     >

@@ -16,13 +16,22 @@ import { styles, retro, Aubergine } from "./DetailPhotoScreenStyle";
 import icon from "../../../../assets/locus.png";
 import { Linking } from "expo";
 import { getDistance } from "geolib";
+
+import axios from 'axios';
+import { API_URL } from '../../../../configKeys';
+
 import useScreenBrightness from "../../../hooks/useScreenBrightness";
 import useCurrentLocation from "../../../hooks/useCurrentLocation";
 
+
 export default function DetailPhotoScreen({ route, navigation }) {
   const [showPhoto, setShowPhoto] = useState(false);
+
+  const [user, setUser] = useState(null);
+
   const { currentBrightness } = useScreenBrightness();
   const { currentLocation, _getLocationAsync } = useCurrentLocation();
+
 
   const distance = () => {
     const result = getDistance(
@@ -41,8 +50,17 @@ export default function DetailPhotoScreen({ route, navigation }) {
     }
   };
 
+  const _getUserInfoAsync = async () => {
+    const user = await axios.get(`${API_URL}users/myinfo`, {headers: {"authorization": route.params.token}});
+    console.log(`user: `);
+    console.log(user.data);
+    //Only if this user id is set then we display a button to go to chat!!
+    setUser(user.data);
+  }
+
   useEffect(() => {
     _getLocationAsync();
+    _getUserInfoAsync();
   }, []);
 
   const getDirections = () => {
@@ -137,6 +155,20 @@ export default function DetailPhotoScreen({ route, navigation }) {
                 <Text style={styles.bold}>{route.params.image.username} </Text>
               </Text>
             </TouchableOpacity>
+            {user && 
+              (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("Chat", {
+                      imageId: route.params.image.id,
+                      user: user
+                    })
+                  }}
+                >
+                  <Text>Chat</Text>
+                </TouchableOpacity>
+              )
+            }
           </View>
           <View style={styles.direction}>
             <CustomButton onPress={() => getDirections()}>
