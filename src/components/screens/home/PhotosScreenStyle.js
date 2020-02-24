@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 28,
     fontWeight: "bold",
-    paddingRight: 20
+    paddingRight: 30
   },
   toggle: {
     alignItems: "center"
