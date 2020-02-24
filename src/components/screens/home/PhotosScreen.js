@@ -1,9 +1,16 @@
-
-
 import React, { useState, useEffect, useRef } from "react";
-import { Text, View, Button, FlatList, Dimensions, Image, ActivityIndicator, TouchableOpacity, Switch } from "react-native";
+import {
+  Text,
+  View,
+  Button,
+  FlatList,
+  Dimensions,
+  Image,
+  ActivityIndicator,
+  TouchableOpacity,
+  Switch
+} from "react-native";
 import { Tile } from "react-native-elements";
-
 
 import useCurrentLocation from "../../../hooks/useCurrentLocation";
 import { getDistance } from "geolib";
@@ -24,10 +31,7 @@ export default function PhotosScreen({ route, navigation }) {
   const [toggle, setToggle] = useState(false);
   const { currentLocation, _getLocationAsync } = useCurrentLocation();
 
-
   const flatListRef = useRef();
-
-
 
   useEffect(() => {
     _getLocationAsync();
@@ -87,14 +91,16 @@ export default function PhotosScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.bannerContainer}>
-
         <TouchableOpacity
           onPress={() => {
-            flatListRef.current.scrollToOffset({index: 0, animated: true});
+            flatListRef.current.scrollToOffset({ index: 0, animated: true });
           }}
         >
-          <Text style={styles.categoryTitle}>Photos of {route.params.categoryName}</Text>
-          <View style={styles.toggle}>
+          <Text style={styles.categoryTitle}>
+            Photos of {route.params.categoryName}
+          </Text>
+        </TouchableOpacity>
+        <View style={styles.toggle}>
           <Switch
             value={toggle}
             onChange={() => {
@@ -105,9 +111,7 @@ export default function PhotosScreen({ route, navigation }) {
             thumbColor={"#6E89A6"}
           />
           <Text style={styles.proximity}>Proximity</Text>
-          </View>
-        </TouchableOpacity>
-
+        </View>
       </View>
       <View style={styles.photosContainer}>
         {loading && <ActivityIndicator size="large" color="#0000ff" />}
