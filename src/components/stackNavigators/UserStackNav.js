@@ -14,20 +14,20 @@ export default function UserStackNav({ authContext, state }) {
       {state.userToken ? (
         <UserStack.Screen
           name="Profile"
-          options={{
-            headerTitle: (
-              <View>
-                <Image
-                  source={header}
-                  style={{
-                    alignSelf: "center",
-                    resizeMode: "contain",
-                    flex: 1
-                  }}
-                />
-              </View>
-            )
-          }}
+          // options={{
+          //   headerTitle: (
+          //     <View>
+          //       <Image
+          //         source={header}
+          //         style={{
+          //           alignSelf: "center",
+          //           resizeMode: "contain",
+          //           flex: 1
+          //         }}
+          //       />
+          //     </View>
+          //   )
+          // }}
         >
           {() => (
             <ProfileScreen
@@ -39,20 +39,20 @@ export default function UserStackNav({ authContext, state }) {
       ) : (
         <UserStack.Screen
           name="Login"
-          options={{
-            headerTitle: (
-              <View>
-                <Image
-                  source={header}
-                  style={{
-                    alignSelf: "center",
-                    resizeMode: "contain",
-                    flex: 1
-                  }}
-                />
-              </View>
-            )
-          }}
+          // options={{
+          //   headerTitle: (
+          //     <View>
+          //       <Image
+          //         source={header}
+          //         style={{
+          //           alignSelf: "center",
+          //           resizeMode: "contain",
+          //           flex: 1
+          //         }}
+          //       />
+          //     </View>
+          //   )
+          // }}
         >
           {() => (
             <LoginScreen
