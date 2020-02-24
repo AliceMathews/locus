@@ -87,15 +87,18 @@ export default function PhotosScreen({ route, navigation }) {
         <Text style={styles.categoryTitle}>
           Photos of {route.params.categoryName}
         </Text>
-        <Switch
-          value={toggle}
-          onChange={() => {
-            setToggle(toggle === false ? true : false);
-            toggle === false ? orderByLocation() : orderById();
-          }}
-          trackColor={{ true: "#9eb6ba", false: "#dae6e8" }}
-          thumbColor={"#6E89A6"}
-        />
+        <View style={styles.toggle}>
+          <Switch
+            value={toggle}
+            onChange={() => {
+              setToggle(toggle === false ? true : false);
+              toggle === false ? orderByLocation() : orderById();
+            }}
+            trackColor={{ true: "#9eb6ba", false: "#dae6e8" }}
+            thumbColor={"#6E89A6"}
+          />
+          <Text style={styles.proximity}>Proximity</Text>
+        </View>
       </View>
       <View style={styles.photosContainer}>
         {loading && <ActivityIndicator size="large" color="#0000ff" />}

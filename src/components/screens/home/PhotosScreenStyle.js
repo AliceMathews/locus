@@ -23,7 +23,14 @@ const styles = StyleSheet.create({
   },
   categoryTitle: {
     fontSize: 28,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    paddingRight: 20
+  },
+  toggle: {
+    alignItems: "center"
+  },
+  proximity: {
+    color: "#666666"
   }
 });
 
