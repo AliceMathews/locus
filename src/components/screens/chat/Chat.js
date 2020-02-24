@@ -92,11 +92,16 @@ export default class Chat extends Component {
     };
     this.deviceWidth = Dimensions.get("window").width;
     this.imageId = props.route.params.imageId;
+    this.userId = props.route.params.user.id;
+    this.username = props.route.params.user.username;
+    this.avatar = props.route.params.user.profile_pic;
     console.log(`image: ${this.imageId}`)
+    console.log("userId");
+    console.log(this.userId);
   }
 
   componentDidMount() {
-    this.socket = io("https://99504048.ngrok.io");
+    this.socket = io("https://5c117309.ngrok.io");
     this.socket.on("connect", () => {
       this.socket.emit('room', this.imageId);
       console.log(`conencted as ${this.socket.id}`)
@@ -144,8 +149,9 @@ export default class Chat extends Component {
         messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
         user={{
-          _id: this.state.socketId || 1,
-          avatar: "https://img.icons8.com/ios-filled/344/user-male-circle.png"
+          _id: this.userId,
+          avatar: this.avatar,
+          name: this.username
         }}
         renderUsernameOnMessage={true}
       />
