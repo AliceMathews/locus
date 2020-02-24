@@ -7,17 +7,12 @@ import {
   Switch,
   ActivityIndicator
 } from "react-native";
-import { Tile } from "react-native-elements";
-import ToggleSwitch from "toggle-switch-react-native";
+
 import useCurrentLocation from "../../../hooks/useCurrentLocation";
-import { getDistance, convertSpeed } from "geolib";
-import CustomButton from "../../global/Button";
-
+import { getDistance } from "geolib";
 import axios from "axios";
-
 import styles from "./PhotosScreenStyle";
 import { API_URL } from "../../../../configKeys";
-
 import PhotoTile from "./PhotoTile";
 
 export default function PhotosScreen({ route, navigation }) {
@@ -98,6 +93,8 @@ export default function PhotosScreen({ route, navigation }) {
             setToggle(toggle === false ? true : false);
             toggle === false ? orderByLocation() : orderById();
           }}
+          trackColor={{ true: "#9eb6ba", false: "#dae6e8" }}
+          thumbColor={"#6E89A6"}
         />
       </View>
       <View style={styles.photosContainer}>
