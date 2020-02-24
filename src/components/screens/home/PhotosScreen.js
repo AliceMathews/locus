@@ -1,13 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Text, View, Button, FlatList, Dimensions, Image, ActivityIndicator, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  Button,
+  FlatList,
+  Dimensions,
+  Image,
+  ActivityIndicator,
+  TouchableOpacity,
+  Switch
+} from "react-native";
 import { Tile } from "react-native-elements";
 
+import useCurrentLocation from "../../../hooks/useCurrentLocation";
+import { getDistance } from "geolib";
 import axios from "axios";
-
 import styles from "./PhotosScreenStyle";
 import { API_URL } from "../../../../configKeys";
-
-import PhotoTile from './PhotoTile';
+import PhotoTile from "./PhotoTile";
 
 export default function PhotosScreen({ route, navigation }) {
   const { categoryId } = route.params;
@@ -18,10 +28,13 @@ export default function PhotosScreen({ route, navigation }) {
 
   const [oneItem, setOneItem] = useState(false);
 
+  const [toggle, setToggle] = useState(false);
+  const { currentLocation, _getLocationAsync } = useCurrentLocation();
+
   const flatListRef = useRef();
 
-
   useEffect(() => {
+    _getLocationAsync();
     axios.get(`${API_URL}categories/${categoryId}/images`).then(res => {
       setImages(res.data.images);
       setLoading(false);
@@ -44,6 +57,35 @@ export default function PhotosScreen({ route, navigation }) {
     });
   };
 
+  const distance = image => {
+    console.log(currentLocation);
+    const result = getDistance(
+      {
+        latitude: image.latitude,
+        longitude: image.longitude
+      },
+      currentLocation,
+      1
+    );
+
+    return result;
+  };
+
+  const orderByLocation = () => {
+    const imagesToSort = [...images];
+    imagesToSort.forEach(image => {
+      image.distance = distance(image);
+    });
+    imagesToSort.sort((a, b) => a.distance - b.distance);
+    setImages(imagesToSort);
+  };
+
+  const orderById = () => {
+    const imagesToSort = [...images];
+    imagesToSort.sort((a, b) => a.id - b.id);
+    setImages(imagesToSort);
+  };
+
   const deviceWidth = Dimensions.get("window").width;
 
   return (
@@ -51,34 +93,46 @@ export default function PhotosScreen({ route, navigation }) {
       <View style={styles.bannerContainer}>
         <TouchableOpacity
           onPress={() => {
-            flatListRef.current.scrollToOffset({index: 0, animated: true});
+            flatListRef.current.scrollToOffset({ index: 0, animated: true });
           }}
         >
-          <Text style={styles.categoryTitle}>Photos of {route.params.categoryName}</Text>
+          <Text style={styles.categoryTitle}>
+            Photos of {route.params.categoryName}
+          </Text>
         </TouchableOpacity>
+        <View style={styles.toggle}>
+          <Switch
+            value={toggle}
+            onChange={() => {
+              setToggle(toggle === false ? true : false);
+              toggle === false ? orderByLocation() : orderById();
+            }}
+            trackColor={{ true: "#9eb6ba", false: "#dae6e8" }}
+            thumbColor={"#6E89A6"}
+          />
+          <Text style={styles.proximity}>Proximity</Text>
+        </View>
       </View>
       <View style={styles.photosContainer}>
-        {loading && (
-          <ActivityIndicator size="large" color="#0000ff" />
-        )}
+        {loading && <ActivityIndicator size="large" color="#0000ff" />}
         {!loading && (
           <FlatList
             numColumns={2}
             data={images}
             renderItem={({ item }) => (
               <PhotoTile
-                  item={item}
-                  navigation={navigation}
-                  deviceWidth={deviceWidth}
-                  onlyOne={oneItem}
-                  token={route.params.token}
+                item={item}
+                navigation={navigation}
+                deviceWidth={deviceWidth}
+                onlyOne={oneItem}
+                token={route.params.token}
               />
             )}
             refreshing={refreshing}
             onRefresh={onRefresh}
             ref={flatListRef}
           />
-        )}  
+        )}
       </View>
     </View>
   );
