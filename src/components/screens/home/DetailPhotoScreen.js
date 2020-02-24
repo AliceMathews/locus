@@ -103,7 +103,7 @@ export default function DetailPhotoScreen({ route, navigation }) {
         onMapReady={displayCallout}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        customMapStyle={currentBrightness > 0.5 ? retro : Aubergine}
+        customMapStyle={currentBrightness >= 0.5 ? retro : Aubergine}
         showsUserLocation={true}
         initialRegion={{
           latitude: route.params.image.latitude,
@@ -164,7 +164,7 @@ export default function DetailPhotoScreen({ route, navigation }) {
                 }}
                 style={{ marginLeft: 5 }}
               >
-                <MaterialIcons name={"chat"} size={30} color={"grey"} />
+                <MaterialIcons name={"chat"} size={28} color={"#7A96B2"} />
               </TouchableOpacity>
             )}
           </View>
@@ -187,7 +187,9 @@ export default function DetailPhotoScreen({ route, navigation }) {
         <View style={styles.infoContainer}>
           <Text style={styles.info}>
             Camera Make |
-            <Text style={styles.bold}>{route.params.image.camera_make}</Text>
+            <Text
+              style={styles.bold}
+            >{` ${route.params.image.camera_make}`}</Text>
           </Text>
 
           <View style={styles.cameraSettings}>
@@ -195,31 +197,32 @@ export default function DetailPhotoScreen({ route, navigation }) {
               <Text style={styles.info}>
                 Exposure |
                 <Text style={styles.bold}>
-                  + {route.params.image.exposure.toFixed(3)}
+                  {` +${route.params.image.exposure.toFixed(3)}`}
                 </Text>
               </Text>
               <Text style={styles.info}>
                 Focal length |
                 <Text style={styles.bold}>
-                  {route.params.image.focul_length} Mm
+                  {` ${route.params.image.focul_length} mm`}
                 </Text>
               </Text>
 
               <Text style={styles.info}>
                 Shutter speed |
                 <Text style={styles.bold}>
-                  {route.params.image.shutter_speed.toFixed(3)} Ms
+                  {` ${route.params.image.shutter_speed.toFixed(3)} ms`}
                 </Text>
               </Text>
             </View>
             <View>
               <Text style={styles.info}>
-                ISO | <Text style={styles.bold}>{route.params.image.iso}</Text>
+                ISO |
+                <Text style={styles.bold}>{` ${route.params.image.iso}`}</Text>
               </Text>
               <Text style={styles.info}>
                 Aperture |
                 <Text style={styles.bold}>
-                  F{route.params.image.aperture.toFixed(2)}
+                  {` F${route.params.image.aperture.toFixed(2)}`}
                 </Text>
               </Text>
             </View>

@@ -26,8 +26,7 @@ const styles = StyleSheet.create({
   },
   botContainer: {
     flex: 1,
-    padding: 10,
-    backgroundColor: "#262626"
+    padding: 10
   },
   botHeader: {
     flex: 0.2,
@@ -54,9 +53,8 @@ const styles = StyleSheet.create({
     padding: 10
   },
   title: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: "white"
+    fontSize: 18,
+    fontWeight: "700"
   },
 
   infoContainer: {
@@ -81,10 +79,10 @@ const styles = StyleSheet.create({
   },
   bold: {
     fontWeight: "700",
-    color: "white"
+    color: "black"
   },
   userInfoAndChatContainer: {
-    flexDirection: 'row'
+    flexDirection: "row"
   }
 });
 
