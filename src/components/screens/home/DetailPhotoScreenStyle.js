@@ -82,6 +82,9 @@ const styles = StyleSheet.create({
   bold: {
     fontWeight: "700",
     color: "white"
+  },
+  userInfoAndChatContainer: {
+    flexDirection: 'row'
   }
 });
 

@@ -16,6 +16,7 @@ import { styles, retro, Aubergine } from "./DetailPhotoScreenStyle";
 import icon from "../../../../assets/locus.png";
 import { Linking } from "expo";
 import { getDistance } from "geolib";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import axios from 'axios';
 import { API_URL } from '../../../../configKeys';
@@ -142,19 +143,11 @@ export default function DetailPhotoScreen({ route, navigation }) {
 
       <View style={styles.botContainer}>
         <View style={styles.botHeader}>
-          <View>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("Chat", {
-                  imageId: route.params.image.id
-                })
-              }
-            >
-              <Text style={styles.username}>
-                Credit:{" "}
-                <Text style={styles.bold}>{route.params.image.username} </Text>
-              </Text>
-            </TouchableOpacity>
+          <View style={styles.userInfoAndChatContainer}>
+            <Text style={styles.username}>
+              Credit:{" "}
+              <Text style={styles.bold}>{route.params.image.username} </Text>
+            </Text>
             {user && 
               (
                 <TouchableOpacity
@@ -164,8 +157,13 @@ export default function DetailPhotoScreen({ route, navigation }) {
                       user: user
                     })
                   }}
+                  style={{marginLeft: 5}}
                 >
-                  <Text>Chat</Text>
+                  <MaterialIcons
+                    name={"chat"}
+                    size={30}
+                    color={"grey"}
+                  />
                 </TouchableOpacity>
               )
             }
