@@ -67,7 +67,8 @@ export default function ProfileScreen({ signOut, user, token }) {
     axios
       .delete(`${API_URL}images/${id}`)
       .then(res => {
-        onRefresh();
+        // onRefresh();
+        setImages(images.filter(image => image.id !== id));
       })
       .catch(e => console.log);
   };
