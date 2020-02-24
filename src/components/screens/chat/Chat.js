@@ -98,6 +98,7 @@ export default class Chat extends Component {
     console.log(`image: ${this.imageId}`)
     console.log("userId");
     console.log(this.userId);
+    this.navigation = props.navigation;
   }
 
   componentDidMount() {
@@ -119,7 +120,43 @@ export default class Chat extends Component {
     });
 
     this.socket.on("new person", msg => {
-      console.log("new person joined the room");
+      console.log("new person joined the room " + msg);
+      this.setState(previousState => ({
+        messages: GiftedChat.append(previousState.messages, 
+          [
+            {
+                _id: this.generateId(),
+                text: 'Someone has joined the room',
+                createdAt: new Date(),
+                user: {
+                  _id: "woenfowienfowienfow",
+                  name: 'Room Admin',
+                  avatar: 'https://image.shutterstock.com/image-vector/bot-icon-chatbot-concept-cute-260nw-715418284.jpg',
+                },
+            }
+          ]
+        ),
+      }));
+    });
+
+    this.socket.on("someone left", msg => {
+      console.log("someone left the room");
+      this.setState(previousState => ({
+        messages: GiftedChat.append(previousState.messages, 
+          [
+            {
+                _id: this.generateId(),
+                text: 'Someone has left the room',
+                createdAt: new Date(),
+                user: {
+                  _id: "woenfowienfowienfow",
+                  name: 'Room Admin',
+                  avatar: 'https://image.shutterstock.com/image-vector/bot-icon-chatbot-concept-cute-260nw-715418284.jpg',
+                },
+            }
+          ]
+        ),
+      }));
     })
 
 
@@ -137,6 +174,11 @@ export default class Chat extends Component {
         // },
       ],
     })
+
+    const listener = this.navigation.addListener('blur', () => {
+      console.log("blur");
+      this.socket.emit("leave");
+    })
   } 
 
   onSend(messages=[]) {
@@ -147,6 +189,29 @@ export default class Chat extends Component {
     //   messages: GiftedChat.append(previousState.messages, messages),
     // }))
   }
+
+  generateId() {
+    let count = 0;
+    let randomString = "";
+  
+    while (count < 6) {
+      let randomNumber = Math.floor(Math.random() * (122 - 48 + 1) + 48);
+      let randomChar = "";
+  
+      if (randomNumber >= 58 && randomNumber <= 64) {
+        continue;
+      } else if (randomNumber >= 91 && randomNumber <= 96) {
+        continue;
+      } else {
+        //convert to character
+        randomChar = String.fromCharCode(randomNumber);
+        randomString += randomChar;
+        count++;
+      }
+    }
+  
+    return randomString;
+  };
 
   render() {
     return (
@@ -159,6 +224,7 @@ export default class Chat extends Component {
           name: this.username
         }}
         renderUsernameOnMessage={true}
+        isTyping={true}
       />
     );
   }
