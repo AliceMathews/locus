@@ -9,13 +9,13 @@ import {
   Dimensions,
   ActivityIndicator,
   ImageBackground,
-  TouchableOpacity,
+  TouchableOpacity
 } from "react-native";
 // import { Tile, SearchBar } from "react-native-elements";
 // import { CacheManager } from 'react-native-expo-image-cache';
-import LiveSearch from './LiveSearch';
-import Tile from './Tile';
-import CategoryTile from './CategoryTile';
+import LiveSearch from "./LiveSearch";
+import Tile from "./Tile";
+import CategoryTile from "./CategoryTile";
 
 import axios from "axios";
 
@@ -37,7 +37,6 @@ export default function CategoriesScreen({ navigation }) {
 
   const [oneItem, setOneItem] = useState(false);
 
-
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -54,7 +53,7 @@ export default function CategoriesScreen({ navigation }) {
         setOneItem(false);
       }
     });
-  }
+  };
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -90,7 +89,7 @@ export default function CategoriesScreen({ navigation }) {
     setCategories(searchResults);
     setSearching(false);
   };
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.bannerContainer}>
@@ -102,16 +101,14 @@ export default function CategoriesScreen({ navigation }) {
         />
       </View>
       <View style={styles.categoriesContainer}>
-        {loading && (
-          <ActivityIndicator size="large" color="#0000ff" />
-        )}
-        
+        {loading && <ActivityIndicator size="large" color="#0000ff" />}
+
         {!loading && (
           <FlatList
             numColumns={2}
             data={categories}
             keyExtractor={item => item.id}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               return (
                 <CategoryTile
                   item={item}
@@ -123,7 +120,8 @@ export default function CategoriesScreen({ navigation }) {
             }}
             onRefresh={onRefresh}
             refreshing={refreshing}
-          />)}
+          />
+        )}
       </View>
     </View>
   );

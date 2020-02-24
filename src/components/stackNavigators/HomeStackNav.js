@@ -15,7 +15,6 @@ export default function HomeStackNav() {
       {Platform.OS === "ios" ? (
         <HomeStack.Screen
           name="Categories"
-          component={CategoriesScreen}
           options={{
             headerTitle: (
               <Image
@@ -28,7 +27,9 @@ export default function HomeStackNav() {
               />
             )
           }}
-        />
+        >
+          {() => <CategoriesScreen rnd={"hellothere"} />}
+        </HomeStack.Screen>
       ) : (
         <HomeStack.Screen name="Categories" component={CategoriesScreen} />
       )}
