@@ -20,7 +20,6 @@ export default function ProfileScreen({ signOut, user, token }) {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [oneItem, setOneItem] = useState(false);
-
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -72,11 +71,8 @@ export default function ProfileScreen({ signOut, user, token }) {
     console.log("DELETING");
     axios
       .delete(`${API_URL}images/${id}`)
-      .then(res => {
-        // onRefresh();
-        setImages(images.filter(image => image.id !== id));
-      })
-      .catch(e => console.log);
+      .then(setImages(images.filter(image => image.id !== id)))
+      .catch(console.log);
   };
 
   const deviceWidth = Dimensions.get("window").width;
