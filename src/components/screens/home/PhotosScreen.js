@@ -77,9 +77,10 @@ export default function PhotosScreen({ route, navigation }) {
     setImages(imagesToSort);
   };
 
-  const orderById = () => {
+  const orderByConfidence = () => {
     const imagesToSort = [...images];
-    imagesToSort.sort((a, b) => a.id - b.id);
+    imagesToSort.sort((a, b) => b.confidence - a.confidence);
+    console.log(imagesToSort);
     setImages(imagesToSort);
   };
 
@@ -102,7 +103,7 @@ export default function PhotosScreen({ route, navigation }) {
             value={toggle}
             onChange={() => {
               setToggle(toggle === false ? true : false);
-              toggle === false ? orderByLocation() : orderById();
+              toggle === false ? orderByLocation() : orderByConfidence();
             }}
             trackColor={{ true: "#9eb6ba", false: "#dae6e8" }}
             thumbColor={"#6E89A6"}
