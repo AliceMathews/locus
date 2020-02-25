@@ -1,6 +1,5 @@
 import React from "react";
 import { Text, TouchableOpacity } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 
 import styles from "./ButtonStyle";
 

@@ -1,11 +1,8 @@
-import React, { useEffect, useReducer, useMemo, createContext } from "react";
-import { AsyncStorage, Alert, Image } from "react-native";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
-import { API_URL } from "./configKeys";
 import AuthFlowHook from "./src/hooks/AuthFlowHook";
-import axios from "axios";
 
 import HomeStackNav from "./src/components/stackNavigators/HomeStackNav";
 import UploadStackNav from "./src/components/stackNavigators/UploadStackNav";
@@ -45,7 +42,9 @@ export default function App() {
         <Tab.Screen name="User">
           {() => <UserStackNav authContext={authContext} state={state} />}
         </Tab.Screen>
-        <Tab.Screen name="Home">{() => <HomeStackNav token={state.userToken} />}</Tab.Screen>
+        <Tab.Screen name="Home">
+          {() => <HomeStackNav token={state.userToken} />}
+        </Tab.Screen>
         <Tab.Screen name="Upload">
           {() => <UploadStackNav token={state.userToken} />}
         </Tab.Screen>
