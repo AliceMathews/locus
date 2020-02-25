@@ -29,6 +29,7 @@ export default function PhotoTile(props) {
           key={props.item.id}
           source={{ uri: props.item.url, cache: "force-cache" }}
           style={{
+            margin: 2,
             width: props.deviceWidth / 2,
             height: props.deviceWidth / 2,
             ...styles.image
