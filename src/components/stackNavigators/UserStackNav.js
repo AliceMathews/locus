@@ -12,7 +12,7 @@ export default function UserStackNav({ authContext, state }) {
   return (
     <UserStack.Navigator>
       {state.userToken ? (
-        <UserStack.Screen name="Profile">
+        <UserStack.Screen name="Profile" options={{ headerShown: false }}>
           {() => (
             <ProfileScreen
               signOut={authContext.signOut}

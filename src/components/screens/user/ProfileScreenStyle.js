@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
   },
   profileInfoContainer: {
     flex: 1,
+    padding: 40,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center"
@@ -17,8 +18,8 @@ const styles = StyleSheet.create({
   },
   userName: {
     textAlign: "center",
-    fontSize: 24,
-    fontWeight: 'bold'
+    fontSize: 32,
+    fontWeight: "bold"
   }
 });
 
