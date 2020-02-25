@@ -6,7 +6,8 @@ import {
   Modal,
   SafeAreaView,
   TouchableOpacity,
-  Platform
+  Platform,
+  ScrollView
 } from "react-native";
 import FadeInView from "../../global/FadeInView";
 import CustomButton from "../../global/Button";
@@ -88,14 +89,22 @@ export default function DetailPhotoScreen({ route, navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Modal visible={showPhoto} transparent={true}>
-        <View style={{ backgroundColor: "rgba(0, 0, 0, 0.74)" }}>
+        <ScrollView
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.74)"
+          }}
+          // vertical={true}
+          scrollEnabled={false}
+          maximumZoomScale={1.00001}
+          bouncesZoom={true}
+        >
           <TouchableOpacity onPress={() => setShowPhoto(false)}>
             <Image
               source={{ uri: route.params.image.url }}
               style={styles.expanded}
             />
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       </Modal>
 
       <MapView

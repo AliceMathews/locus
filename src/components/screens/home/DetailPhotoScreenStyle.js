@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   expanded: {
-    width: "100%",
-    height: "100%",
+    width: Dimensions.get("screen").width,
+    height: Dimensions.get("screen").height,
     resizeMode: "contain"
   },
   bold: {
