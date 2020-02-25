@@ -48,19 +48,23 @@ export default function LoginScreen({ signIn, signUp }) {
           onChangeText={text => setPassword(text)}
           value={password}
         />
-        <TouchableOpacity
-          disabled={!password || !username}
-          style={styles.submitButton}
-          onPress={() => signIn({ username, password })}
-        >
-          <Text style={styles.submitButtonText}>Login</Text>
+        <TouchableOpacity style={styles.wrapper}>
+          <TouchableOpacity
+            disabled={!password || !username}
+            style={styles.submitButton}
+            onPress={() => signIn({ username, password })}
+          >
+            <Text style={styles.submitButtonText}>Login</Text>
+          </TouchableOpacity>
         </TouchableOpacity>
-        <TouchableOpacity
-          disabled={!password || !username}
-          style={styles.submitButton}
-          onPress={() => signUp({ username, password })}
-        >
-          <Text style={styles.submitButtonText}>Sign up</Text>
+        <TouchableOpacity style={styles.wrapper}>
+          <TouchableOpacity
+            disabled={!password || !username}
+            style={styles.submitButton}
+            onPress={() => signUp({ username, password })}
+          >
+            <Text style={styles.submitButtonText}>Sign up</Text>
+          </TouchableOpacity>
         </TouchableOpacity>
         <SplashScreen />
       </Animated.View>

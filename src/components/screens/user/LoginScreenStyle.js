@@ -11,12 +11,24 @@ const styles = StyleSheet.create({
     borderBottomColor: "black",
     borderBottomWidth: 1
   },
+  wrapper: {
+    shadowColor: "#fff",
+    shadowOffset: { width: -3, height: -3 },
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    elevation: 8
+  },
   submitButton: {
     backgroundColor: "#55708E",
     padding: 10,
     margin: 15,
     alignItems: "center",
-    height: 40
+    height: 40,
+    shadowColor: "#000",
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 8
   },
   submitButtonText: {
     color: "white"
