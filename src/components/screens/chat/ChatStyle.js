@@ -21,6 +21,9 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     padding:10,
     fontSize: 16
+  },
+  chatListView: {
+    backgroundColor: 'white'
   }
 });
 

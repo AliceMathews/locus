@@ -159,6 +159,8 @@ export default class Chat extends Component {
         }}
         renderUsernameOnMessage={true}
         isTyping={true}
+        showUserAvatar={true}
+        listViewProps={styles.chatListView}
       />
     );
   }
