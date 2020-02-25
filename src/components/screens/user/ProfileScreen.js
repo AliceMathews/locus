@@ -80,7 +80,7 @@ export default function ProfileScreen({ signOut, user, token }) {
           <View style={styles.profileInfoContainer}>
             <Image
               source={{ uri: currentUser.profile_pic }}
-              style={{ width: 80, height: 80 }}
+              style={{ width: 100, height: 100 }}
             />
             <Text style={styles.userName}>{currentUser.username}</Text>
             <CustomButton onPress={signOut}>Sign out</CustomButton>
