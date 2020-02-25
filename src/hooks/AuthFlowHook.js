@@ -66,7 +66,7 @@ const AuthFlowHook = () => {
     }
   );
   useEffect(() => {
-    const bootstrapAsync = async () => {
+    const initialize = async () => {
       let userToken;
 
       try {
@@ -88,7 +88,7 @@ const AuthFlowHook = () => {
         // Redirect to "Login"
       }
     };
-    bootstrapAsync();
+    initialize();
   }, []);
 
   const authContext = useMemo(
