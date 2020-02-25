@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   wrapper: {
     shadowColor: "#fff",
     shadowOffset: { width: -3, height: -3 },
-    shadowOpacity: 1,
+    shadowOpacity: 0.74,
     shadowRadius: 3,
     elevation: 8
   },

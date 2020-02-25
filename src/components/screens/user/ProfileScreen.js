@@ -24,21 +24,28 @@ export default function ProfileScreen({ signOut, user, token }) {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    axios
-      .get(`${API_URL}users/myinfo`, { headers: { authorization: token } })
-      .then(res => {
-        setCurrentUser(res.data);
-        const userId = res.data.id;
-        axios.get(`${API_URL}users/${userId}/images`).then(res => {
-          setImages(res.data);
-          setLoading(false);
-          if (res.data.length === 1) {
-            setOneItem(true);
-          } else {
-            setOneItem(false);
-          }
+    const fetchMyInfo = async () => {
+      try {
+        const userResponse = await axios.get(`${API_URL}users/myinfo`, {
+          headers: { authorization: token }
         });
-      });
+        setCurrentUser(userResponse.data);
+        const userId = userResponse.data.id;
+        const imageResponse = await axios.get(
+          `${API_URL}users/${userId}/images`
+        );
+        setImages(imageResponse.data);
+        setLoading(false);
+        if (res.data.length === 1) {
+          setOneItem(true);
+        } else {
+          setOneItem(false);
+        }
+      } catch (err) {
+        console.log("Something went wrong", err);
+      }
+    };
+    fetchMyInfo();
   }, []);
 
   const onRefresh = () => {
