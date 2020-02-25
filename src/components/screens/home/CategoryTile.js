@@ -6,6 +6,7 @@ import styles from "./CategoryTileStyle";
 export default function CategoryTile(props) {
   return (
     <TouchableOpacity
+      style={{ margin: 2 }}
       onPress={() => {
         props.navigation.navigate("Photos", {
           categoryId: props.item.id,

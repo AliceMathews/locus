@@ -6,28 +6,27 @@ const styles = StyleSheet.create({
     height: 55
   },
   bannerContainer: {
-    flex: 1,
+    flex: 1
   },
   container: {
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    flex:1
-    
+    flex: 1
   },
   categoriesContainer: {
     flex: 5,
-    justifyContent: "space-evenly"
+    justifyContent: "center"
   },
   categoryTile: {
     margin: 5
   },
   tilesContainer: {
-    width: '50%',
-    position: 'relative'
+    width: "50%",
+    position: "relative"
   },
   categoryTitleStyle: {
-    fontStyle: 'italic',
+    fontStyle: "italic",
     fontSize: 100
   }
 });
