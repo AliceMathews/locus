@@ -25,10 +25,9 @@ import useScreenBrightness from "../../../hooks/useScreenBrightness";
 import useCurrentLocation from "../../../hooks/useCurrentLocation";
 
 export default function DetailPhotoScreen({ route, navigation }) {
+  console.log(route.params.image);
   const [showPhoto, setShowPhoto] = useState(false);
-
   const [user, setUser] = useState(null);
-
   const { currentBrightness } = useScreenBrightness();
   const { currentLocation, _getLocationAsync } = useCurrentLocation();
 
@@ -185,46 +184,61 @@ export default function DetailPhotoScreen({ route, navigation }) {
         )}
 
         <View style={styles.infoContainer}>
-          <Text style={styles.info}>
-            Camera Make |
-            <Text
-              style={styles.bold}
-            >{` ${route.params.image.camera_make}`}</Text>
-          </Text>
+          {route.params.image.camera_make && (
+            <Text style={styles.info}>
+              Camera Make |
+              <Text
+                style={styles.bold}
+              >{` ${route.params.image.camera_make}`}</Text>
+            </Text>
+          )}
 
           <View style={styles.cameraSettings}>
             <View>
-              <Text style={styles.info}>
-                Exposure |
-                <Text style={styles.bold}>
-                  {` +${route.params.image.exposure.toFixed(3)}`}
+              {route.params.image.exposure && (
+                <Text style={styles.info}>
+                  Exposure |
+                  <Text style={styles.bold}>
+                    {` +${route.params.image.exposure}`}
+                  </Text>
                 </Text>
-              </Text>
-              <Text style={styles.info}>
-                Focal length |
-                <Text style={styles.bold}>
-                  {` ${route.params.image.focul_length} mm`}
-                </Text>
-              </Text>
+              )}
 
-              <Text style={styles.info}>
-                Shutter speed |
-                <Text style={styles.bold}>
-                  {` ${route.params.image.shutter_speed.toFixed(3)} ms`}
+              {route.params.image.focul_length && (
+                <Text style={styles.info}>
+                  Focal length |
+                  <Text style={styles.bold}>
+                    {` ${route.params.image.focul_length} mm`}
+                  </Text>
                 </Text>
-              </Text>
+              )}
+              {route.params.image.shutter_speed && (
+                <Text style={styles.info}>
+                  Shutter speed |
+                  <Text style={styles.bold}>
+                    {` ${route.params.image.shutter_speed} ms`}
+                  </Text>
+                </Text>
+              )}
             </View>
             <View>
-              <Text style={styles.info}>
-                ISO |
-                <Text style={styles.bold}>{` ${route.params.image.iso}`}</Text>
-              </Text>
-              <Text style={styles.info}>
-                Aperture |
-                <Text style={styles.bold}>
-                  {` F${route.params.image.aperture.toFixed(2)}`}
+              {route.params.image.iso && (
+                <Text style={styles.info}>
+                  ISO |
+                  <Text
+                    style={styles.bold}
+                  >{` ${route.params.image.iso}`}</Text>
                 </Text>
-              </Text>
+              )}
+
+              {route.params.image.aperture && (
+                <Text style={styles.info}>
+                  Aperture |
+                  <Text style={styles.bold}>
+                    {` F${route.params.image.aperture}`}
+                  </Text>
+                </Text>
+              )}
             </View>
           </View>
         </View>
