@@ -199,7 +199,7 @@ export default function DetailPhotoScreen({ route, navigation }) {
                 <Text style={styles.info}>
                   Exposure |
                   <Text style={styles.bold}>
-                    {` +${route.params.image.exposure}`}
+                    {route.params.image.exposure >= 0 ? ` +${route.params.image.exposure}` : ` ${route.params.image.exposure}` }
                   </Text>
                 </Text>
               )}
