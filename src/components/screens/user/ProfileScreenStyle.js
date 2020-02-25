@@ -14,6 +14,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     flex: 3,
     backgroundColor: "#fff"
+  },
+  userName: {
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: 'bold'
   }
 });
 
