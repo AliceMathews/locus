@@ -11,8 +11,9 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   userPhotosContainer: {
-    justifyContent: 'space-evenly',
-    flex: 3
+    justifyContent: "space-evenly",
+    flex: 3,
+    backgroundColor: "#fff"
   }
 });
 

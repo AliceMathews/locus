@@ -89,6 +89,7 @@ export default function ProfileScreen({ signOut, user, token }) {
             {loading && <ActivityIndicator size="large" color="#0000ff" />}
             {!loading && (
               <FlatList
+                style={{ left: -2 }}
                 numColumns={2}
                 data={images}
                 keyExtractor={item => item.id}
