@@ -13,6 +13,7 @@ import { API_URL } from "../../../../configKeys";
 import axios from "axios";
 
 import PhotoTile from "../home/PhotoTile";
+import CustomButton from "../../global/Button";
 
 import UserPhotoTile from "./UserPhotoTile";
 
@@ -84,7 +85,7 @@ export default function ProfileScreen({ signOut, user, token }) {
               style={{ width: 80, height: 80 }}
             />
             <Text style={{ textAlign: "center" }}>{currentUser.username}</Text>
-            <Button title="Sign out" onPress={signOut}></Button>
+            <CustomButton onPress={signOut}>Sign out</CustomButton>
           </View>
           <View style={styles.userPhotosContainer}>
             {loading && <ActivityIndicator size="large" color="#0000ff" />}
