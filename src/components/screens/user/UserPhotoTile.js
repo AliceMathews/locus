@@ -28,6 +28,7 @@ export default function UserPhotoTile(props) {
               key={props.item.id}
               source={{ uri: props.item.url, cache: "force-cache" }}
               style={{
+                margin: 2,
                 width: props.deviceWidth / 2,
                 height: props.deviceWidth / 2,
                 ...styles.image
@@ -36,7 +37,7 @@ export default function UserPhotoTile(props) {
               <MaterialIcons
                 name={"cancel"}
                 size={30}
-                color={"#183152"}
+                color={"#999999"}
                 style={{ opacity: 0.74 }}
                 onPress={() => {
                   Alert.alert(

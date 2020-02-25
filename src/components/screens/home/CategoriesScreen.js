@@ -107,6 +107,7 @@ export default function CategoriesScreen({ token }) {
 
         {!loading && (
           <FlatList
+            style={{ left: -2 }}
             numColumns={2}
             data={categories}
             keyExtractor={item => item.id}
