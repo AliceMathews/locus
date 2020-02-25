@@ -114,6 +114,7 @@ export default function PhotosScreen({ route, navigation }) {
         {loading && <ActivityIndicator size="large" color="#0000ff" />}
         {!loading && (
           <FlatList
+            style={{ left: -2 }}
             numColumns={2}
             data={images}
             renderItem={({ item }) => (
