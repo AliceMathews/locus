@@ -1,20 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import {
-  Text,
   View,
-  Button,
-  Image,
-  ScrollView,
   FlatList,
   Dimensions,
   ActivityIndicator,
-  ImageBackground,
   TouchableOpacity
 } from "react-native";
-// import { Tile, SearchBar } from "react-native-elements";
-// import { CacheManager } from 'react-native-expo-image-cache';
 import LiveSearch from "./LiveSearch";
-import Tile from "./Tile";
 import CategoryTile from "./CategoryTile";
 
 import axios from "axios";
@@ -28,7 +20,6 @@ export default function CategoriesScreen({ token }) {
   const navigation = useNavigation();
 
   const [categories, setCategories] = useState([]);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [fullCategories, setFullCategories] = useState([]);

@@ -2,15 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   Text,
   View,
-  Button,
   FlatList,
   Dimensions,
-  Image,
   ActivityIndicator,
   TouchableOpacity,
   Switch
 } from "react-native";
-import { Tile } from "react-native-elements";
 
 import useCurrentLocation from "../../../hooks/useCurrentLocation";
 import { getDistance } from "geolib";

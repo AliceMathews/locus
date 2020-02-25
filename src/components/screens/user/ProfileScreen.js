@@ -3,7 +3,6 @@ import {
   Text,
   View,
   Image,
-  Button,
   ActivityIndicator,
   FlatList,
   Dimensions
@@ -12,7 +11,6 @@ import styles from "./ProfileScreenStyle";
 import { API_URL } from "../../../../configKeys";
 import axios from "axios";
 
-import PhotoTile from "../home/PhotoTile";
 import CustomButton from "../../global/Button";
 
 import UserPhotoTile from "./UserPhotoTile";

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, Dimensions } from "react-native";
+import { View, Image } from "react-native";
 import splash from "../../../../assets/splash.png";
 import styles from "./SplashScreenStyle";
 

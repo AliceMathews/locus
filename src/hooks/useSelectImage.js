@@ -1,7 +1,6 @@
 import { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 
-// import resizeImage from "../../../helpers/upload/resizeImage";
 import resizeImage from "../helpers/upload/resizeImage";
 
 export default function useSelectImage() {
@@ -17,7 +16,6 @@ export default function useSelectImage() {
   };
 
   const openCamera = () => {
-    // await _getLocationAsync();
     const options = {
       permissions: ImagePicker.requestCameraPermissionsAsync,
       launch: ImagePicker.launchCameraAsync
@@ -49,7 +47,6 @@ export default function useSelectImage() {
         exif: pickerResult.exif,
         type: pickerResult.type
       });
-      // setMode("IMAGE");
     } catch (err) {
       console.log(err);
     }

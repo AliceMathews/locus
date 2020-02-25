@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 
@@ -21,8 +21,6 @@ export default function useCurrentLocation() {
       console.log("Something went wrong", err);
     }
   };
-
-  // _getLocationAsync();
 
   return { currentLocation, _getLocationAsync };
 }

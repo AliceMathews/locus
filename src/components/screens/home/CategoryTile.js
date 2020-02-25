@@ -1,36 +1,32 @@
 import React from "react";
-import { Text, View, Image, TouchableOpacity, ImageBackground } from "react-native";
-import { SearchBar } from "react-native-elements";
+import { Text, View, TouchableOpacity, ImageBackground } from "react-native";
 
 import styles from "./CategoryTileStyle";
-import Tile from './Tile';
 
 export default function CategoryTile(props) {
-  
   return (
     <TouchableOpacity
       onPress={() => {
         props.navigation.navigate("Photos", {
-            categoryId: props.item.id,
-            categoryName: props.item.name,
-            token: props.token
+          categoryId: props.item.id,
+          categoryName: props.item.name,
+          token: props.token
         });
       }}
     >
       {props.oneItem && (
         <ImageBackground
           key={props.item.id}
-          source={{uri: props.item.cover_photo_url,
-                  cache: "force-cache"}}
-          style={{width: props.deviceWidth, height: props.deviceWidth, ...styles.categoryImage}}
+          source={{ uri: props.item.cover_photo_url, cache: "force-cache" }}
+          style={{
+            width: props.deviceWidth,
+            height: props.deviceWidth,
+            ...styles.categoryImage
+          }}
         >
           <View style={styles.categoryTextContainer}>
             <View style={styles.categoryTextBorder}>
-              <Text
-                style={styles.categoryText}
-              >
-                {props.item.name}
-              </Text>
+              <Text style={styles.categoryText}>{props.item.name}</Text>
             </View>
           </View>
         </ImageBackground>
@@ -38,21 +34,20 @@ export default function CategoryTile(props) {
       {!props.oneItem && (
         <ImageBackground
           key={props.item.id}
-          source={{uri: props.item.cover_photo_url,
-                  cache: "force-cache"}}
-          style={{width: props.deviceWidth / 2, height: props.deviceWidth / 2, ...styles.categoryImage}}
+          source={{ uri: props.item.cover_photo_url, cache: "force-cache" }}
+          style={{
+            width: props.deviceWidth / 2,
+            height: props.deviceWidth / 2,
+            ...styles.categoryImage
+          }}
         >
           <View style={styles.categoryTextContainer}>
             <View style={styles.categoryTextBorder}>
-              <Text
-                style={styles.categoryText}
-              >
-                {props.item.name}
-              </Text>
+              <Text style={styles.categoryText}>{props.item.name}</Text>
             </View>
           </View>
         </ImageBackground>
-      )}  
+      )}
     </TouchableOpacity>
   );
 }
