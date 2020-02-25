@@ -17,12 +17,9 @@ export default function CategoryTile(props) {
       {props.oneItem && (
         <ImageBackground
           key={props.item.id}
-          source={{ uri: props.item.cover_photo_url, cache: "force-cache" }}
-          style={{
-            width: props.deviceWidth,
-            height: props.deviceWidth,
-            ...styles.categoryImage
-          }}
+          source={{uri: props.item.cover_photo_url,
+                  cache: "force-cache"}}
+          style={styles.categoryImage}
         >
           <View style={styles.categoryTextContainer}>
             <View style={styles.categoryTextBorder}>
@@ -34,12 +31,9 @@ export default function CategoryTile(props) {
       {!props.oneItem && (
         <ImageBackground
           key={props.item.id}
-          source={{ uri: props.item.cover_photo_url, cache: "force-cache" }}
-          style={{
-            width: props.deviceWidth / 2,
-            height: props.deviceWidth / 2,
-            ...styles.categoryImage
-          }}
+          source={{uri: props.item.cover_photo_url,
+                  cache: "force-cache"}}
+          style={styles.categoryImage}
         >
           <View style={styles.categoryTextContainer}>
             <View style={styles.categoryTextBorder}>

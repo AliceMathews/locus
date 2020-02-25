@@ -13,6 +13,11 @@ const styles = StyleSheet.create({
   userPhotosContainer: {
     justifyContent: 'space-evenly',
     flex: 3
+  },
+  userName: {
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: 'bold'
   }
 });
 

@@ -1,4 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const deviceWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   categoryText: {
@@ -20,7 +22,9 @@ const styles = StyleSheet.create({
   },
   categoryImage: {
     borderWidth: 2, 
-    borderColor: 'rgba(247,237,237,0.5)'
+    borderColor: 'rgba(247,237,237,0.5)',
+    width: deviceWidth / 2,
+    height: deviceWidth / 2
   }
 });
 
