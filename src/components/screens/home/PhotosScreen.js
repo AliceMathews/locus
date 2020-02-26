@@ -94,7 +94,10 @@ export default function PhotosScreen({ route, navigation }) {
           }}
         >
           <Text style={styles.categoryTitle}>
-            Photos of {route.params.categoryName}
+            {route.params.categoryName.replace(
+              route.params.categoryName[0],
+              route.params.categoryName[0].toUpperCase()
+            )}
           </Text>
         </TouchableOpacity>
         <View style={styles.toggle}>

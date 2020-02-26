@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
@@ -11,11 +11,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    width: Dimensions.get("window").width
   },
   photosContainer: {
     flex: 6
-    // justifyContent: "space-evenly"
   },
   banner: {
     width: 300,
@@ -24,10 +24,12 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 28,
     fontWeight: "bold",
-    paddingRight: 30
+    paddingLeft: 30,
+    color: "#183152"
   },
   toggle: {
-    alignItems: "center"
+    alignItems: "center",
+    paddingRight: 30
   },
   proximity: {
     color: "#666666"
