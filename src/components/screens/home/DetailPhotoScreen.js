@@ -26,7 +26,6 @@ import useScreenBrightness from "../../../hooks/useScreenBrightness";
 import useCurrentLocation from "../../../hooks/useCurrentLocation";
 
 export default function DetailPhotoScreen({ route, navigation }) {
-  console.log(route.params.image);
   const [showPhoto, setShowPhoto] = useState(false);
   const [user, setUser] = useState(null);
   const { currentBrightness } = useScreenBrightness();
@@ -182,13 +181,16 @@ export default function DetailPhotoScreen({ route, navigation }) {
           </View>
         </View>
 
-        {route.params.image.description === "" || (
-          <View style={styles.titleSection}>
-            <View>
-              <Text style={styles.title}>{route.params.image.description}</Text>
+        {route.params.image.description === "" ||
+          !route.params.image.description || (
+            <View style={styles.titleSection}>
+              <View>
+                <Text style={styles.title}>
+                  {route.params.image.description}
+                </Text>
+              </View>
             </View>
-          </View>
-        )}
+          )}
 
         <View style={styles.infoContainer}>
           {route.params.image.camera_make && (
