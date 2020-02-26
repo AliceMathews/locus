@@ -41,7 +41,6 @@ export default function CategoriesScreen({ token }) {
     try {
       const res = await axios.get(`${API_URL}categories`);
       setCategories(res.data.categories);
-      console.log(`response from backend ${categories}`);
       setFullCategories(res.data.categories);
       setLoading(false);
       if (res.data.categories === 1) {
