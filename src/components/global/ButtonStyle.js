@@ -4,11 +4,15 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     backgroundColor: "#55708E",
-    padding: 3,
+    padding: 2,
     width: 100,
-    height: 30,
     margin: 3,
-    borderRadius: 5
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 0.74,
+    shadowRadius: 3,
+    elevation: 8
   },
   buttonBig: {
     alignItems: "center",
@@ -20,7 +24,7 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   label: {
-    fontSize: 22,
+    fontSize: 18,
     color: "white"
   }
 });
