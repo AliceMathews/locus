@@ -25,7 +25,8 @@ export default function HomeStackNav({ token }) {
                   flex: 1
                 }}
               />
-            )
+            ),
+            headerStyle: { shadowColor: "transparent" }
           }}
         >
           {() => <CategoriesScreen token={token} />}

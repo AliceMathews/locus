@@ -4,6 +4,7 @@ const styles = StyleSheet.create({
   searchBarContainer: {
     flex: 1,
     justifyContent: "center"
+    // backgroundColor: "pink"
   }
 });
 

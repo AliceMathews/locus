@@ -17,7 +17,7 @@ export default function LiveSearch(props) {
           containerStyle={{ width: props.width }}
           showLoading={props.loading}
           containerStyle={{ backgroundColor: "white" }}
-          inputContainerStyle={{ height: 50 }}
+          inputContainerStyle={{ height: 25 }}
         />
       )}
       {Platform.OS === "android" && (

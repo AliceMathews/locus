@@ -93,8 +93,6 @@ export default function DetailPhotoScreen({ route, navigation }) {
           style={{
             backgroundColor: "rgba(0, 0, 0, 0.74)"
           }}
-          // vertical={true}
-          scrollEnabled={false}
           maximumZoomScale={1.00001}
           bouncesZoom={true}
         >
