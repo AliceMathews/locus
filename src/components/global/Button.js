@@ -12,18 +12,8 @@ export default function CustomButton(props) {
   }
 
   return (
-    <TouchableOpacity
-      style={{
-        shadowColor: "#fff",
-        shadowOffset: { width: -3, height: -3 },
-        shadowOpacity: 0.74,
-        shadowRadius: 3,
-        elevation: 8
-      }}
-    >
-      <TouchableOpacity style={styleType} onPress={props.onPress}>
-        <Text style={styles.label}>{props.children}</Text>
-      </TouchableOpacity>
+    <TouchableOpacity style={styleType} onPress={props.onPress}>
+      <Text style={styles.label}>{props.children}</Text>
     </TouchableOpacity>
   );
 }
