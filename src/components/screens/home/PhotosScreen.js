@@ -31,19 +31,32 @@ export default function PhotosScreen({ route, navigation }) {
   const flatListRef = useRef();
 
   useEffect(() => {
+
     _getLocationAsync();
-    axios.get(`${API_URL}categories/${categoryId}/images`).then(res => {
-      setImages(res.data.images);
-      setLoading(false);
-      if (res.data.images.length === 1) {
-        setOneItem(true);
+
+    const fetchPhotos = async () => {
+      try {
+        const res = await axios.get(`${API_URL}categories/${categoryId}/images`);
+        setImages(res.data.images);
+        setLoading(false);
+        if (res.data.images.length === 1) {
+          setOneItem(true);
+        } else {
+          setOneItem(false);
+        }
+      } catch(err) {
+        console.log("something went wrong: ", err);
       }
-    });
+    }  
+    
+    fetchPhotos();
+
   }, []);
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
-    axios.get(`${API_URL}categories/${categoryId}/images`).then(res => {
+    try {
+      const res = await axios.get(`${API_URL}categories/${categoryId}/images`)
       setImages(res.data.images);
       setRefreshing(false);
       if (res.data.images.length === 1) {
@@ -51,7 +64,9 @@ export default function PhotosScreen({ route, navigation }) {
       } else {
         setOneItem(false);
       }
-    });
+    } catch(err) {
+      console.log("something went wront: ", err);
+    }
   };
 
   const distance = image => {
