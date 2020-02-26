@@ -37,10 +37,10 @@ export default function CategoriesScreen({ token }) {
     fetchCategories();
   }, []);
 
-  const fetchCategories = () => {
-    axios.get(`${API_URL}categories`).then(res => {
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(`${API_URL}categories`);
       setCategories(res.data.categories);
-      console.log(`response from backend ${categories}`);
       setFullCategories(res.data.categories);
       setLoading(false);
       if (res.data.categories === 1) {
@@ -48,12 +48,15 @@ export default function CategoriesScreen({ token }) {
       } else {
         setOneItem(false);
       }
-    });
+    } catch(err) {
+      console.log("something went wrong: ", err);
+    }
   };
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
-    axios.get(`${API_URL}categories`).then(res => {
+    try {
+      const res = await axios.get(`${API_URL}categories`);
       setCategories(res.data.categories);
       setFullCategories(res.data.categories);
       setRefreshing(false);
@@ -62,7 +65,9 @@ export default function CategoriesScreen({ token }) {
       } else {
         setOneItem(false);
       }
-    });
+    } catch(err) {
+      console.log("something went wrong: ", err);
+    }
   };
 
   const deviceWidth = Dimensions.get("window").width;
